@@ -48,9 +48,26 @@ case "$FORMAT" in
         slidev export "$SLIDES_FILE" --format pptx --output "$OUTPUT_FILE"
         ;;
     png)
-        OUTPUT_FILE="$OUTPUT_DIR/${BASENAME}"
-        echo -e "${YELLOW}Exporting to PNG (slides as images)...${NC}"
-        slidev export "$SLIDES_FILE" --format png --output "$OUTPUT_FILE"
+        echo -e "${YELLOW}Exporting slides to individual PNG images...${NC}"
+        # Slidev exports PNGs to a directory, each slide as slide-{n}.png
+        slidev export "$SLIDES_FILE" --format png --output "$OUTPUT_DIR"
+
+        # Rename files to have consistent 3-digit numbering
+        cd "$OUTPUT_DIR"
+        counter=1
+        for file in slide-*.png; do
+            if [[ -f "$file" ]]; then
+                newname=$(printf "slide-%03d.png" $counter)
+                if [[ "$file" != "$newname" ]]; then
+                    mv "$file" "$newname"
+                fi
+                ((counter++))
+            fi
+        done
+        cd - > /dev/null
+
+        echo -e "${GREEN}✓ Exported $((counter-1)) slides as PNG images${NC}"
+        OUTPUT_FILE="$OUTPUT_DIR ($(ls -1 $OUTPUT_DIR/slide-*.png | wc -l) images)"
         ;;
     *)
         echo -e "${RED}✗ Unknown format: $FORMAT${NC}"
