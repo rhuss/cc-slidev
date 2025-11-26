@@ -381,7 +381,13 @@ title: [Presentation Title]
 
 **For each section in outline:**
 - Choose appropriate layout (cover, center, two-cols, image-right, etc.)
-- Create concise content (follow 6x6 rule: max 6 bullets, 6 words each)
+- **ENFORCE HARD LIMITS:**
+  - MAX 6 elements per slide (bullets + visuals + code combined)
+  - MAX 50 words body text (excluding title)
+  - MAX 1-2 code blocks per slide (8-10 lines each)
+  - ONE idea per slide
+- **If content exceeds limits → SPLIT into multiple slides**
+- Create concise content (phrases not sentences: max 6 words per bullet)
 - Add presenter notes with `<!-- -->` comments
 - Mark visual placeholders where diagrams/images would enhance
 
