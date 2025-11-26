@@ -1,27 +1,39 @@
 # Slidedeck Plugin for Claude Code
 
-> Comprehensive presentation creation workflow using Slidev - from brainstorming to handout generation
+> Professional presentation creation using Slidev - from brainstorming to handout generation
 
 ## Overview
 
-The Slidedeck plugin transforms Claude Code into a complete presentation creation assistant. It guides you through every phase of presentation development:
+**Create clean, professional presentations that audiences can actually read.** The Slidedeck plugin enforces hard limits to prevent overcrowded slides, ensures accessibility by default, and guides you through every phase of presentation development:
 
-1. **Brainstorming & Research** - Interactive ideation with web research and local file analysis
+1. **Brainstorming & Research** - Interactive ideation with web research, CfP analysis, and local file analysis
 2. **Framing** - Define scope, audience, and constraints
 3. **Outline Creation** - Structured narrative with validation
-4. **Slide Generation** - Automated Slidev markdown creation
+4. **Slide Generation** - Clean, accessible Slidev markdown with enforced limits
 5. **Visual Enhancement** - Mermaid diagrams, stock photos, AI image prompts
 6. **Presenter Notes** - Comprehensive speaker notes for each slide
-7. **Handout Generation** - Professional LaTeX handout with slides, notes, and research
+7. **Handout Generation** - Professional LaTeX handout with slides, prose explanations, and research links
 
 ## Features
 
-### 🎯 Complete Workflow
-- **Interactive brainstorming** with guided questions
+### 🎯 Design Enforcement
+
+**Prevents common presentation mistakes through automatic hard limits:**
+- **≤6 elements per slide** - Prevents information overload (based on cognitive load research)
+- **<50 words per slide** - Ensures slides remain scannable, not readable
+- **One idea per slide** - Automatically splits dense content into multiple focused slides
+- **Meaningful titles** - "System handles 10K req/sec" not "Results"
+- **Accessibility defaults** - 18pt+ fonts, 4.5:1+ contrast, colorblind-safe colors
+- **90-second timing** - Default pacing prevents rushing (configurable: 60s-180s)
+
+**If your content exceeds limits, the plugin splits it into additional slides instead of cramming.**
+
+### 🔄 Complete Workflow
+- **Interactive brainstorming** with CfP analysis and web research
 - **Automated outline** generation and validation
-- **Slidev slide creation** with theme support
-- **Visual enhancement** with multiple diagram and image options
-- **LaTeX handout** compilation with embedded slides
+- **Clean slide creation** with enforced limits and accessibility
+- **Visual enhancement** with diagrams and images
+- **Comprehensive handouts** with prose explanations and research links
 
 ### 🎨 Visual Enhancement
 - **Mermaid diagrams** - Multiple options per slide, inline or high-quality rendering
