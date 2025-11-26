@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Skill(plugin-dev:command-development)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
