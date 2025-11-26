@@ -49,25 +49,13 @@ case "$FORMAT" in
         ;;
     png)
         echo -e "${YELLOW}Exporting slides to individual PNG images...${NC}"
-        # Slidev exports PNGs to a directory, each slide as slide-{n}.png
-        slidev export "$SLIDES_FILE" --format png --output "$OUTPUT_DIR"
+        # Use --per-slide to export each slide as a separate PNG
+        slidev export "$SLIDES_FILE" --output "$OUTPUT_DIR/slides" --format png --per-slide
 
-        # Rename files to have consistent 3-digit numbering
-        cd "$OUTPUT_DIR"
-        counter=1
-        for file in slide-*.png; do
-            if [[ -f "$file" ]]; then
-                newname=$(printf "slide-%03d.png" $counter)
-                if [[ "$file" != "$newname" ]]; then
-                    mv "$file" "$newname"
-                fi
-                ((counter++))
-            fi
-        done
-        cd - > /dev/null
-
-        echo -e "${GREEN}✓ Exported $((counter-1)) slides as PNG images${NC}"
-        OUTPUT_FILE="$OUTPUT_DIR ($(ls -1 $OUTPUT_DIR/slide-*.png | wc -l) images)"
+        # Count exported slides
+        SLIDE_COUNT=$(ls -1 "$OUTPUT_DIR"/slide-*.png 2>/dev/null | wc -l)
+        echo -e "${GREEN}✓ Exported $SLIDE_COUNT slides as PNG images${NC}"
+        OUTPUT_FILE="$OUTPUT_DIR ($SLIDE_COUNT images)"
         ;;
     *)
         echo -e "${RED}✗ Unknown format: $FORMAT${NC}"
