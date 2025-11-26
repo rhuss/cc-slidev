@@ -34,15 +34,21 @@ If not available:
   - Ubuntu: `sudo apt-get install texlive-latex-base texlive-latex-extra`
 - Offer to create .tex file anyway (user can compile later)
 
-### 2. Export Slides to PDF
+### 2. Export Slides to Individual PNGs
 
-First, export slides for embedding:
+Export each slide as a separate PNG image:
 ```bash
 cd [presentation-dir]
-${CLAUDE_PLUGIN_ROOT}/scripts/export-slides.sh slides.md pdf exports
+${CLAUDE_PLUGIN_ROOT}/scripts/export-slides.sh slides.md png exports
 ```
 
-This creates `exports/slides.pdf` with all slides.
+This creates `exports/slide-001.png`, `exports/slide-002.png`, etc.
+
+**Why PNGs instead of PDF:**
+- Better LaTeX compatibility with includegraphics
+- Individual files easier to manage
+- Can be used in other documents
+- Higher quality rendering for print
 
 ### 3. Parse Slides for Content
 
@@ -55,11 +61,25 @@ Read slides.md and extract:
 
 ### 4. Gather Supplementary Content
 
-Read brainstorm.md (if exists) for:
+**From brainstorm.md (if exists):**
 - Research notes
 - References and sources
 - Background context
 - Additional examples
+
+**Research for Further Reading:**
+For each major section, conduct web research to find:
+- Authoritative articles and papers
+- Official documentation
+- Tutorial resources
+- Best practices guides
+- Community resources
+
+Use WebSearch to find 3-5 high-quality resources per section that provide:
+- Deeper technical details
+- Real-world examples
+- Alternative perspectives
+- Current best practices
 
 ### 5. Generate LaTeX Document
 
@@ -108,7 +128,7 @@ Using latex-handouts skill, create `handout.tex`:
 ```latex
 \section{Introduction}
 
-[Brief overview of presentation]
+[Brief overview of presentation - 2-3 paragraphs of prose]
 
 \section{Presentation Content}
 
@@ -120,26 +140,42 @@ Using latex-handouts skill, create `handout.tex`:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[page=[N],width=0.85\textwidth]{exports/slides.pdf}
-  \caption{Slide [N]: [Title]}
+  \includegraphics[width=0.75\textwidth]{exports/slide-[NNN].png}
+  \caption{[Slide Title]}
   \label{fig:slide[N]}
 \end{figure}
 
-\paragraph{Key Points:}
+\paragraph{Overview:}
+[Expressive prose paragraph expanding on slide content - NOT just bullet points.
+Write 2-4 complete sentences that explain the concept in detail, provide context,
+and connect to the broader topic. Transform bullet points into flowing narrative.]
+
+\paragraph{Key Considerations:}
+[Another prose paragraph discussing implications, trade-offs, or important details.
+This should add value beyond what's on the slide - explain WHY things matter,
+provide examples, or discuss real-world applications.]
+
+\paragraph{Technical Details:}
+[If applicable: Code explanations, architecture decisions, implementation notes.
+Write in prose form, not bullets. Explain HOW things work, not just WHAT they are.]
+
+\paragraph{Further Reading:}
 \begin{itemize}
-  \item [Point from slide]
-  \item [Point from slide]
+  \item \href{https://...}{[Resource Title]} - [Brief description of what reader will learn]
+  \item \href{https://...}{[Resource Title]} - [Brief description]
+  \item \href{https://...}{[Resource Title]} - [Brief description]
 \end{itemize}
 
-\paragraph{Presenter Notes:}
-[Notes from slides.md]
+\vspace{0.5cm}
 
-\paragraph{Additional Context:}
-[Extra information from brainstorm.md or research]
+% Repeat for all slides in section
+
+\paragraph{Section Summary:}
+[Prose summary of the section, tying together all slides. 2-3 sentences.]
 
 \newpage
 
-% Repeat for all slides
+% Repeat for all sections
 
 \section{Summary}
 
@@ -155,16 +191,37 @@ Using latex-handouts skill, create `handout.tex`:
 
 \section{Additional Resources}
 
-\subsection{References}
+\subsection{Further Reading by Topic}
+
+% Organized by presentation sections
+\subsubsection{[Section 1 Topic]}
 \begin{itemize}
-  \item [Reference 1]
-  \item [Reference 2]
+  \item \href{https://...}{[Title]} - [Description]
+  \item \href{https://...}{[Title]} - [Description]
+  \item \href{https://...}{[Title]} - [Description]
 \end{itemize}
 
-\subsection{Further Reading}
+\subsubsection{[Section 2 Topic]}
 \begin{itemize}
-  \item [Resource 1] - \url{https://...}
-  \item [Resource 2] - \url{https://...}
+  \item \href{https://...}{[Title]} - [Description]
+  \item \href{https://...}{[Title]} - [Description]
+\end{itemize}
+
+\subsection{Official Documentation}
+\begin{itemize}
+  \item \href{https://...}{[Official Docs]} - [What it covers]
+  \item \href{https://...}{[API Reference]} - [What it covers]
+\end{itemize}
+
+\subsection{Community Resources}
+\begin{itemize}
+  \item \href{https://...}{[Forum/Discussion]} - [What it is]
+  \item \href{https://...}{[Tutorial/Blog]} - [What it covers]
+\end{itemize}
+
+\subsection{Original References}
+\begin{itemize}
+  \item [Citations from brainstorm.md]
 \end{itemize}
 
 \end{document}
@@ -263,10 +320,12 @@ Apply customizations to handout.tex if requested.
 - Include page numbers and headers
 
 **Content Balance:**
-- Don't just duplicate slides
-- Add value with notes and context
-- Provide resources for deeper learning
-- Make it standalone (useful without presentation)
+- ✅ **Write in prose, not bullets** - Transform slide bullets into flowing paragraphs
+- ✅ **Add value beyond slides** - Explain WHY and HOW, not just WHAT
+- ✅ **Include researched URLs** - 3-5 quality resources per section
+- ✅ **Make it standalone** - Reader should understand without attending presentation
+- ❌ **Don't copy slide bullets** - Expand them into complete explanations
+- ❌ **Don't use generic descriptions** - Be specific about what each URL provides
 
 **Organization:**
 - Match presentation structure

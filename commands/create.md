@@ -516,7 +516,30 @@ If not available:
 - Provide install instructions
 - Skip handout generation
 
-If available, create `handout.tex` in `PROJECT_DIR` using latex-handouts skill:
+If available, follow these steps:
+
+**Step 1: Export slides to individual PNGs**
+```bash
+cd $PROJECT_DIR
+${CLAUDE_PLUGIN_ROOT}/scripts/export-slides.sh slides.md png exports
+```
+
+This creates `exports/slide-001.png`, `exports/slide-002.png`, etc.
+
+**Step 2: Research further reading resources**
+
+For each major section of the presentation, use WebSearch to find:
+- Official documentation
+- Authoritative articles and papers
+- Tutorial resources
+- Best practices guides
+- Community resources (forums, discussions)
+
+Find 3-5 high-quality URLs per section that provide deeper technical details, real-world examples, and current best practices.
+
+**Step 3: Create comprehensive handout.tex**
+
+Using latex-handouts skill, create `handout.tex` in `PROJECT_DIR`:
 
 **Handout structure:**
 ```latex
@@ -526,9 +549,18 @@ If available, create `handout.tex` in `PROJECT_DIR` using latex-handouts skill:
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{parskip}
 
-\title{[Presentation Title] - Comprehensive Handout}
-\author{[User name or default]}
+\hypersetup{
+    pdftitle={[Title] - Handout},
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=cyan
+}
+
+\title{[Presentation Title]\\[0.5em]\large Comprehensive Handout}
+\author{[Author name or default]}
 \date{\today}
 
 \pagestyle{fancy}
@@ -540,39 +572,79 @@ If available, create `handout.tex` in `PROJECT_DIR` using latex-handouts skill:
 \tableofcontents
 \newpage
 
-% For each slide/section:
-\section{[Section name]}
+% For each section:
+\section{[Section Name]}
 
-\subsection{Slide Content}
+% For each slide in section:
+\subsubsection{[Slide Title]}
+
 \begin{figure}[H]
   \centering
-  % Reference exported slide PDF
-  \includegraphics[width=0.9\textwidth]{exports/slides.pdf}
-  \caption{[Slide title]}
+  \includegraphics[width=0.75\textwidth]{exports/slide-[NNN].png}
+  \caption{[Slide Title]}
 \end{figure}
 
-\subsection{Presenter Notes}
-[Notes from slides]
+\paragraph{Overview:}
+[Write 2-4 complete sentences in prose expanding on the slide content.
+Transform bullet points into flowing narrative that explains the concept,
+provides context, and connects to the broader topic.]
 
-\subsection{Additional Context}
-[Extra research from brainstorm.md]
+\paragraph{Key Considerations:}
+[Write prose discussing implications, trade-offs, or important details.
+Explain WHY things matter, provide examples, discuss real-world applications.
+Add value beyond what's visible on the slide.]
+
+\paragraph{Technical Details:}
+[If applicable: Explain code, architecture decisions, implementation.
+Write in prose, not bullets. Explain HOW things work, not just WHAT.]
+
+\paragraph{Further Reading:}
+\begin{itemize}
+  \item \href{https://...}{[Resource Title]} - [What reader will learn]
+  \item \href{https://...}{[Resource Title]} - [What it covers]
+  \item \href{https://...}{[Resource Title]} - [Why it's useful]
+\end{itemize}
+
+\vspace{0.5cm}
+
+% Section summary
+\paragraph{Section Summary:}
+[2-3 sentences tying together all slides in this section]
 
 \newpage
 
-% Repeat for all slides
+\section{Additional Resources}
 
-\section{References and Resources}
-[Links from brainstorm.md]
-[Further reading suggestions]
+\subsection{Further Reading by Topic}
+
+% Organized by sections
+\subsubsection{[Section 1 Topic]}
+\begin{itemize}
+  \item \href{https://...}{[Title]} - [Description]
+  \item \href{https://...}{[Title]} - [Description]
+\end{itemize}
+
+\subsection{Official Documentation}
+\begin{itemize}
+  \item \href{https://...}{[Official Docs]} - [Coverage]
+\end{itemize}
+
+\subsection{Community Resources}
+\begin{itemize}
+  \item \href{https://...}{[Forum/Tutorial]} - [What it is]
+\end{itemize}
 
 \end{document}
 ```
 
-Export slides to PDF first:
-```bash
-cd $PROJECT_DIR
-${CLAUDE_PLUGIN_ROOT}/scripts/export-slides.sh slides.md pdf
-```
+**Critical handout requirements:**
+- ✅ **Write in prose** - Complete sentences and paragraphs, NOT bullet points
+- ✅ **Expand on slides** - Explain concepts in detail that slides only hint at
+- ✅ **Add researched URLs** - Include 3-5 quality resources per section
+- ✅ **Make standalone** - Reader understands content without attending presentation
+- ❌ **Don't copy bullets** - Transform slide bullets into flowing explanations
+
+**Step 4: Compile handout**
 
 Compile handout:
 ```bash
