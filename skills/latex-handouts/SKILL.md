@@ -8,6 +8,39 @@ version: 0.1.0
 
 LaTeX provides professional typesetting for presentation handouts that combine slide images, presenter notes, and supplementary research into comprehensive reference documents.
 
+## Dependency Checking
+
+Before generating handouts, check dependencies using:
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/check-handout-deps.sh
+```
+
+**Exit codes:**
+- 0: All dependencies available (full handout with images and rich formatting)
+- 1: pdflatex missing (BLOCKER - cannot generate handout)
+- 2: LaTeX packages missing (use basic formatting)
+- 3: Playwright missing (text-only handout)
+
+## Graceful Degradation Strategies
+
+**When LaTeX packages unavailable (exit code 2):**
+- Skip `\usepackage{tcolorbox}` and `\usepackage{enumitem}` in preamble
+- Use standard LaTeX boxes instead of tcolorbox
+- Use default enumerate/itemize instead of enumitem
+- Result: Basic but functional handout
+
+**When Playwright unavailable (exit code 3):**
+- Skip slide PNG export entirely
+- Omit `\begin{figure}...\end{figure}` blocks for slide images
+- Still include all prose paragraphs (Overview, Key Considerations, Technical Details)
+- Still include all Further Reading links
+- Result: Text-only reference document (still valuable)
+
+**When pdflatex unavailable (exit code 1):**
+- Cannot generate PDF handout
+- Offer to create .tex file for user to compile later
+- Provide installation instructions
+
 ## Handout Writing Principles
 
 **Critical:** Handouts should be **comprehensive standalone documents**, not just copies of slides.

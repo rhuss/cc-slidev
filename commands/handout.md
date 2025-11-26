@@ -22,19 +22,40 @@ Create comprehensive LaTeX handout combining slides, presenter notes, and supple
 - brainstorm.md (for additional context)
 - Presenter notes in slides (for note sections)
 
-**LaTeX availability:**
+**Check all handout dependencies:**
 ```bash
-command -v pdflatex
+${CLAUDE_PLUGIN_ROOT}/scripts/check-handout-deps.sh
 ```
 
-If not available:
+**Handle exit codes:**
+- **0**: All dependencies available → Proceed with full handout (PNG slides, rich formatting)
+- **1**: pdflatex missing → EXIT with error, provide installation instructions
+- **2**: LaTeX packages missing → Proceed with basic handout (standard LaTeX formatting)
+- **3**: Playwright missing → Proceed with text-only handout (no slide images)
+
+**Graceful degradation strategies:**
+
+If **LaTeX packages** (tcolorbox, enumitem) missing:
+- Skip `\usepackage{tcolorbox}` and `\usepackage{enumitem}`
+- Use standard LaTeX boxes instead of colored tcolorbox
+- Use standard enumerate/itemize instead of enumitem features
+- Handout quality: Basic but functional
+
+If **Playwright** missing:
+- Skip slide PNG export step entirely
+- Generate handout with prose only (no slide images)
+- Still include all Further Reading links and content
+- Handout quality: Text-only reference document
+
+If **pdflatex** missing:
+- Cannot generate handout at all
 - Inform user LaTeX is required
-- Provide installation instructions:
-  - macOS: `brew install --cask mactex-no-gui`
-  - Ubuntu: `sudo apt-get install texlive-latex-base texlive-latex-extra`
+- Provide installation instructions
 - Offer to create .tex file anyway (user can compile later)
 
-### 2. Export Slides to Individual PNGs
+### 2. Export Slides to Individual PNGs (If Playwright Available)
+
+**Only if dependency check returned 0 or 2 (Playwright available):**
 
 Export each slide as a separate PNG image:
 ```bash
@@ -49,6 +70,11 @@ This creates `exports/slide-1.png`, `exports/slide-2.png`, etc.
 - Individual files easier to manage
 - Can be used in other documents
 - Higher quality rendering for print
+
+**If Playwright NOT available (exit code 3):**
+- Skip this step entirely
+- Proceed to generate text-only handout
+- Handout will contain only prose and links, no slide images
 
 ### 3. Parse Slides for Content
 
@@ -85,11 +111,11 @@ Use WebSearch to find 3-5 high-quality resources per section that provide:
 
 Using latex-handouts skill, create `handout.tex`:
 
-**Preamble:**
+**Preamble (adapt based on available packages):**
 ```latex
 \documentclass[11pt,a4paper]{article}
 
-% Packages
+% Core packages (always included)
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
@@ -97,6 +123,11 @@ Using latex-handouts skill, create `handout.tex`:
 \usepackage{fancyhdr}
 \usepackage{float}
 \usepackage{parskip}
+
+% Optional packages (include only if available - exit code 0)
+% If exit code 2 or 3, skip these:
+% \usepackage{tcolorbox}   % For colored boxes
+% \usepackage{enumitem}    % For enhanced lists
 
 % PDF metadata
 \hypersetup{
@@ -138,6 +169,8 @@ Using latex-handouts skill, create `handout.tex`:
 % For each slide in section:
 \subsubsection{[Slide Title]}
 
+% Include slide image ONLY if Playwright available (exit code 0 or 2)
+% If exit code 3 (Playwright missing), skip this figure block:
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.75\textwidth]{exports/slide-[NNN].png}

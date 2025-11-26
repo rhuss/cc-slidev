@@ -506,25 +506,30 @@ Ask: "Would you like to generate a comprehensive handout (requires LaTeX)?"
 
 If yes:
 
-Check LaTeX availability:
+Check all handout dependencies:
 ```bash
-command -v pdflatex
+${CLAUDE_PLUGIN_ROOT}/scripts/check-handout-deps.sh
 ```
 
-If not available:
-- Explain LaTeX installation needed
-- Provide install instructions
-- Skip handout generation
+**Handle exit codes:**
+- **0**: All dependencies available → Generate full handout with PNG slides and rich formatting
+- **1**: pdflatex missing → Explain installation needed, provide instructions, skip handout
+- **2**: LaTeX packages missing → Generate basic handout with standard formatting
+- **3**: Playwright missing → Generate text-only handout without slide images
 
-If available, follow these steps:
+**If exit code 0, 2, or 3 (pdflatex available), follow these steps:**
 
-**Step 1: Export slides to individual PNGs**
+**Step 1: Export slides to individual PNGs (if Playwright available)**
+
+Only if exit code 0 or 2 (skip if exit code 3):
 ```bash
 cd $PROJECT_DIR
 slidev export slides.md --output exports/slides --format png --per-slide
 ```
 
 This creates `exports/slide-1.png`, `exports/slide-2.png`, etc.
+
+If exit code 3: Skip this step, handout will be text-only.
 
 **Step 2: Research further reading resources**
 

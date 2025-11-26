@@ -42,8 +42,19 @@ The Slidedeck plugin transforms Claude Code into a complete presentation creatio
 
 ### Optional
 - **Slidev** (plugin will install/update automatically)
-- **LaTeX** (pdflatex) for handout generation
 - **mermaid-cli** for offline diagram rendering
+
+### For Handout Generation
+- **LaTeX** (pdflatex) - Core compiler required
+  - macOS: `brew install --cask mactex-no-gui`
+  - Ubuntu: `sudo apt-get install texlive-latex-base texlive-latex-extra`
+- **LaTeX Packages** - For enhanced formatting (optional)
+  - tcolorbox - Colored boxes and callouts
+  - enumitem - Enhanced list formatting
+  - macOS with MacTeX: `sudo tlmgr install tcolorbox enumitem`
+  - Ubuntu: Included in `texlive-latex-extra`
+- **Playwright Chromium** - For slide PNG export (optional)
+  - `npx playwright install chromium`
 
 ## Installation
 
@@ -292,19 +303,51 @@ Plugin will offer to install automatically. Or install manually:
 npm install -g @slidev/cli
 ```
 
-### LaTeX not available
+### Handout Dependencies
 
-Handout generation will be skipped. Install LaTeX:
+The plugin automatically checks handout dependencies and offers to install missing components.
 
-**macOS:**
+**LaTeX (required):**
+
+macOS:
 ```bash
 brew install --cask mactex-no-gui
 ```
 
-**Ubuntu/Debian:**
+Ubuntu/Debian:
 ```bash
 sudo apt-get install texlive-latex-base texlive-latex-extra
 ```
+
+Fedora/RHEL:
+```bash
+sudo dnf install texlive-scheme-basic texlive-latex
+```
+
+**Playwright Chromium (optional - for slide PNG export):**
+```bash
+npx playwright install chromium
+```
+
+Without Playwright: Handout will be text-only without embedded slide images.
+
+**LaTeX Packages (optional - for enhanced formatting):**
+
+macOS with MacTeX:
+```bash
+sudo tlmgr install tcolorbox enumitem
+```
+
+Ubuntu: Already included in `texlive-latex-extra`
+
+Without these packages: Handout will use basic LaTeX formatting without colored boxes and enhanced lists.
+
+**Check all dependencies:**
+```bash
+./scripts/check-handout-deps.sh
+```
+
+The plugin offers automatic installation with user confirmation when dependencies are missing.
 
 ### Mermaid rendering quality
 
