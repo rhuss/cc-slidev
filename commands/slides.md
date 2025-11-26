@@ -6,9 +6,9 @@ allowed-tools: ["Read", "Write", "Bash", "Grep"]
 
 # Slide Generation
 
-Generate evidence-based, accessible Slidev slides from validated outline.
+Generate clean, accessible Slidev slides from validated outline with enforced design limits.
 
-**Evidence Base**: Slides generated following research from The Scientist, TED, PLOS Computational Biology, MIT Communication Lab. See `references/presentation-best-practices.md` for full guidelines.
+**Research Basis**: These guidelines are based on cognitive load studies (Miller's Law), TED presentation research, and MIT Communication Lab recommendations. See `references/presentation-best-practices.md` for detailed research.
 
 **Default Timing**: 90 seconds (1.5 minutes) per slide (configurable: 60s-180s)
 
@@ -56,7 +56,7 @@ title: [Title]
 ---
 
 <style>
-/* Evidence-based accessibility defaults */
+/* Accessibility defaults: 18pt+ fonts, 4.5:1+ contrast */
 h1 { font-size: 3rem; }      /* ~48pt - headings ≥24pt required */
 h2 { font-size: 2rem; }      /* ~32pt */
 h3 { font-size: 1.5rem; }    /* ~24pt */
@@ -111,7 +111,7 @@ p, li { font-size: 1.25rem; }
 </style>
 ```
 
-### 4. Generate Slides from Outline (Evidence-Based Rules)
+### 4. Generate Slides from Outline (Hard Limits - Never Violate)
 
 For each slide in outline, apply these critical principles:
 
@@ -267,7 +267,7 @@ spec:
 
 Then create separate slides for Node Affinity and Taints.
 
-**Example slide generation (Evidence-Based):**
+**Example slide generation with enforced limits:**
 
 From outline:
 ```markdown
@@ -439,13 +439,13 @@ Write to `[topic-slug]/package.json`.
 
 Present summary to user:
 ```markdown
-## ✅ Evidence-Based Slides Generated!
+## ✅ Clean, Accessible Slides Generated!
 
 **Location:** `[topic-slug]/slides.md`
 **Slide Count:** [X] main slides + [Y] backup slides
 **Estimated Duration:** [Z] minutes (at 90s/slide)
 
-**Evidence-Based Features Applied:**
+**Design Limits Enforced:**
 - ✓ Meaningful assertion titles (not generic labels)
 - ✓ One idea per slide enforced
 - ✓ ≤6 elements per slide (cognitive load limit)
@@ -456,7 +456,7 @@ Present summary to user:
 - ✓ Backup slides for Q&A
 
 **Quality Validation:**
-Run slide-optimizer to verify all slides meet research standards:
+Run slide-optimizer to verify all slides meet quality standards:
 ```bash
 # (Agent will check 12-point quality criteria)
 ```
@@ -488,7 +488,7 @@ cd [topic-slug]
 ${CLAUDE_PLUGIN_ROOT}/scripts/preview-slidev.sh slides.md
 ```
 
-## Evidence-Based Slide Generation Checklist
+## Slide Generation Checklist (Hard Limits)
 
 **HARD LIMITS (NEVER Violate - Split Slides Instead):**
 - 🔴 **MAX 6 elements** total (bullets + visuals + charts + code blocks combined)
@@ -530,7 +530,7 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/preview-slidev.sh slides.md
 - Note timing (default 90s per slide)
 - Include word count validation
 
-**Layouts (Evidence-Based Distribution):**
+**Layouts (Recommended Distribution):**
 Use variety to maintain visual interest:
 - 30% standard/default (with visual placeholders)
 - 20% center (section breaks, transition slides)

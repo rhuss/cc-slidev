@@ -6,9 +6,9 @@ version: 0.2.0
 
 # Presentation Design
 
-Effective presentations combine evidence-based design principles, storytelling, and audience understanding. Create compelling narratives that engage audiences and communicate ideas clearly.
+Effective presentations combine research-backed design principles, storytelling, and audience understanding. Create compelling narratives that engage audiences and communicate ideas clearly.
 
-**Evidence Base**: Guidelines based on research from The Scientist, TED, PLOS Computational Biology, MIT Communication Lab, and tech conference best practices. See `references/presentation-best-practices.md` for detailed citations.
+**Research Basis**: These guidelines are based on cognitive load studies (Miller's Law), TED presentation research, MIT Communication Lab recommendations, and analysis of effective technical conference talks. They prevent common mistakes that make presentations hard to follow. See `references/presentation-best-practices.md` for detailed research citations.
 
 ## HARD LIMITS (Never Violate)
 
@@ -30,7 +30,7 @@ These are research-backed **maximum limits** that should NEVER be exceeded. If c
 - ✅ **ALWAYS** split into additional slides
 - ✅ **ALWAYS** move details to presenter notes or backup slides
 
-## Core Principles (Evidence-Based)
+## Core Principles
 
 ### 1. One Idea Per Slide
 
