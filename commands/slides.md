@@ -126,18 +126,30 @@ For each slide in outline, apply these critical principles:
 - If outline section has multiple concepts → generate multiple slides
 - Slide content must support only the title's assertion
 
-**3. Cognitive Load Limit (Max 6 Elements Total)**
-- COUNT: bullets + images + diagrams + charts + text blocks
-- If >6 elements → use progressive disclosure (v-click) or split into slides
+**3. Cognitive Load Limit (Max 6 Elements Total) - HARD LIMIT**
+- COUNT: bullets + images + diagrams + charts + text blocks + code snippets
+- **CRITICAL: If >6 elements → SPLIT into multiple slides**
+- **NEVER** exceed 6 elements - split content instead
 - Research basis: Working memory 7±2 items
+- Progressive disclosure (v-click) does NOT exempt from 6-element limit
 
-**4. Minimal Text (<50 Words Excluding Title)**
+**4. Minimal Text (<50 Words Excluding Title) - HARD LIMIT**
 - Use phrases, not full sentences
 - Bullets: 3-6 words each maximum
-- If outline has paragraphs → convert to terse bullet points
+- **CRITICAL: If content exceeds 50 words → SPLIT into multiple slides**
+- **NEVER** try to compress information - create additional slides instead
+- If outline has paragraphs → convert to terse bullet points OR split
 - Detailed text → move to presenter notes
 
-**5. Visual Element Requirement**
+**5. Code Examples - Special Handling**
+- **Code blocks count as MULTIPLE elements** (1 block ≈ 3-4 elements depending on length)
+- **NEVER** show more than 1-2 code examples per slide
+- **Keep code snippets short:** Max 8-10 lines
+- **Highlight key lines** only (use `{2,5}` line highlighting syntax)
+- **Full examples** → Move to backup slides or presenter notes with GitHub link
+- **Multiple examples** → SPLIT across multiple slides (1 example per slide)
+
+**6. Visual Element Requirement**
 - Almost every slide needs a visual (diagram, chart, image, or code)
 - Add visual placeholder TODOs during generation
 - Exceptions: quotes, definitions, bold statements
@@ -148,6 +160,112 @@ For each slide in outline, apply these critical principles:
 - Content with visuals → `layout: image-right` or `two-cols`
 - Quotes → `layout: quote`
 - Standard content → `layout: default`
+
+**CRITICAL: How to Handle Dense Content**
+
+When outline has too much content for one slide, **SPLIT into multiple slides**:
+
+❌ **WRONG** (Violates limits):
+```markdown
+# GPU Cluster Operational Requirements
+
+**What's Needed:**
+- Drivers: Kernel modules, CUDA libraries (must match GPU and kernel)
+- Container Runtime: GPU device injection into containers
+- Health Monitoring: ECC errors, temperature throttling, GPU resets
+- Metrics: Utilization, memory usage, power consumption
+- Configuration Sync: Drivers + runtime + plugin versions aligned
+
+**The Problem:**
+- Manual setup: SSH into each node, install drivers, configure runtime
+- Error-prone: Driver/kernel mismatches, missing libraries
+- Not declarative: Configuration drift across nodes
+- Doesn't scale: Adding new GPU nodes requires manual work
+```
+**Issues:** >100 words, >10 elements, 2 ideas (what's needed + problems)
+
+✅ **CORRECT** (Split into 3 slides):
+
+Slide 1:
+```markdown
+# GPU clusters require five operational components
+
+- **Drivers** - Kernel + CUDA libraries
+- **Runtime** - Container GPU injection
+- **Monitoring** - Health + temperature
+- **Metrics** - Usage tracking
+- **Config sync** - Version alignment
+
+<!-- Visual: Simple architecture diagram showing 5 components -->
+```
+**Valid:** 31 words, 5 bullets + 1 diagram = 6 elements, 1 idea ✓
+
+Slide 2:
+```markdown
+# Manual GPU setup creates configuration drift
+
+- **SSH** each node individually
+- **Mismatches** between driver/kernel
+- **Missing** libraries across fleet
+- **Manual** work blocks scaling
+
+<!-- Visual: Before diagram showing manual chaos -->
+```
+**Valid:** 27 words, 4 bullets + 1 diagram = 5 elements, 1 idea ✓
+
+Slide 3:
+```markdown
+# Traditional approaches don't scale
+
+**Challenge:** Adding 100 GPU nodes
+
+- Manual: **Days of SSH work**
+- Drift: **Inconsistent configs**
+- Errors: **Production failures**
+
+**Need:** Declarative automation
+
+<!-- Visual: Timeline showing manual vs automated -->
+```
+**Valid:** 32 words, 5 elements, 1 idea (scaling problem) ✓
+
+**Code Example Slides:**
+
+❌ **WRONG** (Too many code blocks):
+```markdown
+# Label-Based Scheduling
+
+**nodeSelector:**
+[code block 1 - 8 lines of YAML]
+
+**Node Affinity:**
+[code block 2 - 12 lines of YAML]
+
+**Taints/Tolerations:**
+[code block 3 - 10 lines of YAML]
+```
+**Issues:** 3 code blocks ≈ 9-10 elements, >50 words, 3 different concepts
+
+✅ **CORRECT** (One concept, one code snippet):
+```markdown
+# nodeSelector provides simple label matching
+
+```yaml {3-4}
+spec:
+  containers:
+  - name: gpu-app
+    image: tensorflow:latest
+  nodeSelector:
+    gpu: "tesla-t4"
+```
+
+**Direct match:** All-or-nothing
+
+<!-- Backup: Full examples at github.com/user/repo -->
+```
+**Valid:** 22 words, 1 code block + 1 text line = ~4-5 elements, 1 idea ✓
+
+Then create separate slides for Node Affinity and Taints.
 
 **Example slide generation (Evidence-Based):**
 
@@ -372,14 +490,21 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/preview-slidev.sh slides.md
 
 ## Evidence-Based Slide Generation Checklist
 
+**HARD LIMITS (NEVER Violate - Split Slides Instead):**
+- 🔴 **MAX 6 elements** total (bullets + visuals + charts + code blocks combined)
+- 🔴 **MAX 50 words** body text (excluding title)
+- 🔴 **MAX 1-2 code blocks** per slide (8-10 lines each max)
+- 🔴 **ONE idea** per slide (if content has multiple ideas → SPLIT)
+
 **Critical Requirements (Every Slide):**
 - ✓ **Meaningful title** (assertion: "X demonstrates Y", not label: "Results")
 - ✓ **One idea** per slide (single central finding)
-- ✓ **≤6 elements** total (bullets + visuals + charts combined)
-- ✓ **<50 words** body text (excluding title)
+- ✓ **≤6 elements** total - **SPLIT if exceeded**
+- ✓ **<50 words** body text - **SPLIT if exceeded**
 - ✓ **Visual element** planned or included (except quotes/definitions)
 - ✓ **Phrases not sentences** in bullets
 - ✓ **Detailed text in presenter notes** (not on slide)
+- ✓ **Code examples:** 1 snippet per slide, highlight key lines only
 
 **Accessibility Defaults (Built-in):**
 - ✓ Font sizes: h1=48pt, h2=32pt, h3=24pt, body=20pt (meets ≥18pt requirement)

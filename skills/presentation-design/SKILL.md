@@ -10,6 +10,26 @@ Effective presentations combine evidence-based design principles, storytelling, 
 
 **Evidence Base**: Guidelines based on research from The Scientist, TED, PLOS Computational Biology, MIT Communication Lab, and tech conference best practices. See `references/presentation-best-practices.md` for detailed citations.
 
+## HARD LIMITS (Never Violate)
+
+These are research-backed **maximum limits** that should NEVER be exceeded. If content exceeds these limits, you MUST split into multiple slides:
+
+🔴 **MAX 6 elements** per slide (bullets + images + diagrams + code blocks combined)
+🔴 **MAX 50 words** body text per slide (excluding title)
+🔴 **MAX 1-2 code blocks** per slide (8-10 lines each)
+🔴 **ONE idea** per slide (if multiple ideas → split slides)
+
+**Why these are hard limits:**
+- Cognitive load research: >6 elements exponentially increases audience confusion
+- Reading vs listening interference: >50 words means audience stops listening
+- Code complexity: >2 code examples creates comparison overhead
+
+**When content doesn't fit:**
+- ❌ **NEVER** compress or shrink to fit
+- ❌ **NEVER** reduce font size below 18pt
+- ✅ **ALWAYS** split into additional slides
+- ✅ **ALWAYS** move details to presenter notes or backup slides
+
 ## Core Principles (Evidence-Based)
 
 ### 1. One Idea Per Slide
