@@ -39,10 +39,10 @@ If not available:
 Export each slide as a separate PNG image:
 ```bash
 cd [presentation-dir]
-${CLAUDE_PLUGIN_ROOT}/scripts/export-slides.sh slides.md png exports
+slidev export slides.md --output exports/slides --format png --per-slide
 ```
 
-This creates `exports/slide-001.png`, `exports/slide-002.png`, etc.
+This creates `exports/slide-1.png`, `exports/slide-2.png`, etc.
 
 **Why PNGs instead of PDF:**
 - Better LaTeX compatibility with includegraphics

@@ -521,10 +521,10 @@ If available, follow these steps:
 **Step 1: Export slides to individual PNGs**
 ```bash
 cd $PROJECT_DIR
-${CLAUDE_PLUGIN_ROOT}/scripts/export-slides.sh slides.md png exports
+slidev export slides.md --output exports/slides --format png --per-slide
 ```
 
-This creates `exports/slide-001.png`, `exports/slide-002.png`, etc.
+This creates `exports/slide-1.png`, `exports/slide-2.png`, etc.
 
 **Step 2: Research further reading resources**
 

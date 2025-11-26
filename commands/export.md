@@ -57,14 +57,9 @@ npx playwright install chromium
 
 ### 4. Export to Format
 
-Execute export script:
-```bash
-cd [presentation-dir]
-${CLAUDE_PLUGIN_ROOT}/scripts/export-slides.sh slides.md [format] exports
-```
-
 **PDF Export:**
 ```bash
+cd [presentation-dir]
 slidev export slides.md --output exports/slides.pdf
 ```
 - Vector format (best quality)
@@ -74,6 +69,7 @@ slidev export slides.md --output exports/slides.pdf
 
 **PPTX Export:**
 ```bash
+cd [presentation-dir]
 slidev export slides.md --format pptx --output exports/slides.pptx
 ```
 - PowerPoint format
@@ -83,11 +79,12 @@ slidev export slides.md --format pptx --output exports/slides.pptx
 
 **PNG Export:**
 ```bash
-slidev export slides.md --format png --output exports/slides
+cd [presentation-dir]
+slidev export slides.md --output exports/slides --format png --per-slide
 ```
 - Creates PNG for each slide
-- Numbered files: 001.png, 002.png, etc.
-- Useful for social media, thumbnails
+- Numbered files: slide-1.png, slide-2.png, etc.
+- Useful for handouts, social media, thumbnails
 - High resolution images
 
 ### 5. Monitor Progress
