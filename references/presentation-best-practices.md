@@ -1,6 +1,13 @@
 # Presentation Best Practices
 
-Evidence-based guidelines for creating effective scientific and technical presentations.
+Research-backed guidelines for creating effective scientific and technical presentations. The Slidedeck plugin enforces these rules automatically through hard limits and design checks.
+
+**Key Principles:**
+- Cognitive load limits: ≤6 elements per slide (based on Miller's Law)
+- Minimal text: <50 words per slide (prevents reading vs listening interference)
+- One idea per slide (maintains focus and narrative flow)
+- Accessibility: 18pt+ fonts, 4.5:1+ contrast, colorblind-safe colors
+- Meaningful titles: Assertions not labels (e.g., "System handles 10K req/sec" not "Results")
 
 **Sources**: The Scientist, TED Blog, PLOS Computational Biology, MIT Communication Lab, Last Week in AWS, Prezent.ai
 

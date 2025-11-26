@@ -1,7 +1,7 @@
 {
   "name": "slidedeck",
   "version": "0.1.0",
-  "description": "Evidence-based presentation creation workflow using Slidev - from brainstorming to handout generation. Features research-backed design principles (90s/slide timing, cognitive load limits ≤6 elements, accessibility defaults, colorblind-safe palettes).",
+  "description": "Professional presentation creation using Slidev - from brainstorming to handout generation. Enforces clean, accessible slides with hard limits (≤6 elements, <50 words, 18pt+ fonts) and prevents common presentation mistakes.",
   "author": {
     "name": "Roland Huss",
     "email": "cc-slidedeck@ro14nd.de"
@@ -16,18 +16,19 @@
     "diagrams",
     "workflow",
     "accessibility",
-    "evidence-based"
+    "design-enforcement",
+    "clean-slides"
   ],
   "license": "MIT",
   "commands": [
     {
       "name": "brainstorm",
-      "description": "Interactive brainstorming and research phase for presentation creation",
+      "description": "Interactive brainstorming with web research and CfP analysis",
       "file": "commands/brainstorm.md"
     },
     {
       "name": "create",
-      "description": "Create a complete presentation from brainstorming to handout generation",
+      "description": "End-to-end workflow: brainstorming → slides → handout (with enforced design limits)",
       "file": "commands/create.md"
     },
     {
@@ -42,7 +43,7 @@
     },
     {
       "name": "enhance-visuals",
-      "description": "Comprehensive visual enhancement for all slides",
+      "description": "Add mermaid diagrams, stock photos, and AI image prompts to slides",
       "file": "commands/enhance-visuals.md"
     },
     {
@@ -52,7 +53,7 @@
     },
     {
       "name": "handout",
-      "description": "Generate comprehensive LaTeX handout from presentation",
+      "description": "Generate LaTeX handout with slide images, prose explanations, and research links",
       "file": "commands/handout.md"
     },
     {
@@ -72,14 +73,14 @@
     },
     {
       "name": "slides",
-      "description": "Generate Slidev slides from outline",
+      "description": "Generate clean, accessible Slidev slides from outline (enforces ≤6 elements, <50 words)",
       "file": "commands/slides.md"
     }
   ],
   "skills": [
     {
       "name": "Presentation Design",
-      "description": "Evidence-based presentation design principles, storytelling, visual hierarchy, and audience engagement strategies",
+      "description": "Research-backed presentation design principles, storytelling, visual hierarchy, and audience engagement strategies with hard limits to prevent overcrowded slides",
       "file": "skills/presentation-design/SKILL.md",
       "version": "0.2.0"
     },
@@ -105,14 +106,14 @@
   "agents": [
     {
       "name": "outline-validator",
-      "description": "Validate presentation outline structure, flow, completeness, and time constraints using evidence-based timing (90s/slide default)",
+      "description": "Validate presentation outline structure, flow, completeness, and time constraints (90s/slide default timing)",
       "file": "agents/outline-validator.md",
       "color": "yellow",
       "model": "inherit"
     },
     {
       "name": "slide-optimizer",
-      "description": "Review slide quality using 12-point evidence-based checklist (one idea, meaningful title, ≤6 elements, <50 words, accessibility)",
+      "description": "Review slide quality using 12-point checklist (one idea per slide, meaningful title, ≤6 elements, <50 words, accessibility)",
       "file": "agents/slide-optimizer.md",
       "color": "cyan",
       "model": "inherit"

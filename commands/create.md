@@ -7,9 +7,9 @@ allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "Grep", "Glob", "T
 
 # Slidedeck Creation - Complete Workflow
 
-Execute the full presentation creation workflow from initial brainstorming through final handout generation using evidence-based best practices.
+Execute the full presentation creation workflow from initial brainstorming through final handout generation with enforced design limits and accessibility defaults.
 
-**Evidence Base**: This workflow applies research-based principles for presentation design, cognitive load management, accessibility, and effective communication. See `references/presentation-best-practices.md` for detailed guidelines.
+**Research Basis**: This workflow enforces presentation best practices based on cognitive load studies (Miller's Law), TED presentation research, and MIT Communication Lab recommendations. See `references/presentation-best-practices.md` for detailed research.
 
 ## Overview
 
@@ -235,7 +235,7 @@ options:
   - "60+ minutes (Workshop/Tutorial)"
 ```
 
-**Slide Count (Evidence-Based - 90s/slide default):**
+**Slide Count (90s/slide default timing):**
 Calculate recommendation based on duration using formula:
 ```
 Expected slides = (duration_minutes × 60) / 90
@@ -745,12 +745,12 @@ Present completion summary:
 - Offer to skip optional phases
 - Provide clear next steps
 
-**Content Quality (Evidence-Based):**
+**Content Quality Standards:**
 - **Follow presentation-design skill principles** (one idea per slide, meaningful titles, cognitive load limits)
 - **Apply slidev-mastery skill** for Slidev syntax and accessibility defaults
 - **Use visual-design skill** for colorblind-safe visuals and diagram design
 - **Validate with agents** before proceeding (outline-validator, slide-optimizer)
-- **Apply research standards**:
+- **Enforce hard limits**:
   - One idea per slide (CRITICAL)
   - ≤6 elements per slide (cognitive load)
   - <50 words body text per slide
