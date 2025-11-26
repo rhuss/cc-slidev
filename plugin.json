@@ -1,0 +1,128 @@
+{
+  "name": "slidedeck",
+  "version": "0.1.0",
+  "description": "Evidence-based presentation creation workflow using Slidev - from brainstorming to handout generation. Features research-backed design principles (90s/slide timing, cognitive load limits ≤6 elements, accessibility defaults, colorblind-safe palettes).",
+  "author": {
+    "name": "Roland Huss",
+    "email": "cc-slidedeck@ro14nd.de"
+  },
+  "keywords": [
+    "slidev",
+    "presentation",
+    "slides",
+    "latex",
+    "handout",
+    "mermaid",
+    "diagrams",
+    "workflow",
+    "accessibility",
+    "evidence-based"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "brainstorm",
+      "description": "Interactive brainstorming and research phase for presentation creation",
+      "file": "commands/brainstorm.md"
+    },
+    {
+      "name": "create",
+      "description": "Create a complete presentation from brainstorming to handout generation",
+      "file": "commands/create.md"
+    },
+    {
+      "name": "diagram",
+      "description": "Create or improve mermaid diagram for specific slide",
+      "file": "commands/diagram.md"
+    },
+    {
+      "name": "edit-slide",
+      "description": "Edit a specific slide with table of contents context",
+      "file": "commands/edit-slide.md"
+    },
+    {
+      "name": "enhance-visuals",
+      "description": "Comprehensive visual enhancement for all slides",
+      "file": "commands/enhance-visuals.md"
+    },
+    {
+      "name": "export",
+      "description": "Export presentation to PDF, PPTX, or other formats",
+      "file": "commands/export.md"
+    },
+    {
+      "name": "handout",
+      "description": "Generate comprehensive LaTeX handout from presentation",
+      "file": "commands/handout.md"
+    },
+    {
+      "name": "notes",
+      "description": "Generate or enhance presenter notes for all slides",
+      "file": "commands/notes.md"
+    },
+    {
+      "name": "outline",
+      "description": "Create or revise presentation outline from brainstorming notes",
+      "file": "commands/outline.md"
+    },
+    {
+      "name": "preview",
+      "description": "Start Slidev dev server to preview presentation",
+      "file": "commands/preview.md"
+    },
+    {
+      "name": "slides",
+      "description": "Generate Slidev slides from outline",
+      "file": "commands/slides.md"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Presentation Design",
+      "description": "Evidence-based presentation design principles, storytelling, visual hierarchy, and audience engagement strategies",
+      "file": "skills/presentation-design/SKILL.md",
+      "version": "0.2.0"
+    },
+    {
+      "name": "Slidev Mastery",
+      "description": "Comprehensive Slidev expertise for markdown-based presentations with layouts, animations, and accessibility features",
+      "file": "skills/slidev-mastery/SKILL.md",
+      "version": "0.2.0"
+    },
+    {
+      "name": "Visual Design",
+      "description": "Mermaid diagrams, colorblind-safe color palettes, stock photography, and AI image generation for presentations",
+      "file": "skills/visual-design/SKILL.md",
+      "version": "0.2.0"
+    },
+    {
+      "name": "LaTeX Handouts",
+      "description": "Professional LaTeX document creation for presentation handouts with slides, notes, and supplementary materials",
+      "file": "skills/latex-handouts/SKILL.md",
+      "version": "0.1.0"
+    }
+  ],
+  "agents": [
+    {
+      "name": "outline-validator",
+      "description": "Validate presentation outline structure, flow, completeness, and time constraints using evidence-based timing (90s/slide default)",
+      "file": "agents/outline-validator.md",
+      "color": "yellow",
+      "model": "inherit"
+    },
+    {
+      "name": "slide-optimizer",
+      "description": "Review slide quality using 12-point evidence-based checklist (one idea, meaningful title, ≤6 elements, <50 words, accessibility)",
+      "file": "agents/slide-optimizer.md",
+      "color": "cyan",
+      "model": "inherit"
+    },
+    {
+      "name": "visual-suggester",
+      "description": "Suggest visual enhancements (mermaid diagrams, stock photos, AI images) for slides based on content analysis",
+      "file": "agents/visual-suggester.md",
+      "color": "magenta",
+      "model": "inherit"
+    }
+  ]
+}
