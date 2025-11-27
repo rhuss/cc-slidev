@@ -29,13 +29,15 @@ Locate slides.md:
 Read master slides.md directly to extract slide information:
 
 ```markdown
-<!-- Slide 1: Title -->
+---
 src: ./slides/title.md
 ---
+<!-- Slide 1: Title -->
 
-<!-- Slide 5: Microservices Benefits -->
+---
 src: ./slides/microservices-benefits.md
 ---
+<!-- Slide 5: Microservices Benefits -->
 ```
 
 Parse comment pattern `<!-- Slide \d+: .* -->` to get:

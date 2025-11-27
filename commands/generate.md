@@ -476,62 +476,75 @@ body {
 </style>
 
 ---
-<!-- Slide 1: Title -->
 src: ./slides/title.md
 ---
+<!-- Slide 1: Title -->
 
 ---
-<!-- Slide 2: Hook - Opening question -->
 src: ./slides/hook.md
 ---
+<!-- Slide 2: Hook - Opening question -->
 
 ---
-<!-- Slide 3: Problem Statement -->
 src: ./slides/problem-statement.md
 ---
+<!-- Slide 3: Problem Statement -->
 
 ---
-<!-- Slide 4: Kubernetes Architecture Overview -->
 src: ./slides/kubernetes-architecture.md
 ---
+<!-- Slide 4: Kubernetes Architecture Overview -->
 
 ---
-<!-- Slide 5: Microservices Benefits -->
 src: ./slides/microservices-benefits.md
 ---
+<!-- Slide 5: Microservices Benefits -->
 
 <!-- Continue for all main content slides... -->
 
 ---
-<!-- Slide 18: Conclusion - Key Takeaways -->
 src: ./slides/conclusion.md
 ---
+<!-- Slide 18: Conclusion - Key Takeaways -->
 
 ---
-<!-- Slide 19: Questions -->
 src: ./slides/questions.md
 ---
+<!-- Slide 19: Questions -->
 
 ---
-<!-- Slide 20: Backup - Detailed Methodology -->
 src: ./slides/backup-methodology.md
 ---
+<!-- Slide 20: Backup - Detailed Methodology -->
 
 ---
-<!-- Slide 21: Backup - Alternative Approaches -->
 src: ./slides/backup-alternatives.md
 ---
+<!-- Slide 21: Backup - Alternative Approaches -->
 
 <!-- Continue for all backup slides... -->
 ```
 
 **Master file requirements:**
 - Global frontmatter with theme and accessibility CSS at the top
-- Each slide inclusion preceded by `---` separator
-- Comment before each `src` with format: `<!-- Slide X: Brief description -->`
+- Each slide inclusion uses frontmatter block with `src:` directive
+- Comment AFTER closing `---` with format: `<!-- Slide X: Brief description -->`
 - Sequential slide numbering in comments (updates when reordering)
-- Descriptive file names in `src` paths (stable, never change)
+- Descriptive file names in `src:` paths (stable, never change)
 - Clear section markers (main content vs backup slides)
+
+**Correct syntax (per Slidev docs):**
+```markdown
+---
+src: ./slides/filename.md
+---
+<!-- Slide X: Description -->
+```
+
+**Why comments go after `---`:**
+- Frontmatter block (between `---` separators) contains only YAML
+- Comments after closing `---` are ignored by Slidev
+- This matches Slidev's official importing slides syntax
 
 **Benefits of this structure:**
 - **Reordering slides:** Just move the `src` includes, update slide numbers in comments

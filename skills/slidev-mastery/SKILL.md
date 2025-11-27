@@ -76,20 +76,22 @@ title: My Presentation
 ---
 
 ---
-<!-- Slide 1: Title -->
 src: ./slides/title.md
 ---
+<!-- Slide 1: Title -->
 
 ---
-<!-- Slide 2: Opening Hook -->
 src: ./slides/hook.md
 ---
+<!-- Slide 2: Opening Hook -->
 
 ---
-<!-- Slide 3: Problem Statement -->
 src: ./slides/problem-statement.md
 ---
+<!-- Slide 3: Problem Statement -->
 ```
+
+**Note:** Comments must come AFTER the closing `---` (not inside frontmatter block) per Slidev specs.
 
 **Frontmatter merging:** You can override frontmatter from external files:
 ```markdown
