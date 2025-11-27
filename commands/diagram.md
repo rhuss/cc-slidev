@@ -1,5 +1,5 @@
 ---
-name: diagram
+name: slidev:diagram
 description: Create or improve mermaid diagram for specific slide
 argument-hint: "<slide-number>"
 allowed-tools: ["Read", "Edit", "Bash", "Task"]
@@ -7,9 +7,11 @@ allowed-tools: ["Read", "Edit", "Bash", "Task"]
 
 # Diagram Creation for Specific Slide
 
-Focus on creating or improving mermaid diagrams for a specific slide using evidence-based cognitive load limits and colorblind-safe design.
+Focus on creating diagrams for a specific slide with **multi-platform support** (Mermaid, PlantUML, Excalidraw) using evidence-based cognitive load limits and colorblind-safe design.
 
 **Evidence Base**: Diagram design follows research-based principles for cognitive load (max 7-9 nodes), colorblind accessibility, and visual clarity. See `references/presentation-best-practices.md` for guidelines.
+
+**Multi-Platform**: Diagrams are automatically generated in all enabled formats (configurable in `default.json` or per-presentation `slidev.config.json`). Mermaid code is embedded inline by default, with PlantUML and Excalidraw alternatives saved for flexibility.
 
 ## Execution
 
@@ -180,11 +182,29 @@ stateDiagram-v2
 5. Let me create a custom variation
 ```
 
-### 5. Implement Chosen Diagram
+### 5. Generate Multi-Platform Diagram
 
-Based on user selection:
+Based on user selection, generate diagram in all enabled formats:
 
-**Inline Rendering (Default):**
+**Step 1: Extract slide title for directory naming**
+Read the slide to get its title for creating organized storage.
+
+**Step 2: Generate all formats using orchestration script**
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/generate-multi-platform-diagram.sh \
+  "[Slide Title]" \
+  "[Mermaid Code]" \
+  "."
+```
+
+This automatically:
+- Creates `public/images/<slide-title-mangled>/` directory
+- Generates Mermaid source (.mmd) and rendered image (.svg/.png)
+- Translates to PlantUML (.puml) and renders if enabled
+- Translates to Excalidraw (.excalidraw JSON) and renders if enabled
+- Applies colorblind-safe theme to all formats
+
+**Step 3: Embed Mermaid inline in slide (default)**
 Add diagram directly to slide:
 ```markdown
 # Slide Title
@@ -192,40 +212,33 @@ Add diagram directly to slide:
 Content before diagram
 
 ```mermaid
-[chosen diagram code]
+[chosen diagram code with theme variables]
 ```
 
 Remaining content
 ```
 
-**Offline Rendering (High Quality):**
-If user wants high-quality SVG:
+**Step 4: Show user all generated formats**
+```markdown
+✅ Diagram Generated for Slide [N]: [Title]
 
-1. Save diagram to temp file:
-   ```bash
-   cat > /tmp/diagram-slide-[N].mmd <<'EOF'
-   [mermaid code]
-   EOF
-   ```
+**Embedded in slide**: Mermaid (inline rendering by Slidev)
 
-2. Render with mermaid-cli (if available):
-   ```bash
-   ${CLAUDE_PLUGIN_ROOT}/scripts/render-mermaid.sh \
-     /tmp/diagram-slide-[N].mmd \
-     public/images/diagram-slide-[N].svg \
-     svg \
-     [theme]
-   ```
+**All formats generated in** `public/images/[mangled-title]/`:
+- `diagram.mmd` - Mermaid source
+- `diagram.svg` - Mermaid rendered (if mmdc available)
+- `diagram.puml` - PlantUML source (if enabled)
+- `diagram-plantuml.svg` - PlantUML rendered (if enabled)
+- `diagram.excalidraw` - Excalidraw JSON source (if enabled)
+- `diagram-excalidraw.svg` - Excalidraw rendered (if enabled)
 
-3. Add image reference to slide:
-   ```markdown
-   ![Diagram](./public/images/diagram-slide-[N].svg)
-   ```
+**To switch formats in slide:**
+Replace mermaid code block with image reference:
+![Diagram](./public/images/[mangled-title]/diagram-plantuml.svg)
 
-If mermaid-cli not available:
-- Provide code
-- Suggest https://mermaid.live/ for manual rendering
-- Explain how to download and add to slides
+**To edit in Excalidraw:**
+Open `public/images/[mangled-title]/diagram.excalidraw` at https://excalidraw.com
+```
 
 ### 6. Customize Diagram
 
@@ -309,7 +322,7 @@ Navigate to slide [N] to see diagram.
 
 **Edit Diagram:**
 Diagram code is in `slides.md` at slide [N].
-Edit directly or run `/slidedeck:diagram [N]` again.
+Edit directly or run `/slidev:diagram [N]` again.
 ```
 
 ## Diagram Types Reference
