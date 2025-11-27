@@ -1,8 +1,9 @@
 ---
-name: edit-slide
+name: slides:edit-slide
 description: Edit a specific slide with table of contents context
 argument-hint: "<slide-number>"
-allowed-tools: ["Read", "Edit", "Grep", "Task"]
+allowed-tools: ["Read", "Edit", "Grep", "Task", "Skill"]
+skills: ["slidedeck:presentation-design"]
 ---
 
 # Edit Specific Slide
@@ -19,17 +20,37 @@ Extract from `$ARGUMENTS`:
 - Must be a valid number
 - If missing or invalid: Ask user "Which slide number should we edit?"
 
-### 2. Read slides.md
+### 2. Read Master slides.md and Locate Slide File
 
-Find the presentation file:
-- Look in current directory
+Find the presentation:
+- Look for `slides.md` in current directory
 - Look in subdirectories (presentation folders)
 - If multiple found: Ask user which one
 
-Parse slides.md to:
-- Count total slides (separated by `---`)
-- Extract table of contents (all slide headings)
-- Locate the requested slide
+**Read slides.md directly** to find slide file path:
+
+The master slides.md contains comments with slide numbers:
+```markdown
+<!-- Slide 1: Title -->
+src: ./slides/title.md
+---
+
+<!-- Slide 5: Microservices Benefits -->
+src: ./slides/microservices-benefits.md
+---
+```
+
+**To find a specific slide:**
+1. Read the master slides.md file using the Read tool
+2. Search for the comment pattern `<!-- Slide N: ... -->`
+3. Extract the description after the colon
+4. Find the `src:` line immediately following
+5. Extract the file path
+
+**To build table of contents:**
+- Extract all comments matching `<!-- Slide \d+: .* -->`
+- Parse slide number and description
+- Count total slides
 
 If slide number > total slides:
 - Error: "Only [X] slides exist. Choose 1-[X]."
@@ -103,7 +124,8 @@ Options to offer:
 Based on user choice:
 
 **Content changes (Evidence-Based Rules):**
-- Use Edit tool to update slide content
+- Use Edit tool to update the **individual slide file** (e.g., `slides/microservices-benefits.md`)
+- Changes automatically reflected in presentation
 - **One idea per slide** (single central message)
 - **Meaningful title** (assertion format: "X demonstrates Y", not label: "Results")
 - **Cognitive load limit** (≤6 total elements: bullets + images + diagrams)

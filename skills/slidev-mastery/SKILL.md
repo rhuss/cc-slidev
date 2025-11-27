@@ -28,6 +28,77 @@ Content here
 More content
 ```
 
+### Importing Slides from External Files
+
+You can split your presentation into multiple markdown files using the `src` frontmatter option. This allows for better organization and reusability:
+
+```markdown
+# Normal slide
+
+---
+src: ./slides/introduction.md
+---
+
+---
+# Another normal slide
+
+---
+src: ./slides/conclusion.md
+---
+```
+
+**Benefits of modular slide structure:**
+- **Stable identity:** Use meaningful filenames (e.g., `microservices-benefits.md`) instead of numbers
+- **Easy reordering:** Move `src` includes in master file without renaming files
+- **Independent editing:** Edit individual slide files separately
+- **Better collaboration:** Team members can work on different slides simultaneously
+- **Version control:** Meaningful file names in git diffs
+
+**Example structure:**
+```
+presentation/
+├── slides.md                      # Master file with includes
+├── slides/
+│   ├── title.md                   # Title slide
+│   ├── hook.md                    # Opening hook
+│   ├── problem-statement.md       # Problem introduction
+│   ├── architecture-overview.md   # Architecture slide
+│   ├── conclusion.md              # Conclusion
+│   └── questions.md               # Q&A
+└── public/images/
+```
+
+**Master file example with slide number comments:**
+```markdown
+---
+theme: default
+title: My Presentation
+---
+
+---
+<!-- Slide 1: Title -->
+src: ./slides/title.md
+---
+
+---
+<!-- Slide 2: Opening Hook -->
+src: ./slides/hook.md
+---
+
+---
+<!-- Slide 3: Problem Statement -->
+src: ./slides/problem-statement.md
+---
+```
+
+**Frontmatter merging:** You can override frontmatter from external files:
+```markdown
+---
+src: ./slides/content.md
+layout: two-cols  # Overrides layout in content.md
+---
+```
+
 ### Frontmatter Configuration
 
 Configure presentation globally in frontmatter at the top of `slides.md`:
