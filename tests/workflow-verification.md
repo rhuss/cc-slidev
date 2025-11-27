@@ -108,10 +108,12 @@ for (const nodeMatch of nodeMatches) { ... }
 **Solution:** Modular slide structure with slide number comments in master slides.md:
 ```markdown
 ---
-src: ./slides/filename.md
+src: ./slides/05-descriptive-name.md
 ---
 <!-- Slide 5: Description -->
 ```
+
+**File naming:** Individual slides use numeric prefix (01-, 02-, etc.) for ordering in directory listings.
 
 **Accuracy:** 100% match - slide numbers are explicitly annotated in comments.
 
