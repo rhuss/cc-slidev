@@ -31,20 +31,22 @@ Find the presentation:
 
 The master slides.md contains comments with slide numbers:
 ```markdown
-<!-- Slide 1: Title -->
+---
 src: ./slides/title.md
 ---
+<!-- Slide 1: Title -->
 
-<!-- Slide 5: Microservices Benefits -->
+---
 src: ./slides/microservices-benefits.md
 ---
+<!-- Slide 5: Microservices Benefits -->
 ```
 
 **To find a specific slide:**
 1. Read the master slides.md file using the Read tool
 2. Search for the comment pattern `<!-- Slide N: ... -->`
 3. Extract the description after the colon
-4. Find the `src:` line immediately following
+4. Find the `src:` line immediately preceding (in the frontmatter block above)
 5. Extract the file path
 
 **To build table of contents:**

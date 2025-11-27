@@ -107,8 +107,10 @@ for (const nodeMatch of nodeMatches) { ... }
 
 **Solution:** Modular slide structure with slide number comments in master slides.md:
 ```markdown
-<!-- Slide 5: Description -->
+---
 src: ./slides/filename.md
+---
+<!-- Slide 5: Description -->
 ```
 
 **Accuracy:** 100% match - slide numbers are explicitly annotated in comments.
