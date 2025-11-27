@@ -28,12 +28,12 @@ Read the master `slides.md` file containing slide comments:
 
 ```markdown
 ---
-src: ./slides/title.md
+src: ./slides/01-title.md
 ---
 <!-- Slide 1: Title -->
 
 ---
-src: ./slides/microservices-benefits.md
+src: ./slides/05-microservices-benefits.md
 ---
 <!-- Slide 5: Microservices Benefits -->
 ```
