@@ -2,13 +2,17 @@
 name: slidev:edit
 description: Edit a specific slide with table of contents context
 argument-hint: "[slide-number]"
-allowed-tools: ["Read", "Edit", "Grep", "Task", "Skill"]
-skills: ["slidev:presentation-design"]
+allowed-tools: ["Read", "Edit", "Grep", "Bash"]
 ---
 
 # Edit Specific Slide
 
-Focus on editing a specific slide with full context of presentation structure, applying evidence-based quality standards.
+**CRITICAL ENFORCEMENT RULES - READ FIRST:**
+
+1. **MANDATORY FILE READING**: You MUST use the Read tool to read actual files BEFORE generating ANY output
+2. **NO HALLUCINATION**: DO NOT generate slide titles, content, or examples from patterns - only show content from actual files you've read
+3. **VALIDATION REQUIRED**: Before displaying context, verify you have actual file content in your context
+4. **FAIL FAST**: If files don't exist or slide number is invalid, error immediately - don't generate placeholder content
 
 **Evidence Base**: Slide editing follows research-based principles for clarity, cognitive load, and accessibility. See `references/presentation-best-practices.md` for guidelines.
 
@@ -22,147 +26,119 @@ Extract from `$ARGUMENTS`:
 
 **IMPORTANT**: The slide number provided by the user is the EXACT slide to edit. Do NOT increment or modify it.
 
-### 2. Read Master slides.md and Locate Slide File
+### 2. Find and Read slides.md (MANDATORY - Use Read Tool Now)
 
-Find the presentation:
-- Look for `slides.md` in current directory
-- Look in subdirectories (presentation folders)
-- If multiple found: Ask user which one
+**ACTION REQUIRED - Use Read tool to find slides.md:**
 
-**Read slides.md directly** to find slide file path:
+```bash
+# Use Bash to locate slides.md if not in current directory
+find . -name "slides.md" -type f -not -path "*/node_modules/*"
+```
 
-The master slides.md contains comments with slide numbers:
+Then **USE Read TOOL** on the slides.md file you found.
+
+**VALIDATION CHECKPOINT**: Do you have the actual slides.md content? If NO, STOP and find the file.
+
+### 3. Parse Actual Slide Data (From File Content You Just Read)
+
+The master slides.md contains comments with slide numbers like:
 ```markdown
 ---
 src: ./slides/01-title.md
 ---
 <!-- Slide 1: Title -->
-
----
-src: ./slides/05-microservices-benefits.md
----
-<!-- Slide 5: Microservices Benefits -->
 ```
 
-**To find a specific slide:**
-1. Read the master slides.md file using the Read tool
-2. Search for the comment pattern `<!-- Slide N: ... -->` where N is the EXACT number requested
-3. Extract the description after the colon (this is the slide title)
-4. Find the `src:` line immediately preceding (in the frontmatter block above)
-5. Extract the file path
-6. Read the individual slide file to get full content
+**PROCESS THE ACTUAL FILE CONTENT:**
 
-**To build table of contents:**
-- Extract all comments matching `<!-- Slide \d+: .* -->`
-- Parse slide number and description
-- Count total slides
+1. **USE Read TOOL** to read slides.md (if you haven't already)
+2. Extract ALL slide comments matching `<!-- Slide (\d+): (.+) -->`
+3. Count total slides from ACTUAL file
+4. Find the requested slide number N in ACTUAL comments
+5. Extract the ACTUAL title after the colon
+6. Find the `src:` line IMMEDIATELY BEFORE that comment
+7. Extract the file path
 
-If slide number > total slides:
-- Error: "Only [X] slides exist. Choose 1-[X]."
+**VALIDATION CHECKPOINT**:
+- If slide number > total slides: Error "Only [X] slides exist. Choose 1-[X]."
+- If slide N comment not found: Error "Slide [N] not found."
+- Do you have an actual file path? If NO, something went wrong - re-read the file.
 
-If comment for requested slide N not found:
-- Error: "Slide [N] not found. Use slide numbers from table of contents."
+### 4. Read Individual Slide File (MANDATORY - Use Read Tool Now)
 
-### 3. Gather Comprehensive Context
+**USE Read TOOL** on the slide file path you extracted (e.g., `./slides/07-nfd-detects-general-hardware-features.md`)
 
-**Read contextual files to understand slide purpose:**
+**VALIDATION CHECKPOINT**: Do you have the actual slide content including frontmatter and body? If NO, STOP.
 
-1. **Check for brainstorm.md** in presentation directory:
-   - If exists: Search for mentions of slide topic/keywords
-   - Extract relevant research, objectives, or key points
-   - Note if this slide relates to CfP commitments
+### 5. Gather Optional Context Files
 
-2. **Check for outline.md** in presentation directory:
-   - If exists: Find section where this slide appears
-   - Extract outline context (section goals, flow)
-   - Note slide's role in presentation structure
+**Optionally read contextual files** (use Read tool only if files exist):
 
-3. **Read slide's presenter notes**:
-   - Extract any `<!-- PRESENTER NOTES: -->` sections from slide file
-   - Parse key points, timing, delivery tips
-   - Note transition guidance
+1. **brainstorm.md** - presentation research/goals (if exists)
+2. **outline.md** - section structure/flow (if exists)
+3. **notes.md** or **speaker-notes.md** - presenter notes organized by slide (if exists)
+   - Look for sections mentioning slide N or the slide title
+   - Extract relevant timing, delivery tips, transitions
+4. **Inline presenter notes** - already in slide file you read in step 4 (HTML comments)
 
-### 4. Display Context
+### 6. Display Context (VALIDATION: Must Use Actual File Content)
 
-Show user comprehensive context:
+**FINAL VALIDATION BEFORE DISPLAY:**
+- ✓ Have you read slides.md?
+- ✓ Have you read the individual slide file?
+- ✓ Are you using ACTUAL titles/content from files (not examples)?
+
+**If any validation fails, STOP and use Read tool.**
+
+Show user CONCISE context (CLI-friendly format):
 
 ```markdown
-# Editing Slide [N]: [Slide Title]
+Editing Slide N: [ACTUAL TITLE]
+Position: N of [TOTAL] | Layout: [layout] | File: [path]
 
-**Position:** Slide [N] of [X]
+Tagline: [Create a single-sentence prose summary that blends information from:
+- outline.md section purpose and key message
+- speaker-notes.md timing, delivery points, and limitations to emphasize
+- inline slide notes
+- the slide title itself
+Capture the CORE MESSAGE this slide is trying to convey in one clear sentence.]
 
----
-
-## 📋 Table of Contents
-
-1. [Slide 1 title]
-2. [Slide 2 title]
-3. [Slide 3 title]
-...
-**→ [N]. [Current slide title]** ← You are here
-...
-[X]. [Last slide title]
-
----
-
-## 🎯 Slide Context
-
-**From outline.md:**
-[If outline.md exists and mentions this slide:
-- Section: [Section name]
-- Purpose: [Why this slide is here]
-- Flow: [How it fits in narrative]
-]
-[If not found: "No outline context available"]
-
-**From brainstorm.md:**
-[If brainstorm.md exists and has relevant info:
-- Related key points: [List]
-- Research/sources: [Relevant findings]
-- CfP commitments: [If applicable]
-]
-[If not found: "No brainstorming context available"]
-
-**Presenter notes:**
-[If slide has presenter notes:
-- Key points to emphasize
-- Timing guidance
-- Delivery tips
-- Transitions
-]
-[If not found: "No presenter notes yet"]
-
----
-
-## 📄 Current Slide Content
-
-### Frontmatter
-```yaml
-[Slide frontmatter - layout, image, etc.]
+Context: [2-3 sentence prose summary combining relevant details from outline, speaker notes, and brainstorm that help understand the slide's role in the presentation flow and what points to emphasize during editing]
 ```
 
-### Slide Body
-[Slide content - heading, bullets, diagrams]
+**Then use AskUserQuestion tool to present menu:**
 
----
+```
+AskUserQuestion with:
+- question: "What would you like to do with this slide?"
+- header: "Action"
+- options:
+  1. label: "Run quality assessment"
+     description: "Analyze against quality criteria (references/presentation-best-practices.md)"
+  2. label: "Edit content"
+     description: "Modify text, bullets, or heading"
+  3. label: "Change layout"
+     description: "Switch Slidev layout (two-cols, default, center, etc.)"
+  4. label: "Add/edit visuals"
+     description: "Add diagrams, images, or improve existing visuals"
+  5. label: "Update notes"
+     description: "Edit presenter notes and timing guidance"
+  6. label: "Done"
+     description: "Finish editing this slide"
 ```
 
-### 5. Analyze Slide (Evidence-Based Quality Check)
+**IMPORTANT**: Do NOT display full slide content - user has it open. Focus on synthesized context.
 
-**Automatically** use slide-optimizer agent to check against 12-point quality criteria:
-```
-Analyze slide [N] using slide-optimizer agent to identify improvement opportunities.
-```
+### 7. Interactive Editing
 
-Present analysis with evidence-based scoring:
+When user chooses "Run quality assessment":
+
+Use slide-optimizer agent to analyze the slide and present DETAILED results:
+
 ```markdown
-## 📊 Evidence-Based Quality Analysis
+Quality Score: [X/12]
 
-**Slide [N]: [Slide Title]**
-
-**Quality Score: [X/12]**
-
-**Current state:**
+Current State:
 - ✓/✗ One idea per slide
 - ✓/✗ Meaningful title (assertion vs label)
 - ✓/✗ Element count: [X] elements (target ≤6)
@@ -176,24 +152,36 @@ Present analysis with evidence-based scoring:
 - ✓/✗ White space (≥10% margins)
 - ✓/✗ Explainable in ~90 seconds
 
-**Critical violations:** [List or "None"]
+Critical violations: [List or "None"]
 
-**Recommendations:**
-1. [Priority order: CRITICAL → HIGH → MEDIUM → LOW]
+Recommendations (priority order):
+1. [CRITICAL/HIGH/MEDIUM/LOW] - [Specific issue]
+   Current: [What exists now]
+   Suggested: [Concrete improvement]
+   Why: [Research basis]
+   Impact: [What changes]
+
+2. [Next recommendation with same detail...]
 ```
 
-### 6. Interactive Editing
+**Then offer to apply improvements:**
 
-Ask user: "What would you like to change on this slide?"
+Use AskUserQuestion:
+- question: "Would you like to apply these improvements?"
+- header: "Next Step"
+- options:
+  1. label: "Apply all recommendations"
+     description: "Implement all suggested changes"
+  2. label: "Apply specific ones"
+     description: "Choose which recommendations to apply"
+  3. label: "Make other changes"
+     description: "Edit something else on this slide"
+  4. label: "Done with this slide"
+     description: "Return to slide selection"
 
-Options to offer:
-- **Content**: Revise text, bullets, heading
-- **Visual**: Add/modify diagram or image
-- **Layout**: Change Slidev layout
-- **Notes**: Update presenter notes
-- **Apply suggestions**: Use optimizer recommendations
+If user chooses "Apply specific ones", show another menu with each recommendation as an option (multiSelect: true).
 
-Based on user choice:
+When user chooses to edit content/layout/notes/visuals:
 
 **Content changes (Evidence-Based Rules):**
 - Use Edit tool to update the **individual slide file** (e.g., `slides/05-microservices-benefits.md`)
@@ -223,44 +211,18 @@ Based on user choice:
 - Add or update presenter notes
 - Include timing, transitions, examples
 
-### 7. Preview Changes
+### 8. After Edits
 
-After edits, show updated slide:
-```markdown
-## Updated Slide [N]
-
-[New slide content]
-
----
-
-**Changes Made:**
-- [Change 1]
-- [Change 2]
+Confirm changes made:
+```
+Updated: [brief description of what changed]
 ```
 
-Ask: "Does this look good? Any other changes needed?"
-
-Allow iteration until satisfied.
-
-### 8. Optimization Check
-
-After user-requested changes, ask:
-"Should I run the optimizer to check if there are other improvements?"
-
-If yes:
-- Run slide-optimizer agent again
-- Show if any new issues found
-- Offer to apply suggestions
-
-### 9. Navigation
-
-Ask: "What would you like to do next?"
-
-Options:
+Then offer:
+- Make more changes
+- Run quality assessment (if not done yet)
 - Edit another slide
-- Preview presentation
-- Continue with next workflow step
-- Done editing
+- Done
 
 ## Evidence-Based Editing Checklist
 
