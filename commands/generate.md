@@ -350,27 +350,34 @@ Priority: [High/Medium/Low]
 For each slide in the outline, create a separate markdown file in `[topic-slug]/slides/` with a **descriptive filename** based on the slide content.
 
 **File Naming Convention:**
-- Use lowercase with hyphens (kebab-case)
-- Name based on slide topic/content, not position
+- Use numeric prefix + descriptive name (e.g., `01-title.md`, `05-microservices-benefits.md`)
+- Format: `NN-descriptive-name.md` where NN is zero-padded slide number
+- Use lowercase with hyphens (kebab-case) for descriptive part
 - Examples:
-  - `title.md` - Title/cover slide
-  - `hook.md` or `opening.md` - Opening hook
-  - `problem-statement.md` - Problem introduction
-  - `kubernetes-architecture.md` - K8s architecture slide
-  - `microservices-benefits.md` - Benefits of microservices
-  - `gpu-cluster-requirements.md` - GPU cluster requirements
-  - `conclusion.md` - Conclusion slide
-  - `questions.md` - Q&A slide
-  - `backup-methodology.md` - Backup slide about methodology
-  - `backup-alternatives.md` - Backup slide about alternatives
+  - `01-title.md` - Title/cover slide
+  - `02-hook.md` or `02-opening.md` - Opening hook
+  - `03-problem-statement.md` - Problem introduction
+  - `04-kubernetes-architecture.md` - K8s architecture slide
+  - `05-microservices-benefits.md` - Benefits of microservices
+  - `06-gpu-cluster-requirements.md` - GPU cluster requirements
+  - `18-conclusion.md` - Conclusion slide
+  - `19-questions.md` - Q&A slide
+  - `20-backup-methodology.md` - Backup slide about methodology
+  - `21-backup-alternatives.md` - Backup slide about alternatives
 
-**Why meaningful names?**
-- Stable identity when slides are reordered
-- Easy to find specific slides
-- Self-documenting
+**Why numeric prefixes?**
+- Files appear in presentation order in directory listings
+- Easy to see sequence at a glance
+- Still have meaningful, descriptive names
 - Better version control (meaningful diffs)
 
-**Example: `[topic-slug]/slides/title.md` (Title Slide)**
+**When reordering slides:**
+- Update numeric prefixes to match new order (e.g., rename `05-*.md` to `04-*.md`)
+- Update `src:` paths in master slides.md
+- Update slide number comments
+- Git will track the rename with the descriptive name
+
+**Example: `[topic-slug]/slides/01-title.md` (Title Slide)**
 ```markdown
 ---
 layout: cover
@@ -383,7 +390,7 @@ layout: cover
 Presenter · Date
 ```
 
-**Example: `[topic-slug]/slides/hook.md` (Hook Slide)**
+**Example: `[topic-slug]/slides/02-hook.md` (Hook Slide)**
 ```markdown
 # [Hook Slide - Compelling opening]
 
@@ -396,7 +403,7 @@ Timing: 90 seconds
 -->
 ```
 
-**Example: `[topic-slug]/slides/microservices-benefits.md` (Content Slide)**
+**Example: `[topic-slug]/slides/05-microservices-benefits.md` (Content Slide)**
 ```markdown
 ---
 layout: image-right
@@ -434,10 +441,10 @@ Word count: ~35 words ✓
 ```
 
 **Continue for all slides:**
-- Main content slides (each in separate file with descriptive name)
-- Conclusion slide (`conclusion.md`)
-- Questions slide (`questions.md`)
-- Backup slides (`backup-*.md` files, 3-5 total)
+- Main content slides (each in separate file: `03-*.md`, `04-*.md`, etc.)
+- Conclusion slide (e.g., `18-conclusion.md`)
+- Questions slide (e.g., `19-questions.md`)
+- Backup slides (e.g., `20-backup-methodology.md`, `21-backup-alternatives.md`, 3-5 total)
 
 **Step 5.2: Generate Master slides.md**
 
@@ -476,49 +483,49 @@ body {
 </style>
 
 ---
-src: ./slides/title.md
+src: ./slides/01-title.md
 ---
 <!-- Slide 1: Title -->
 
 ---
-src: ./slides/hook.md
+src: ./slides/02-hook.md
 ---
 <!-- Slide 2: Hook - Opening question -->
 
 ---
-src: ./slides/problem-statement.md
+src: ./slides/03-problem-statement.md
 ---
 <!-- Slide 3: Problem Statement -->
 
 ---
-src: ./slides/kubernetes-architecture.md
+src: ./slides/04-kubernetes-architecture.md
 ---
 <!-- Slide 4: Kubernetes Architecture Overview -->
 
 ---
-src: ./slides/microservices-benefits.md
+src: ./slides/05-microservices-benefits.md
 ---
 <!-- Slide 5: Microservices Benefits -->
 
 <!-- Continue for all main content slides... -->
 
 ---
-src: ./slides/conclusion.md
+src: ./slides/18-conclusion.md
 ---
 <!-- Slide 18: Conclusion - Key Takeaways -->
 
 ---
-src: ./slides/questions.md
+src: ./slides/19-questions.md
 ---
 <!-- Slide 19: Questions -->
 
 ---
-src: ./slides/backup-methodology.md
+src: ./slides/20-backup-methodology.md
 ---
 <!-- Slide 20: Backup - Detailed Methodology -->
 
 ---
-src: ./slides/backup-alternatives.md
+src: ./slides/21-backup-alternatives.md
 ---
 <!-- Slide 21: Backup - Alternative Approaches -->
 
@@ -560,7 +567,7 @@ src: ./slides/filename.md
 - Limitations discussion
 - Research: Keeps main deck lean while showing thoroughness
 
-Write individual slide files to `[topic-slug]/slides/[descriptive-name].md` and master file to `[topic-slug]/slides.md`.
+Write individual slide files to `[topic-slug]/slides/NN-descriptive-name.md` and master file to `[topic-slug]/slides.md`.
 
 ### 6. Create package.json (Optional)
 
@@ -591,7 +598,7 @@ Present summary to user:
 
 **Structure:**
 - Master file: `[topic-slug]/slides.md`
-- Individual slides: `[topic-slug]/slides/[descriptive-name].md`
+- Individual slides: `[topic-slug]/slides/NN-descriptive-name.md`
 - Slide Count: [X] main slides + [Y] backup slides
 - Estimated Duration: [Z] minutes (at 90s/slide)
 
@@ -600,13 +607,13 @@ Present summary to user:
 [topic-slug]/
 ├── slides.md                          # Master file with includes
 ├── slides/
-│   ├── title.md                       # Slide 1: Title
-│   ├── hook.md                        # Slide 2: Opening hook
-│   ├── problem-statement.md           # Slide 3: Problem
-│   ├── [descriptive-name].md          # Content slides...
-│   ├── conclusion.md                  # Conclusion
-│   ├── questions.md                   # Q&A
-│   └── backup-*.md                    # Backup slides
+│   ├── 01-title.md                    # Slide 1: Title
+│   ├── 02-hook.md                     # Slide 2: Opening hook
+│   ├── 03-problem-statement.md        # Slide 3: Problem
+│   ├── 04-[descriptive-name].md       # Content slides...
+│   ├── 18-conclusion.md               # Conclusion
+│   ├── 19-questions.md                # Q&A
+│   └── 20-backup-*.md                 # Backup slides
 ├── public/images/
 └── exports/
 ```
@@ -646,7 +653,7 @@ Run slide-optimizer to verify all slides meet quality standards:
 2. **Edit specific slide:**
    - Edit the individual `.md` file in `slides/` directory
    - Changes automatically reflected in presentation
-   - Example: `vim slides/microservices-benefits.md`
+   - Example: `vim slides/05-microservices-benefits.md`
 
 3. **Enhance visuals:**
    `/slidedeck:enhance-visuals` - Add diagrams, photos, AI image prompts

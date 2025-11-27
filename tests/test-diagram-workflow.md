@@ -63,12 +63,12 @@ Read `test-slides.md` and verify it contains slide comments:
 
 ```markdown
 ---
-src: ./slides/first-content.md
+src: ./slides/02-first-content.md
 ---
 <!-- Slide 2: First Content Slide -->
 
 ---
-src: ./slides/second-content.md
+src: ./slides/03-second-content.md
 ---
 <!-- Slide 3: Second Content Slide -->
 ```

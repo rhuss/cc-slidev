@@ -32,12 +32,12 @@ Find the presentation:
 The master slides.md contains comments with slide numbers:
 ```markdown
 ---
-src: ./slides/title.md
+src: ./slides/01-title.md
 ---
 <!-- Slide 1: Title -->
 
 ---
-src: ./slides/microservices-benefits.md
+src: ./slides/05-microservices-benefits.md
 ---
 <!-- Slide 5: Microservices Benefits -->
 ```
@@ -126,7 +126,7 @@ Options to offer:
 Based on user choice:
 
 **Content changes (Evidence-Based Rules):**
-- Use Edit tool to update the **individual slide file** (e.g., `slides/microservices-benefits.md`)
+- Use Edit tool to update the **individual slide file** (e.g., `slides/05-microservices-benefits.md`)
 - Changes automatically reflected in presentation
 - **One idea per slide** (single central message)
 - **Meaningful title** (assertion format: "X demonstrates Y", not label: "Results")

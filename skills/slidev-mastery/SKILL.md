@@ -59,14 +59,16 @@ src: ./slides/conclusion.md
 presentation/
 ├── slides.md                      # Master file with includes
 ├── slides/
-│   ├── title.md                   # Title slide
-│   ├── hook.md                    # Opening hook
-│   ├── problem-statement.md       # Problem introduction
-│   ├── architecture-overview.md   # Architecture slide
-│   ├── conclusion.md              # Conclusion
-│   └── questions.md               # Q&A
+│   ├── 01-title.md                # Slide 1: Title
+│   ├── 02-hook.md                 # Slide 2: Opening hook
+│   ├── 03-problem-statement.md    # Slide 3: Problem introduction
+│   ├── 04-architecture-overview.md # Slide 4: Architecture slide
+│   ├── 18-conclusion.md           # Conclusion
+│   └── 19-questions.md            # Q&A
 └── public/images/
 ```
+
+**File naming:** Individual slides use numeric prefix (01-, 02-, etc.) plus descriptive name for easy ordering in directory listings while maintaining meaningful names.
 
 **Master file example with slide number comments:**
 ```markdown
@@ -76,17 +78,17 @@ title: My Presentation
 ---
 
 ---
-src: ./slides/title.md
+src: ./slides/01-title.md
 ---
 <!-- Slide 1: Title -->
 
 ---
-src: ./slides/hook.md
+src: ./slides/02-hook.md
 ---
 <!-- Slide 2: Opening Hook -->
 
 ---
-src: ./slides/problem-statement.md
+src: ./slides/03-problem-statement.md
 ---
 <!-- Slide 3: Problem Statement -->
 ```
