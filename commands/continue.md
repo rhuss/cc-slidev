@@ -44,7 +44,7 @@ Read the master slides.md file to extract slide information from comments:
 The file contains comments like:
 ```markdown
 ---
-src: ./slides/title.md
+src: ./slides/01-title.md
 ---
 <!-- Slide 1: Title -->
 ```
