@@ -160,7 +160,7 @@ Based on the current state, here are recommended actions:
 **Action:** Run `/slides:handout` to create comprehensive PDF handout
 
 ### Option 5: Edit Specific Slide
-**Action:** `/slides:edit-slide <number>` to focus on individual slide
+**Action:** `/slidev:edit <number>` to focus on individual slide
 
 ### Option 6: Preview Presentation
 **Action:** `/slides:preview` to see current state in browser
@@ -203,7 +203,7 @@ Based on user choice:
 - **Enhance visuals**: Invoke `/slides:enhance-visuals` command
 - **Add notes**: Invoke `/slides:notes` command
 - **Generate handout**: Invoke `/slides:handout` command
-- **Edit slide**: Ask for slide number, then invoke `/slides:edit-slide [N]`
+- **Edit slide**: Ask for slide number, then invoke `/slidev:edit [N]`
 - **Preview**: Invoke `/slides:preview` command
 - **Export**: Invoke `/slides:export` command
 

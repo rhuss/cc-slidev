@@ -40,9 +40,9 @@
       "file": "commands/diagram.md"
     },
     {
-      "name": "edit-slide",
+      "name": "edit",
       "description": "Edit a specific slide with table of contents context",
-      "file": "commands/edit-slide.md"
+      "file": "commands/edit.md"
     },
     {
       "name": "enhance-visuals",
@@ -75,9 +75,19 @@
       "file": "commands/preview.md"
     },
     {
-      "name": "slides",
+      "name": "generate",
       "description": "Generate clean, accessible Slidev slides from outline (enforces ≤6 elements, <50 words)",
-      "file": "commands/slides.md"
+      "file": "commands/generate.md"
+    },
+    {
+      "name": "continue",
+      "description": "Resume work on an existing presentation with context and next steps",
+      "file": "commands/continue.md"
+    },
+    {
+      "name": "redraw-diagrams",
+      "description": "Extract inline diagrams and regenerate in all platforms (Mermaid, PlantUML, Excalidraw)",
+      "file": "commands/redraw-diagrams.md"
     }
   ],
   "skills": [

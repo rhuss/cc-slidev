@@ -84,7 +84,7 @@ Make changes to slides.md and see them live!
 Ask: "What would you like to do while previewing?"
 
 Options:
-- Edit slides while watching: `/slidev:edit-slide [N]`
+- Edit slides while watching: `/slidev:edit [N]`
 - Enhance visuals: `/slidev:enhance-visuals`
 - Export to PDF/PPTX: `/slidev:export`
 - Just review and practice
