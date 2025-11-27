@@ -148,7 +148,7 @@ Three-tier configuration hierarchy working correctly:
 
 1. **Hardcoded defaults** (in scripts)
 2. **Plugin default.json** (global settings)
-3. **Presentation slidedeck.local.md** (per-project overrides)
+3. **Presentation slidev.local.md** (per-project overrides)
 
 All three platforms enabled by default:
 - Mermaid: Source + SVG rendering
@@ -244,5 +244,5 @@ cat public/images/slide-*/diagram.excalidraw | jq '.elements'
 ---
 
 **Report generated:** 2025-11-26
-**Plugin version:** slidedeck@0.1.0
+**Plugin version:** slidev@0.1.0
 **Test environment:** macOS Darwin 25.1.0, Node.js v25.2.1

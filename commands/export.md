@@ -1,5 +1,5 @@
 ---
-name: export
+name: slidev:export
 description: Export presentation to PDF, PPTX, or other formats
 argument-hint: "[format]"
 allowed-tools: ["Bash"]
@@ -136,9 +136,9 @@ File is ready to share, email, or upload.
 
 **Other Formats:**
 Export to other formats:
-- `/slidedeck:export pdf`
-- `/slidedeck:export pptx`
-- `/slidedeck:export png`
+- `/slidev:export pdf`
+- `/slidev:export pptx`
+- `/slidev:export png`
 ```
 
 ## Format Comparison

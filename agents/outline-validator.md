@@ -317,7 +317,7 @@ Range: 12-18 slides acceptable
 **Proactive Triggering:**
 
 Automatically validate outlines when:
-- User completes `/slidedeck:outline`
+- User completes `/slidev:outline`
 - User asks to proceed to slides
 - User requests outline review
 - Outline file is created or modified

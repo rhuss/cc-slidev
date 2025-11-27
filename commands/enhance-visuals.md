@@ -1,8 +1,8 @@
 ---
-name: slides:enhance-visuals
+name: slidev:enhance-visuals
 description: Comprehensive visual enhancement for all slides
 allowed-tools: ["Read", "Edit", "Bash", "WebSearch", "Task", "Skill"]
-skills: ["slidedeck:presentation-design"]
+skills: ["slidev:presentation-design"]
 ---
 
 # Visual Enhancement Workflow
@@ -481,7 +481,7 @@ Present completion:
    - Or I can download them now
 
 4. **Export final version:**
-   `/slidedeck:export pdf`
+   `/slidev:export pdf`
 
 **Visual Theme:**
 - Colors: [Primary], [Secondary], [Accent]
