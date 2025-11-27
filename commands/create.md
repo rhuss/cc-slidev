@@ -750,7 +750,8 @@ Present completion summary:
 - **Follow presentation-design skill principles** (one idea per slide, meaningful titles, cognitive load limits)
 - **Apply slidev-mastery skill** for Slidev syntax and accessibility defaults
 - **Use visual-design skill** for colorblind-safe visuals and diagram design
-- **Validate with agents** before proceeding (outline-validator, slide-optimizer)
+- **Use slide-quality-assessment skill** to validate slides against 12-point quality criteria
+- **Validate structure with outline-validator agent** before generating slides
 - **Enforce hard limits**:
   - One idea per slide (CRITICAL)
   - ≤6 elements per slide (cognitive load)

@@ -2,7 +2,7 @@
 name: slidev:edit
 description: Edit a specific slide with table of contents context
 argument-hint: "[slide-number]"
-allowed-tools: ["Read", "Edit", "Grep", "Bash", "Task", "AskUserQuestion"]
+allowed-tools: ["Read", "Edit", "Grep", "Bash", "Skill", "AskUserQuestion"]
 ---
 
 # Edit Slide Command
@@ -92,12 +92,16 @@ Then use AskUserQuestion with:
 
 ### If user chooses "Analyze quality":
 
-Use the Task tool with:
-- subagent_type: "slidev:slide-optimizer"
-- description: "Analyze slide quality"
-- prompt: "Analyze this slide against evidence-based quality criteria. The slide file is at {path}. Provide a quality score, current state checklist, critical violations, and prioritized recommendations with specific examples."
+Invoke the "Slide Quality Assessment" skill to load the 12-point quality framework, then:
+1. Read the slide file
+2. Apply each of the 12 quality criteria systematically
+3. Calculate quality score (X/12)
+4. Identify critical violations
+5. Provide prioritized recommendations with specific examples
 
-After the agent returns its analysis, use AskUserQuestion:
+Present results in the skill's standard format (see skill for template).
+
+After providing the quality analysis, use AskUserQuestion:
 - question: "How would you like to proceed?"
 - header: "Next Step"
 - multiSelect: false
