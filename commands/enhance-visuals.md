@@ -27,13 +27,15 @@ Find and parse slides.md with CORRECT Slidev numbering:
 Read the master `slides.md` file containing slide comments:
 
 ```markdown
-<!-- Slide 1: Title -->
+---
 src: ./slides/title.md
 ---
+<!-- Slide 1: Title -->
 
-<!-- Slide 5: Microservices Benefits -->
+---
 src: ./slides/microservices-benefits.md
 ---
+<!-- Slide 5: Microservices Benefits -->
 ```
 
 Extract slide information by parsing comment pattern: `<!-- Slide \d+: .* -->`

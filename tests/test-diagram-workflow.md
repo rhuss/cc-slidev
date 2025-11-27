@@ -62,13 +62,15 @@ sequenceDiagram
 Read `test-slides.md` and verify it contains slide comments:
 
 ```markdown
-<!-- Slide 2: First Content Slide -->
+---
 src: ./slides/first-content.md
 ---
+<!-- Slide 2: First Content Slide -->
 
-<!-- Slide 3: Second Content Slide -->
+---
 src: ./slides/second-content.md
 ---
+<!-- Slide 3: Second Content Slide -->
 ```
 
 Expected: Comments show correct slide numbers (2, 3, 4) matching Slidev rendering
