@@ -114,6 +114,12 @@
       "description": "Professional LaTeX document creation for presentation handouts with slides, notes, and supplementary materials",
       "file": "skills/latex-handouts/SKILL.md",
       "version": "0.1.0"
+    },
+    {
+      "name": "Slide Quality Assessment",
+      "description": "Evidence-based slide quality evaluation using 12-point checklist (one idea per slide, meaningful title, ≤6 elements, <50 words, accessibility, cognitive load)",
+      "file": "skills/slide-quality/SKILL.md",
+      "version": "0.1.0"
     }
   ],
   "agents": [
@@ -122,13 +128,6 @@
       "description": "Validate presentation outline structure, flow, completeness, and time constraints (90s/slide default timing)",
       "file": "agents/outline-validator.md",
       "color": "yellow",
-      "model": "inherit"
-    },
-    {
-      "name": "slide-optimizer",
-      "description": "Review slide quality using 12-point checklist (one idea per slide, meaningful title, ≤6 elements, <50 words, accessibility)",
-      "file": "agents/slide-optimizer.md",
-      "color": "cyan",
       "model": "inherit"
     },
     {

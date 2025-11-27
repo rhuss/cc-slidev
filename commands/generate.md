@@ -636,10 +636,10 @@ Present summary to user:
 - Better version control and collaboration
 
 **Quality Validation:**
-Run slide-optimizer to verify all slides meet quality standards:
-```bash
-# (Agent will check 12-point quality criteria)
-```
+Use the "Slide Quality Assessment" skill to verify all slides meet evidence-based quality standards:
+- Apply the 12-point quality checklist to each slide
+- Flag any critical violations (>6 elements, >50 words, missing visuals, etc.)
+- Provide specific recommendations for improvement
 
 **Next Steps:**
 
