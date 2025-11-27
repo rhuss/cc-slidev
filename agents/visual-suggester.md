@@ -12,8 +12,8 @@ Agent analyzes slide content and suggests mermaid diagrams, stock photos, AI ima
 </example>
 
 <example>
-Context: User calls /slidedeck:enhance-visuals command
-user: "/slidedeck:enhance-visuals"
+Context: User calls /slidev:enhance-visuals command
+user: "/slidev:enhance-visuals"
 assistant: "I'm analyzing your slides to suggest visual enhancements using the visual-suggester agent."
 <commentary>
 Agent triggers automatically during visual enhancement workflow to provide comprehensive visual suggestions for all slides.
@@ -404,7 +404,7 @@ Options:
 
 **Interaction Guidelines:**
 
-For `/slidedeck:enhance-visuals`:
+For `/slidev:enhance-visuals`:
 1. Analyze ALL slides
 2. Identify top 5-7 with highest visual ROI
 3. Provide options for each

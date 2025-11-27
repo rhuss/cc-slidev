@@ -1,5 +1,5 @@
 ---
-name: brainstorm
+name: slidev:brainstorm
 description: Interactive brainstorming and research phase for presentation creation
 allowed-tools: ["Read", "Write", "WebSearch", "Grep", "Glob", "AskUserQuestion"]
 ---

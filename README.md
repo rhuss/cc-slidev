@@ -1,411 +1,396 @@
-# Slidedeck Plugin for Claude Code
+# Slidev Plugin for Claude Code
 
-> Professional presentation creation using Slidev - from brainstorming to handout generation
+> Create developer-focused technical presentations using Slidev with evidence-based design guardrails
 
-## Overview
+[![Slidev](https://img.shields.io/badge/Built%20with-Slidev-42b883)](https://sli.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Create clean, professional presentations that audiences can actually read.** The Slidedeck plugin enforces hard limits to prevent overcrowded slides, ensures accessibility by default, and guides you through every phase of presentation development:
+## What is this?
 
-1. **Brainstorming & Research** - Interactive ideation with web research, CfP analysis, and local file analysis
-2. **Framing** - Define scope, audience, and constraints
-3. **Outline Creation** - Structured narrative with validation
-4. **Slide Generation** - Clean, accessible Slidev markdown with enforced limits
-5. **Visual Enhancement** - Mermaid diagrams, stock photos, AI image prompts
-6. **Presenter Notes** - Comprehensive speaker notes for each slide
-7. **Handout Generation** - Professional LaTeX handout with slides, prose explanations, and research links
+A Claude Code plugin for creating technical presentations powered by **[Slidev](https://sli.dev)** - the presentation framework for developers. Specifically designed for tech talks, conference presentations, internal demos, and developer-focused content.
 
-## Features
+**Key differentiator:** Evidence-based design principles are **enforced as guardrails**, not suggestions. The plugin automatically prevents common presentation mistakes through hard limits based on cognitive science research.
 
-### 🎯 Design Enforcement
+### Built on Slidev
 
-**Prevents common presentation mistakes through automatic hard limits:**
-- **≤6 elements per slide** - Prevents information overload (based on cognitive load research)
-- **<50 words per slide** - Ensures slides remain scannable, not readable
-- **One idea per slide** - Automatically splits dense content into multiple focused slides
-- **Meaningful titles** - "System handles 10K req/sec" not "Results"
-- **Accessibility defaults** - 18pt+ fonts, 4.5:1+ contrast, colorblind-safe colors
-- **90-second timing** - Default pacing prevents rushing (configurable: 60s-180s)
+[Slidev](https://sli.dev) is a web-based presentation tool built for developers. Write your slides in markdown, use Vue components, live code with Monaco editor, and export to PDF/PPTX. This plugin adds intelligent automation, evidence-based guardrails, and complete workflow management on top of Slidev's powerful foundation.
 
-**If your content exceeds limits, the plugin splits it into additional slides instead of cramming.**
+## Key Features
+
+### 🎯 Evidence-Based Design Guardrails (Enforced)
+
+These are not suggestions - they're automatic hard limits based on cognitive science research:
+
+- **≤6 elements per slide** - Prevents information overload (Miller's Law: working memory holds 7±2 items)
+- **<50 words body text** - Ensures slides support speech, not replace it
+- **One idea per slide** - Automatically splits dense content into focused slides
+- **Meaningful assertion titles** - "System handles 10K req/sec" not "Results"
+- **18pt+ fonts, 4.5:1+ contrast** - Accessibility by default, not afterthought
+- **Colorblind-safe palettes** - Blue + Orange default (tested for all types of colorblindness)
+
+**When content exceeds limits:** The plugin creates additional slides instead of cramming. Quality over convenience.
+
+### 🛠️ Developer-Focused Features
+
+- **Code syntax highlighting** - Shiki/Prism integration with 100+ languages
+- **Live coding** - Monaco editor embedded in slides for demos
+- **Mermaid diagrams** - Architecture, flowcharts, sequence diagrams
+- **Multi-platform diagrams** - Auto-generate PlantUML + Excalidraw alternatives
+- **Modular slide files** - `01-title.md`, `02-hook.md` etc. in `slides/` directory
+- **Git-friendly** - Meaningful diffs, easy collaboration
 
 ### 🔄 Complete Workflow
-- **Interactive brainstorming** with CfP analysis and web research
-- **Automated outline** generation and validation
-- **Clean slide creation** with enforced limits and accessibility
-- **Visual enhancement** with diagrams and images
-- **Comprehensive handouts** with prose explanations and research links
 
-### 🎨 Visual Enhancement
-- **Mermaid diagrams** - Multiple options per slide, inline or high-quality rendering
-- **Stock photos** - Unsplash integration with smart search suggestions
-- **AI image prompts** - DALL-E, Midjourney-ready prompts
-- **Theme consistency** - Color palette and style coordination
+End-to-end presentation creation:
 
-### 🛠️ Developer-Friendly
-- **Slidev integration** - Preview, export, live development
-- **Global installation** - Automatic version checking and updates
-- **LaTeX support** - Optional handout generation with pdflatex
+1. **Interactive brainstorming** with web research and local file analysis
+2. **Structured outline** with validation
+3. **Modular slide generation** with enforced quality limits
+4. **Visual enhancement** with diagrams and images
+5. **Presenter notes** generation
+6. **LaTeX handout** with prose explanations and research links
+7. **Export** to PDF/PPTX/PNG
 
 ## Prerequisites
 
 ### Required
+
+- **[Slidev](https://sli.dev)** - The presentation framework this plugin is built on
+  ```bash
+  npm install -g @slidev/cli
+  ```
 - **Node.js** (v18 or later)
 - **npm** (comes with Node.js)
 
 ### Optional
-- **Slidev** (plugin will install/update automatically)
-- **mermaid-cli** for offline diagram rendering
 
-### For Handout Generation
-- **LaTeX** (pdflatex) - Core compiler required
+- **LaTeX** (pdflatex) - For handout generation
   - macOS: `brew install --cask mactex-no-gui`
   - Ubuntu: `sudo apt-get install texlive-latex-base texlive-latex-extra`
-- **LaTeX Packages** - For enhanced formatting (optional)
-  - tcolorbox - Colored boxes and callouts
-  - enumitem - Enhanced list formatting
-  - macOS with MacTeX: `sudo tlmgr install tcolorbox enumitem`
-  - Ubuntu: Included in `texlive-latex-extra`
-- **Playwright Chromium** - For slide PNG export (optional)
-  - `npx playwright install chromium`
+
+- **mermaid-cli** - For high-quality offline diagram rendering
+  ```bash
+  npm install -g @mermaid-js/mermaid-cli
+  ```
 
 ## Installation
 
-### From Local Directory (Development)
-
 ```bash
-cc --plugin-dir /path/to/slidedeck
+# From local directory (development)
+cc --plugin-dir /path/to/slidev
+
+# Or copy to plugin directory
+cp -r slidev ~/.claude-plugins/
 ```
 
-### Copy to Project
+## Complete Workflow Example
 
-```bash
-cp -r slidedeck ~/.claude-plugins/
+Here's a full end-to-end workflow for creating a technical presentation:
+
+### 1. Start with brainstorming
+```
+/slidev:brainstorm
+```
+Interactive Q&A session about your presentation topic. The plugin researches the web, analyzes local files, and helps you frame your content.
+
+### 2. Create structured outline
+```
+/slidev:outline
+```
+Generates a structured outline with slide breakdown, validates timing (90s per slide default), and ensures logical flow.
+
+### 3. Generate modular slides
+```
+/slidev:generate
+```
+Creates individual slide files in `slides/` directory:
+```
+presentation/
+├── slides.md                    # Master file
+├── slides/
+│   ├── 01-title.md
+│   ├── 02-hook.md
+│   ├── 03-problem-statement.md
+│   ├── 04-architecture.md
+│   └── ...
 ```
 
-## Usage
+Each slide is enforced to meet quality standards automatically.
 
-### Quick Start
-
-Create a complete presentation with one command:
-
+### 4. Preview with Slidev
 ```
-/slidedeck:create Introduction to Kubernetes
+/slidev:preview
 ```
+Opens Slidev dev server at `localhost:3030`. Press `p` for presenter mode with notes. Hot reload on file changes.
 
-This will:
-1. Guide you through interactive brainstorming
-2. Research the topic (web + local files)
-3. Generate a structured outline
-4. Create Slidev slides with placeholders for visuals
-5. Offer visual enhancement (diagrams, images)
-6. Generate presenter notes
-7. Create comprehensive handout (if LaTeX installed)
-
-### Individual Commands
-
-Work on specific phases independently:
-
-```bash
-# Brainstorming phase only
-/slidedeck:brainstorm
-
-# Create or revise outline
-/slidedeck:outline
-
-# Generate slides from outline
-/slidedeck:slides
-
-# Edit a specific slide with context
-/slidedeck:edit-slide 5
-
-# Add presenter notes
-/slidedeck:notes
-
-# Enhance all visuals
-/slidedeck:enhance-visuals
-
-# Create diagram for specific slide
-/slidedeck:diagram 7
-
-# Generate LaTeX handout
-/slidedeck:handout
+### 5. Edit specific slides
 ```
-
-### Utilities
-
-```bash
-# Preview slides with Slidev dev server
-/slidedeck:preview
-
-# Export to PDF, PPTX, etc.
-/slidedeck:export pdf
-/slidedeck:export pptx
+/slidev:edit-slide 5
 ```
+Shows table of contents, current slide content, and quality analysis. Edit individual slide files directly.
 
-## Project Structure
+### 6. Enhance with visuals
+```
+/slidev:enhance-visuals
+```
+Analyzes all slides and suggests:
+- Mermaid diagrams (flowcharts, sequence, architecture)
+- Stock photos (Unsplash integration)
+- AI image prompts (DALL-E, Midjourney, Stable Diffusion)
 
-When you create a presentation, the plugin creates this structure:
+Generates multiple options per slide.
+
+### 7. Generate comprehensive handout
+```
+/slidev:handout
+```
+Creates professional LaTeX handout with:
+- Embedded slide images (PNG export)
+- Prose explanations
+- Research links and citations
+- Presenter notes
+
+### 8. Export final presentation
+```
+/slidev:export pdf
+```
+Exports to PDF, PPTX, or PNG using Slidev's built-in exporters.
+
+**Result:** Professional technical presentation ready for your conference talk or demo!
+
+## File Structure
+
+When you create a presentation, the plugin generates this structure:
 
 ```
 introduction-to-kubernetes/
-├── slides.md              # Main Slidev presentation
-├── outline.md            # Presentation outline
-├── brainstorm.md         # Research and ideas
-├── handout.tex           # LaTeX handout source
-├── handout.pdf           # Compiled handout
-├── package.json          # Slidev dependencies
+├── slides.md                # Master Slidev file (includes from slides/)
+├── slides/
+│   ├── 01-title.md         # Modular slide files
+│   ├── 02-hook.md
+│   ├── 03-problem.md
+│   ├── 04-kubernetes-architecture.md
+│   ├── 05-benefits.md
+│   └── ...
+├── brainstorm.md           # Research and ideation notes
+├── outline.md              # Validated presentation outline
+├── handout.tex             # LaTeX handout source
+├── handout.pdf             # Compiled handout
+├── package.json            # Slidev dependencies
 ├── public/
-│   └── images/           # Downloaded/generated images
+│   └── images/             # Diagrams, photos
 └── exports/
     ├── slides.pdf
     └── slides.pptx
 ```
 
+**Modular slides benefits:**
+- Files ordered in presentation sequence (`01-`, `02-`, etc.)
+- Meaningful names for easy navigation
+- Individual edits without touching other slides
+- Git-friendly collaboration
+
+## All Commands
+
+| Command | Description |
+|---------|-------------|
+| `/slidev:create <topic>` | End-to-end workflow from brainstorm to handout |
+| `/slidev:brainstorm` | Interactive brainstorming with research |
+| `/slidev:outline` | Create/revise presentation outline |
+| `/slidev:generate` | Generate modular slides from outline |
+| `/slidev:edit-slide <N>` | Edit specific slide with context |
+| `/slidev:continue` | Resume work on existing presentation |
+| `/slidev:enhance-visuals` | Add diagrams and images to all slides |
+| `/slidev:diagram <N>` | Create diagram for specific slide |
+| `/slidev:notes` | Generate/enhance presenter notes |
+| `/slidev:handout` | Generate LaTeX handout with slides and prose |
+| `/slidev:preview` | Start Slidev dev server |
+| `/slidev:export <format>` | Export to PDF, PPTX, PNG |
+| `/slidev:redraw-diagrams` | Regenerate diagrams in multiple formats |
+
+## Evidence-Based Design Principles
+
+This plugin **enforces** (not suggests) design principles based on research from:
+- MIT Communication Lab
+- TED presentation guidelines
+- PLOS Computational Biology
+- Cognitive load research (Miller's Law)
+- Accessibility standards (WCAG 2.1)
+
+See [`references/presentation-best-practices.md`](references/presentation-best-practices.md) for full research documentation.
+
+### Core Principles (Enforced)
+
+**1. One Idea Per Slide**
+- Each slide communicates exactly one central point
+- If content requires >90 seconds, auto-split into multiple slides
+- Slide title states the one clear finding
+
+**2. Meaningful Titles (Assertions, Not Labels)**
+- ❌ Bad: "Results", "Background", "Methods"
+- ✅ Good: "System handles 10K req/sec", "Current solutions fail under load"
+- Format: subject + verb + finding
+
+**3. Cognitive Load Limit (≤6 Elements)**
+- Count: bullets + images + diagrams + charts + code blocks
+- **Hard limit:** If >6 elements → automatically split into multiple slides
+- Research basis: Working memory capacity is 7±2 items
+
+**4. Minimal Text (<50 Words)**
+- Body text only - title not counted
+- Use phrases, not sentences
+- **Hard limit:** >50 words → split or move to presenter notes
+- Detailed explanations go in presenter notes, not slides
+
+**5. Visual Over Text**
+- Almost every slide needs a visual (diagram, chart, image, code)
+- Exceptions: quotes, definitions, transition slides
+- Plugin suggests visuals during generation
+
+**6. Accessibility by Default**
+- **Font sizes:** Body ≥18pt, headings ≥24pt
+- **Contrast:** ≥4.5:1 for all text
+- **Colors:** Colorblind-safe palette (Blue + Orange default)
+- **Don't rely on color alone:** Use patterns, labels, shapes
+
+## For Developers
+
+### Why This Plugin Exists
+
+Generic presentation tools fail developers because:
+- PowerPoint/Keynote: Not code-friendly, hard to version control
+- Google Slides: No local workflow, limited code support
+- Raw Slidev: Powerful but no guardrails against bad design
+
+**This plugin solves that** by combining:
+- Slidev's developer-friendly foundation (markdown, code, Git)
+- Automatic enforcement of presentation best practices
+- Complete workflow automation (brainstorm → export)
+- Multi-platform diagram support
+
+### Ideal Use Cases
+
+- **Conference talks** - Tech conferences, meetups, user groups
+- **Internal demos** - Architecture reviews, sprint demos, technical deep-dives
+- **Training materials** - Developer onboarding, workshops, tutorials
+- **Open source presentations** - Community presentations with Git collaboration
+
+### Developer Features
+
+**Code Syntax Highlighting:**
+```markdown
+\`\`\`python {2-3}
+def process():
+    important_line()      # Highlighted
+    another_important()   # Highlighted
+    return result
+\`\`\`
+```
+
+**Live Coding (Monaco Editor):**
+```markdown
+\`\`\`python {monaco}
+def editable():
+    return "Users can edit this code live"
+\`\`\`
+```
+
+**Mermaid Diagrams:**
+```markdown
+\`\`\`mermaid
+graph TD
+    A[Client] --> B[API Server]
+    B --> C[Database]
+\`\`\`
+```
+
+**Multi-Platform Diagrams:**
+The plugin auto-generates equivalent diagrams in:
+- Mermaid (inline in slides)
+- PlantUML (high-quality SVG)
+- Excalidraw (hand-drawn style)
+
 ## Configuration
 
-Create `.claude/slidedeck.local.md` in your project for custom preferences:
+Create `.claude/slidev.local.md` in your project for custom preferences:
 
 ```yaml
 ---
 # Slidev settings
-theme: default                    # seriph, apple-basic, etc.
+theme: seriph                     # default, apple-basic, etc.
 export_format: pdf                # pdf, pptx, png
 
-# LaTeX settings
-latex_template: article           # article, report
-presenter_notes: true             # Include notes by default
-handout_research: true            # Include extra research
+# Presentation defaults
+default_duration_minutes: 15
+slides_per_minute: 1.5           # 90 seconds per slide
 
 # Visual theme
 visual_theme:
-  primary_color: "#3b82f6"        # Blue
-  secondary_color: "#8b5cf6"      # Purple
-  accent_color: "#f59e0b"         # Amber
-  style: "modern-minimal"         # modern-minimal, professional, creative, technical
+  primary_color: "#3b82f6"       # Blue
+  secondary_color: "#f97316"     # Orange
+  style: "technical"             # modern-minimal, technical, etc.
 
-# Rendering preferences
-mermaid_rendering: inline         # inline, offline, online
-stock_photo_source: unsplash      # unsplash, pexels, none
-ai_image_service: dalle           # dalle, midjourney, stable-diffusion
-
-# Presentation defaults
-default_slide_count: 10
-default_duration_minutes: 15
-slides_per_minute: 1.5
+# Rendering
+mermaid_rendering: inline        # inline, offline, online
 ---
 ```
 
-All fields are optional with sensible defaults.
-
-## Visual Enhancement Workflow
-
-The plugin provides multiple ways to add visuals:
-
-### Mermaid Diagrams
-
-Generate multiple diagram options for any slide:
-
-```
-/slidedeck:diagram 5
-```
-
-Generates 2-3 variations with different diagram types:
-- Flowcharts for processes
-- Sequence diagrams for interactions
-- Class diagrams for architecture
-- Component diagrams for systems
-
-**Rendering options:**
-- **Inline** (default) - Rendered by Slidev, fast and integrated
-- **Offline** - High-quality SVG via mermaid-cli
-- **Online** - Manual rendering at mermaid.live
-
-### Stock Photos
-
-Interactive stock photo suggestions:
-- Search terms generated from slide content
-- Direct Unsplash links provided
-- Automatic download and optimization
-- Proper attribution included
-
-### AI Image Prompts
-
-Ready-to-use prompts for:
-- **DALL-E 3** - Detailed scene descriptions
-- **Midjourney v6** - Parameter-optimized prompts
-- **Stable Diffusion** - Negative prompts included
-
-Prompts saved to `ai-image-prompts.md` for easy reference.
-
-## Agents
-
-The plugin includes specialized agents that work autonomously:
-
-### slide-optimizer
-Reviews slides for clarity, visual balance, and effectiveness. Triggers automatically after slide generation or manually via `/slidedeck:edit-slide`.
-
-### outline-validator
-Validates presentation outline for logical flow, completeness, and time constraints. Ensures presentation fits target duration.
-
-### visual-suggester
-Analyzes slides and suggests appropriate visuals (diagrams, photos, illustrations). Generates multiple options per slide.
-
-## Skills
-
-The plugin provides domain expertise through four specialized skills:
-
-- **slidev-mastery** - Slidev syntax, themes, components, and best practices
-- **presentation-design** - Storytelling, visual hierarchy, audience engagement
-- **latex-handouts** - LaTeX document structure, formatting, compilation
-- **visual-design** - Mermaid diagrams, color theory, AI prompting, stock photos
-
-These skills activate automatically when relevant to your task.
-
-## Examples
-
-### Academic Presentation
-
-```
-/slidedeck:create Machine Learning Fundamentals
-```
-
-Interactive questions:
-- Target audience: Graduate students
-- Duration: 45 minutes
-- Slide count: 30-35 slides
-- Style: Academic formal
-
-Result: Detailed slides with mathematical diagrams, references, comprehensive handout.
-
-### Business Pitch
-
-```
-/slidedeck:create Product Launch Pitch
-```
-
-Interactive questions:
-- Target audience: Investors
-- Duration: 10 minutes
-- Slide count: 10 slides
-- Style: Professional modern
-
-Result: Concise slides with data visualization, stock photos, executive summary.
-
-### Technical Tutorial
-
-```
-/slidedeck:create Docker for Beginners
-```
-
-Interactive questions:
-- Target audience: Developers
-- Duration: 30 minutes
-- Slide count: 20 slides
-- Style: Technical developer-friendly
-
-Result: Code examples, architecture diagrams, hands-on exercises.
+All fields optional with sensible defaults.
 
 ## Troubleshooting
 
 ### Slidev not found
 
-Plugin will offer to install automatically. Or install manually:
-
+Install Slidev globally:
 ```bash
 npm install -g @slidev/cli
 ```
 
-### Handout Dependencies
+### Handout generation fails
 
-The plugin automatically checks handout dependencies and offers to install missing components.
-
-**LaTeX (required):**
-
-macOS:
+Install LaTeX:
 ```bash
+# macOS
 brew install --cask mactex-no-gui
-```
 
-Ubuntu/Debian:
-```bash
+# Ubuntu/Debian
 sudo apt-get install texlive-latex-base texlive-latex-extra
-```
 
-Fedora/RHEL:
-```bash
+# Fedora/RHEL
 sudo dnf install texlive-scheme-basic texlive-latex
 ```
 
-**Playwright Chromium (optional - for slide PNG export):**
-```bash
-npx playwright install chromium
-```
+### Mermaid diagrams low quality
 
-Without Playwright: Handout will be text-only without embedded slide images.
-
-**LaTeX Packages (optional - for enhanced formatting):**
-
-macOS with MacTeX:
-```bash
-sudo tlmgr install tcolorbox enumitem
-```
-
-Ubuntu: Already included in `texlive-latex-extra`
-
-Without these packages: Handout will use basic LaTeX formatting without colored boxes and enhanced lists.
-
-**Check all dependencies:**
-```bash
-./scripts/check-handout-deps.sh
-```
-
-The plugin offers automatic installation with user confirmation when dependencies are missing.
-
-### Mermaid rendering quality
-
-For highest quality diagrams, install mermaid-cli:
-
+Install mermaid-cli for offline high-quality rendering:
 ```bash
 npm install -g @mermaid-js/mermaid-cli
 ```
 
-Plugin will automatically use it for offline rendering.
-
 ## Development
 
 ### Testing
-
 ```bash
-# Run with plugin in development
-cc --plugin-dir /path/to/slidedeck
+cc --plugin-dir /path/to/slidev
 
-# Test specific command
-/slidedeck:create Test Presentation
-```
-
-### Validation
-
-Validate plugin structure:
-
-```bash
-# From plugin-dev plugin
-Use plugin-validator agent
+# Test workflow
+/slidev:create Test Presentation
 ```
 
 ## License
 
 MIT © Roland Huss
 
+## Credits
+
+- Built with [Slidev](https://sli.dev) by Anthony Fu
+- Evidence-based design principles from MIT Communication Lab, TED, PLOS Computational Biology
+- Diagram support: Mermaid, PlantUML, Excalidraw
+
 ## Contributing
 
-This is a personal plugin, but feedback and suggestions are welcome!
+This is a personal plugin, but feedback and suggestions are welcome! File issues or reach out via email.
 
-## Changelog
+---
 
-### 0.1.0 (Initial Release)
-- Complete presentation workflow
-- Slidev integration with preview and export
-- Visual enhancement with mermaid, stock photos, AI prompts
-- LaTeX handout generation
-- Interactive brainstorming and framing
-- Autonomous agents for optimization and validation
+**Tip:** Start with `/slidev:create Your Topic` for a guided end-to-end workflow, or use individual commands for specific phases.

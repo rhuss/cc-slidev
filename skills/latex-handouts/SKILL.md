@@ -229,6 +229,21 @@ def hello():
 \printbibliography
 ```
 
+## Heading Hierarchy
+
+**Use semantic heading levels rigorously and consistently:**
+
+- `\section{}` - Major document divisions (Introduction, Presentation Content, Summary, Additional Resources)
+- `\subsection{}` - Topic sections within presentation (matches slide deck sections/chapters)
+- `\subsubsection{}` - Individual slide titles (each slide gets its own subsubsection heading)
+- `\paragraph{}` - Content subdivisions within slides (Overview, Key Considerations, Technical Details, Further Reading)
+
+**Rules:**
+- Never skip heading levels (don't go from `\section{}` to `\subsubsection{}`)
+- Use headings for semantic structure, not just visual formatting
+- Keep heading text descriptive and assertion-based
+- Each slide must have its own `\subsubsection{}` heading
+
 ## Handout Patterns
 
 ### Comprehensive Slide Documentation (RECOMMENDED)
@@ -242,7 +257,7 @@ Modern handout format with PNG slides and prose explanations:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.75\textwidth]{exports/slide-005.png}
+  \fbox{\includegraphics[width=0.72\textwidth]{exports/slide-005.png}}
   \caption{Specific Slide Title}
 \end{figure}
 
@@ -361,7 +376,9 @@ Content alongside images:
 
 ### Slide Images
 
-Export slides as PDF for best quality:
+**IMPORTANT:** All slide images in handouts should have black borders using `\fbox{}` to clearly delineate the slide boundaries.
+
+Export slides as PNG for handouts:
 
 ```latex
 % Single slide
@@ -370,8 +387,8 @@ Export slides as PDF for best quality:
 % Specific page from multi-page PDF
 \includegraphics[page=5,width=0.8\textwidth]{exports/slides.pdf}
 
-% With border
-\fbox{\includegraphics[width=0.75\textwidth]{slide.pdf}}
+% With black border (recommended for handouts)
+\fbox{\includegraphics[width=0.72\textwidth]{slide.png}}
 ```
 
 ### Size Control
@@ -682,6 +699,33 @@ LaTeX special characters need escaping:
 ```
 
 ## Best Practices
+
+### Slide Image Formatting
+
+**REQUIRED:**
+- All slide images MUST use `\fbox{}` for black borders
+- Use width of 0.72\textwidth to account for border width
+- Center slides with `\centering` in figure environment
+- Always include descriptive captions
+
+**Example:**
+```latex
+\begin{figure}[H]
+  \centering
+  \fbox{\includegraphics[width=0.72\textwidth]{exports/slide-001.png}}
+  \caption{Descriptive Slide Title}
+  \label{fig:slide1}
+\end{figure}
+```
+
+### Heading Structure
+
+**REQUIRED:**
+- Use semantic heading hierarchy rigorously
+- Never skip heading levels
+- Each slide gets its own `\subsubsection{}` heading
+- Use `\paragraph{}` for content subdivisions within slides
+- Keep heading text assertion-based and descriptive
 
 ### File Organization
 

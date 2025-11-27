@@ -1,5 +1,5 @@
 ---
-name: outline
+name: slidev:outline
 description: Create or revise presentation outline from brainstorming notes
 allowed-tools: ["Read", "Write", "Edit", "Task"]
 ---
@@ -243,4 +243,4 @@ If revising existing outline:
 After outline is finalized:
 - "Your outline is ready! Next, I can generate the actual slides. Proceed?"
 - Offer to explain any part of the outline
-- Suggest running `/slidedeck:slides` to generate slides
+- Suggest running `/slidev:slides` to generate slides
