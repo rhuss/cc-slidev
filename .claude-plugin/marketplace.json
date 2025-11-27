@@ -10,10 +10,10 @@
     {
       "name": "slidev",
       "version": "0.1.0",
-      "description": "Evidence-based presentation creation workflow using Slidev - from brainstorming to handout generation. Features research-backed design principles (90s/slide timing, cognitive load limits ≤6 elements, accessibility defaults, colorblind-safe palettes), 11 interactive commands, 4 specialized skills, and 3 validation agents for creating professional, accessible presentations.",
+      "description": "Evidence-based presentation creation workflow using Slidev - from brainstorming to handout generation. Features research-backed design principles, 11 interactive commands, 4 specialized skills, and 3 validation agents for creating professional, accessible presentations.",
       "author": {
         "name": "Roland Huss",
-        "email": "contact@roland-huss.de"
+        "email": "cc-slidev@ro14nd.de"
       },
       "source": "./",
       "category": "productivity",
