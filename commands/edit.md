@@ -2,267 +2,171 @@
 name: slidev:edit
 description: Edit a specific slide with table of contents context
 argument-hint: "[slide-number]"
-allowed-tools: ["Read", "Edit", "Grep", "Bash"]
+allowed-tools: ["Read", "Edit", "Grep", "Bash", "Task", "AskUserQuestion"]
 ---
 
-# Edit Specific Slide
+# Edit Slide Command
 
-**CRITICAL ENFORCEMENT RULES - READ FIRST:**
+This command helps you edit a specific slide by providing context and quality analysis.
 
-1. **MANDATORY FILE READING**: You MUST use the Read tool to read actual files BEFORE generating ANY output
-2. **NO HALLUCINATION**: DO NOT generate slide titles, content, or examples from patterns - only show content from actual files you've read
-3. **VALIDATION REQUIRED**: Before displaying context, verify you have actual file content in your context
-4. **FAIL FAST**: If files don't exist or slide number is invalid, error immediately - don't generate placeholder content
+## Task
 
-**Evidence Base**: Slide editing follows research-based principles for clarity, cognitive load, and accessibility. See `references/presentation-best-practices.md` for guidelines.
+You are editing a specific slide in a Slidev presentation. Your job is to:
+1. Locate and read the slide file
+2. Show the user context about the slide
+3. Ask what they want to do
+4. Help them make improvements
 
-## Execution
+## Step 1: Get the Slide Number
 
-### 1. Parse Slide Number
+The slide number is in `$ARGUMENTS`. If it's missing or not a number, ask the user: "Which slide number would you like to edit?"
 
-Extract from `$ARGUMENTS`:
-- Must be a valid number
-- If missing or invalid: Ask user "Which slide number should we edit?"
+**CRITICAL**: Use the EXACT slide number provided. Do NOT add 1 or modify it in any way.
 
-**IMPORTANT**: The slide number provided by the user is the EXACT slide to edit. Do NOT increment or modify it.
+## Step 2: Find and Read slides.md
 
-### 2. Find and Read slides.md (MANDATORY - Use Read Tool Now)
-
-**ACTION REQUIRED - Use Read tool to find slides.md:**
-
+Use Bash to find slides.md:
 ```bash
-# Use Bash to locate slides.md if not in current directory
-find . -name "slides.md" -type f -not -path "*/node_modules/*"
+find . -name "slides.md" -type f -not -path "*/node_modules/*" | head -1
 ```
 
-Then **USE Read TOOL** on the slides.md file you found.
+Then use the Read tool on that file.
 
-**VALIDATION CHECKPOINT**: Do you have the actual slides.md content? If NO, STOP and find the file.
-
-### 3. Parse Actual Slide Data (From File Content You Just Read)
-
-The master slides.md contains comments with slide numbers like:
+The slides.md file contains slide entries like:
 ```markdown
 ---
-src: ./slides/01-title.md
+src: ./slides/06-example-slide.md
 ---
-<!-- Slide 1: Title -->
+<!-- Slide 6: Example Slide Title -->
 ```
 
-**PROCESS THE ACTUAL FILE CONTENT:**
+## Step 3: Extract the Slide Information
 
-1. **USE Read TOOL** to read slides.md (if you haven't already)
-2. Extract ALL slide comments matching `<!-- Slide (\d+): (.+) -->`
-3. Count total slides from ACTUAL file
-4. Find the requested slide number N in ACTUAL comments
-5. Extract the ACTUAL title after the colon
-6. Find the `src:` line IMMEDIATELY BEFORE that comment
-7. Extract the file path
+From the slides.md content you just read:
 
-**VALIDATION CHECKPOINT**:
-- If slide number > total slides: Error "Only [X] slides exist. Choose 1-[X]."
-- If slide N comment not found: Error "Slide [N] not found."
-- Do you have an actual file path? If NO, something went wrong - re-read the file.
+1. Find the comment that matches: `<!-- Slide {N}: {TITLE} -->` where N is the EXACT slide number from $ARGUMENTS
+2. Look at the `src:` line IMMEDIATELY BEFORE that comment - that's your slide file path
+3. Count how many slide comments exist total
 
-### 4. Read Individual Slide File (MANDATORY - Use Read Tool Now)
+If the slide number is greater than the total slides, error: "Only {X} slides exist. Choose 1-{X}."
 
-**USE Read TOOL** on the slide file path you extracted (e.g., `./slides/07-nfd-detects-general-hardware-features.md`)
+## Step 4: Read the Slide File
 
-**VALIDATION CHECKPOINT**: Do you have the actual slide content including frontmatter and body? If NO, STOP.
+Use the Read tool on the slide file path you extracted from the `src:` line.
 
-### 5. Gather Optional Context Files
+## Step 5: Read Context Files (Optional)
 
-**Optionally read contextual files** (use Read tool only if files exist):
+If these files exist, read them to gather context:
+- `outline.md` - presentation structure
+- `speaker-notes.md` or `notes.md` - presenter notes
+- `brainstorm.md` - presentation goals
 
-1. **brainstorm.md** - presentation research/goals (if exists)
-2. **outline.md** - section structure/flow (if exists)
-3. **notes.md** or **speaker-notes.md** - presenter notes organized by slide (if exists)
-   - Look for sections mentioning slide N or the slide title
-   - Extract relevant timing, delivery tips, transitions
-4. **Inline presenter notes** - already in slide file you read in step 4 (HTML comments)
+## Step 6: Show Context and Menu
 
-### 6. Display Context (VALIDATION: Must Use Actual File Content)
-
-**FINAL VALIDATION BEFORE DISPLAY:**
-- ✓ Have you read slides.md?
-- ✓ Have you read the individual slide file?
-- ✓ Are you using ACTUAL titles/content from files (not examples)?
-
-**If any validation fails, STOP and use Read tool.**
-
-Show user CONCISE context (CLI-friendly format):
-
-```markdown
-Editing Slide N: [ACTUAL TITLE]
-Position: N of [TOTAL] | Layout: [layout] | File: [path]
-
-Tagline: [Create a single-sentence prose summary that blends information from:
-- outline.md section purpose and key message
-- speaker-notes.md timing, delivery points, and limitations to emphasize
-- inline slide notes
-- the slide title itself
-Capture the CORE MESSAGE this slide is trying to convey in one clear sentence.]
-
-Context: [2-3 sentence prose summary combining relevant details from outline, speaker notes, and brainstorm that help understand the slide's role in the presentation flow and what points to emphasize during editing]
-```
-
-**Then use AskUserQuestion tool to present menu:**
+Display a concise summary:
 
 ```
-AskUserQuestion with:
+Editing Slide {N}: {TITLE}
+Position: {N} of {TOTAL} | Layout: {layout} | File: {path}
+
+Context: {2-3 sentence summary combining info from outline, speaker notes, and slide position}
+```
+
+Then use AskUserQuestion with:
 - question: "What would you like to do with this slide?"
 - header: "Action"
+- multiSelect: false
 - options:
-  1. label: "Run quality assessment"
-     description: "Analyze against quality criteria (references/presentation-best-practices.md)"
+  1. label: "Analyze quality"
+     description: "Run evidence-based quality assessment and get improvement suggestions"
   2. label: "Edit content"
-     description: "Modify text, bullets, or heading"
+     description: "Modify text, bullets, or heading directly"
   3. label: "Change layout"
-     description: "Switch Slidev layout (two-cols, default, center, etc.)"
-  4. label: "Add/edit visuals"
-     description: "Add diagrams, images, or improve existing visuals"
+     description: "Switch Slidev layout (two-cols, image-right, center, etc.)"
+  4. label: "Add visuals"
+     description: "Add or improve diagrams, images, or code examples"
   5. label: "Update notes"
      description: "Edit presenter notes and timing guidance"
-  6. label: "Done"
-     description: "Finish editing this slide"
-```
 
-**IMPORTANT**: Do NOT display full slide content - user has it open. Focus on synthesized context.
+## Step 7: Handle User Choice
 
-### 7. Interactive Editing
+### If user chooses "Analyze quality":
 
-When user chooses "Run quality assessment":
+Use the Task tool with:
+- subagent_type: "slidev:slide-optimizer"
+- description: "Analyze slide quality"
+- prompt: "Analyze this slide against evidence-based quality criteria. The slide file is at {path}. Provide a quality score, current state checklist, critical violations, and prioritized recommendations with specific examples."
 
-Use slide-optimizer agent to analyze the slide and present DETAILED results:
-
-```markdown
-Quality Score: [X/12]
-
-Current State:
-- ✓/✗ One idea per slide
-- ✓/✗ Meaningful title (assertion vs label)
-- ✓/✗ Element count: [X] elements (target ≤6)
-- ✓/✗ Word count: [Y] words (target <50)
-- ✓/✗ Visual element present
-- ✓/✗ Font sizes (body ≥18pt, heading ≥24pt)
-- ✓/✗ Contrast ratio (≥4.5:1)
-- ✓/✗ Colorblind-safe
-- ✓/✗ Standalone comprehension
-- ✓/✗ Phrases not sentences
-- ✓/✗ White space (≥10% margins)
-- ✓/✗ Explainable in ~90 seconds
-
-Critical violations: [List or "None"]
-
-Recommendations (priority order):
-1. [CRITICAL/HIGH/MEDIUM/LOW] - [Specific issue]
-   Current: [What exists now]
-   Suggested: [Concrete improvement]
-   Why: [Research basis]
-   Impact: [What changes]
-
-2. [Next recommendation with same detail...]
-```
-
-**Then offer to apply improvements:**
-
-Use AskUserQuestion:
-- question: "Would you like to apply these improvements?"
+After the agent returns its analysis, use AskUserQuestion:
+- question: "How would you like to proceed?"
 - header: "Next Step"
+- multiSelect: false
 - options:
   1. label: "Apply all recommendations"
-     description: "Implement all suggested changes"
-  2. label: "Apply specific ones"
-     description: "Choose which recommendations to apply"
+     description: "Implement all suggested improvements"
+  2. label: "Apply some"
+     description: "Choose which recommendations to implement"
   3. label: "Make other changes"
-     description: "Edit something else on this slide"
-  4. label: "Done with this slide"
-     description: "Return to slide selection"
+     description: "Do something else with this slide"
+  4. label: "Done"
+     description: "Finish editing this slide"
 
-If user chooses "Apply specific ones", show another menu with each recommendation as an option (multiSelect: true).
+If they choose "Apply all" or "Apply some":
+- Use Edit tool to implement the improvements to the slide file
+- Show confirmation of changes made
+- Ask if they want to do anything else with this slide
 
-When user chooses to edit content/layout/notes/visuals:
+### If user chooses "Edit content":
 
-**Content changes (Evidence-Based Rules):**
-- Use Edit tool to update the **individual slide file** (e.g., `slides/05-microservices-benefits.md`)
-- Changes automatically reflected in presentation
-- **One idea per slide** (single central message)
-- **Meaningful title** (assertion format: "X demonstrates Y", not label: "Results")
-- **Cognitive load limit** (≤6 total elements: bullets + images + diagrams)
-- **Minimal text** (<50 words excluding title, use phrases not sentences)
-- **Detailed text → presenter notes** (MIT CommLab principle)
-- Maintain Slidev syntax
+Ask them what they want to change, then use the Edit tool on the slide file.
 
-**Visual changes:**
-- Add mermaid diagram (use visual-design skill)
-- Add image placeholder
-- Reference visual-suggester agent for options
+Remember to follow evidence-based principles:
+- One idea per slide
+- Meaningful title (assertion, not label)
+- ≤6 total elements (bullets + visuals)
+- <50 words body text
+- Phrases not sentences in bullets
+- Visual element present
 
-**Layout changes:**
-- Change frontmatter layout
-- Suggest appropriate layouts:
-  - `default` - Standard
-  - `image-right` - Content + image
-  - `two-cols` - Side by side
-  - `center` - Centered
-  - `quote` - Large quote
+### If user chooses "Change layout":
 
-**Notes changes:**
-- Add or update presenter notes
-- Include timing, transitions, examples
+Show available layouts and ask which one, then use Edit tool to change the frontmatter `layout:` field.
 
-### 8. After Edits
+Common layouts: default, two-cols, image-right, center, quote, cover
 
-Confirm changes made:
-```
-Updated: [brief description of what changed]
-```
+### If user chooses "Add visuals":
 
-Then offer:
-- Make more changes
-- Run quality assessment (if not done yet)
-- Edit another slide
-- Done
+Offer to:
+- Add a mermaid diagram (ask what type)
+- Add an image (provide placeholder)
+- Add code example (ask for language and content)
 
-## Evidence-Based Editing Checklist
+Use Edit tool to add the visual element to the slide file.
 
-Before finalizing slide edits, verify:
-- [ ] **One idea**: Slide communicates exactly one central point
-- [ ] **Meaningful title**: Assertion (subject + verb + finding), not label
-- [ ] **Element count**: ≤6 total (bullets + images + diagrams + charts)
-- [ ] **Word count**: <50 words body text (excluding title)
-- [ ] **Visual element**: Diagram, image, or code present (unless quote/definition)
-- [ ] **Phrases**: Bullets are phrases (3-6 words), not full sentences
-- [ ] **Notes**: Detailed explanations in presenter notes, not on slide
-- [ ] **Explainable**: Can be presented in ~90 seconds
+### If user chooses "Update notes":
 
-## Tips
+Use Edit tool to add or modify HTML comments in the slide file for presenter notes.
 
-**Context is Key:**
-- Always show ToC so user knows where slide fits
-- Show surrounding slides if helpful
-- Note transitions to/from this slide
+## Evidence-Based Quality Criteria
 
-**Be Proactive (Evidence-Based):**
-- **Automatically** run slide-optimizer (not optional)
-- Suggest improvements based on 12-point quality criteria
-- Offer visual enhancements if slide is text-heavy (>50 words)
-- Check consistency with evidence-based standards
-- Convert generic labels to meaningful assertions
+When making any changes, ensure slides meet these standards:
+- ✓ One idea per slide
+- ✓ Meaningful title (assertion: "X demonstrates Y", not label: "Results")
+- ✓ ≤6 total elements (bullets + images + diagrams)
+- ✓ <50 words body text (excluding title)
+- ✓ Visual element present
+- ✓ Phrases not sentences in bullets
+- ✓ High contrast (≥4.5:1)
+- ✓ Colorblind-safe
+- ✓ Explainable in ~90 seconds
 
-**Iteration:**
-- Allow multiple rounds of edits
-- Re-run optimizer after major changes
-- Don't finalize prematurely
-- Ask for confirmation before moving on
+See `references/presentation-best-practices.md` for detailed guidelines.
 
-**Visual Opportunities:**
-- If slide lacks visuals and >50 words, strongly suggest diagram
-- Use visual-suggester for specific recommendations
-- Offer to add mermaid diagram with colorblind-safe theme
-- Ensure visual + content ≤6 total elements
+## Important Notes
 
-## Example Interaction
-
-```
-User: /slidev:edit 7
+- DO NOT show full slide content - user has it open
+- Focus on concise, CLI-friendly output
+- Actually READ files - don't hallucinate content
+- Use the EXACT slide number provided (don't add or subtract)
+- Always offer to do more after each action
+- Make improvements based on evidence-based principles
