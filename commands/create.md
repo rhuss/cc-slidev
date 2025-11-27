@@ -707,7 +707,7 @@ Present completion summary:
    ```
 
 3. **Edit specific slides:**
-   `/slidev:edit-slide [number]`
+   `/slidev:edit [number]`
 
 4. **Enhance visuals:**
    `/slidev:enhance-visuals` (if not done yet)

@@ -12,8 +12,8 @@ The agent should review the slide for clarity, visual balance, text density, and
 </example>
 
 <example>
-Context: User is working on a specific slide with /slidev:edit-slide
-user: "/slidev:edit-slide 7"
+Context: User is working on a specific slide with /slidev:edit
+user: "/slidev:edit 7"
 assistant: "Let me show you slide 7 and analyze it for potential improvements using the slide-optimizer agent."
 <commentary>
 Agent triggers proactively when editing individual slides to offer optimization suggestions automatically.
@@ -225,7 +225,7 @@ Provide analysis in this structure:
 **Proactive Triggering:**
 
 Automatically analyze slides in these situations:
-- User calls `/slidev:edit-slide [N]`
+- User calls `/slidev:edit [N]`
 - User asks for slide review
 - User completes slide generation and asks "what's next"
 - User mentions slide quality concerns

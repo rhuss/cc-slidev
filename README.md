@@ -125,7 +125,7 @@ Opens Slidev dev server at `localhost:3030`. Press `p` for presenter mode with n
 
 ### 5. Edit specific slides
 ```
-/slidev:edit-slide 5
+/slidev:edit 5
 ```
 Shows table of contents, current slide content, and quality analysis. Edit individual slide files directly.
 
@@ -198,7 +198,7 @@ introduction-to-kubernetes/
 | `/slidev:brainstorm` | Interactive brainstorming with research |
 | `/slidev:outline` | Create/revise presentation outline |
 | `/slidev:generate` | Generate modular slides from outline |
-| `/slidev:edit-slide <N>` | Edit specific slide with context |
+| `/slidev:edit <N>` | Edit specific slide with context |
 | `/slidev:continue` | Resume work on existing presentation |
 | `/slidev:enhance-visuals` | Add diagrams and images to all slides |
 | `/slidev:diagram <N>` | Create diagram for specific slide |

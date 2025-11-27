@@ -1,7 +1,7 @@
 ---
-name: slidev:edit-slide
+name: slidev:edit
 description: Edit a specific slide with table of contents context
-argument-hint: "<slide-number>"
+argument-hint: "[slide-number]"
 allowed-tools: ["Read", "Edit", "Grep", "Task", "Skill"]
 skills: ["slidev:presentation-design"]
 ---
@@ -233,4 +233,4 @@ Before finalizing slide edits, verify:
 ## Example Interaction
 
 ```
-User: /slidev:edit-slide 7
+User: /slidev:edit 7
