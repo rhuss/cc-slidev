@@ -1,0 +1,41 @@
+{
+  "diagrams": {
+    "platforms": {
+      "mermaid": {
+        "enabled": true,
+        "generateRendered": true,
+        "renderFormat": "svg",
+        "theme": "base",
+        "themeVariables": {
+          "primaryColor": "#3b82f6",
+          "primaryTextColor": "#fff",
+          "primaryBorderColor": "#2563eb",
+          "lineColor": "#6b7280",
+          "secondaryColor": "#f97316",
+          "tertiaryColor": "#8b5cf6"
+        }
+      },
+      "plantuml": {
+        "enabled": true,
+        "generateRendered": true,
+        "renderFormat": "svg",
+        "server": "https://www.plantuml.com/plantuml"
+      },
+      "excalidraw": {
+        "enabled": true,
+        "generateSource": true,
+        "generateRendered": true,
+        "renderFormat": "svg"
+      }
+    },
+    "storage": {
+      "baseDir": "public/images",
+      "namingStrategy": "slide-title-mangled",
+      "keepSource": true
+    },
+    "embedding": {
+      "defaultFormat": "mermaid-inline",
+      "fallbackToImage": true
+    }
+  }
+}

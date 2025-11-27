@@ -1,5 +1,5 @@
 ---
-name: handout
+name: slidev:handout
 description: Generate comprehensive LaTeX handout from presentation
 allowed-tools: ["Read", "Write", "Bash", "Grep"]
 ---
@@ -155,7 +155,14 @@ Using latex-handouts skill, create `handout.tex`:
 \newpage
 ```
 
-**Body structure:**
+**Body structure with rigorous heading hierarchy:**
+
+Use semantic heading levels consistently:
+- `\section{}` - Main presentation sections (Introduction, Presentation Content, Summary, Additional Resources)
+- `\subsection{}` - Topic sections within presentation (matches slide deck sections)
+- `\subsubsection{}` - Individual slide titles (each slide gets its own subsubsection)
+- `\paragraph{}` - Content subdivisions (Overview, Key Considerations, Technical Details, Further Reading)
+
 ```latex
 \section{Introduction}
 
@@ -171,9 +178,10 @@ Using latex-handouts skill, create `handout.tex`:
 
 % Include slide image ONLY if Playwright available (exit code 0 or 2)
 % If exit code 3 (Playwright missing), skip this figure block:
+% IMPORTANT: Use \fbox{} to add black border around all slide images
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.75\textwidth]{exports/slide-[NNN].png}
+  \fbox{\includegraphics[width=0.72\textwidth]{exports/slide-[NNN].png}}
   \caption{[Slide Title]}
   \label{fig:slide[N]}
 \end{figure}
@@ -347,10 +355,12 @@ Apply customizations to handout.tex if requested.
 ## Best Practices
 
 **Handout Quality:**
-- Keep slide images large enough to read (0.8-0.9\textwidth)
+- **All slides MUST have black borders** using `\fbox{\includegraphics[width=0.72\textwidth]{...}}`
+- Keep slide images large enough to read (accounting for border, use 0.72\textwidth)
 - Balance slide image with surrounding text
 - Use page breaks strategically
 - Include page numbers and headers
+- **Use rigorous heading hierarchy** - never skip heading levels, each slide gets `\subsubsection{}`
 
 **Content Balance:**
 - ✅ **Write in prose, not bullets** - Transform slide bullets into flowing paragraphs

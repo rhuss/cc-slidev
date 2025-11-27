@@ -1,8 +1,8 @@
 ---
-name: slides:generate
+name: slidev:generate
 description: Generate Slidev slides from outline
 allowed-tools: ["Read", "Write", "Bash", "Grep", "Skill"]
-skills: ["slidedeck:presentation-design"]
+skills: ["slidev:presentation-design"]
 ---
 
 # Slide Generation
@@ -24,7 +24,7 @@ Check for required files:
 
 If outline.md missing:
 - Inform user outline is needed first
-- Offer to run `/slidedeck:outline`
+- Offer to run `/slidev:outline`
 - Exit
 
 ### 2. Determine Project Directory
@@ -656,10 +656,10 @@ Run slide-optimizer to verify all slides meet quality standards:
    - Example: `vim slides/05-microservices-benefits.md`
 
 3. **Enhance visuals:**
-   `/slidedeck:enhance-visuals` - Add diagrams, photos, AI image prompts
+   `/slidev:enhance-visuals` - Add diagrams, photos, AI image prompts
 
 4. **Export:**
-   `/slidedeck:export pdf` - Generate final PDF
+   `/slidev:export pdf` - Generate final PDF
 ```
 
 Ask: "Would you like to preview the slides now?"

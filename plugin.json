@@ -1,10 +1,10 @@
 {
-  "name": "slidedeck",
+  "name": "slidev",
   "version": "0.1.0",
-  "description": "Professional presentation creation using Slidev - from brainstorming to handout generation. Enforces clean, accessible slides with hard limits (≤6 elements, <50 words, 18pt+ fonts) and prevents common presentation mistakes.",
+  "description": "Create developer-focused technical presentations using Slidev with enforced evidence-based design guardrails. Modular slide structure, multi-platform diagrams (Mermaid, PlantUML, Excalidraw), and complete workflow from brainstorming to LaTeX handouts. Hard limits: ≤6 elements, <50 words, 18pt+ fonts, colorblind-safe colors.",
   "author": {
     "name": "Roland Huss",
-    "email": "cc-slidedeck@ro14nd.de"
+    "email": "cc-slidev@ro14nd.de"
   },
   "keywords": [
     "slidev",
@@ -13,7 +13,10 @@
     "latex",
     "handout",
     "mermaid",
+    "plantuml",
+    "excalidraw",
     "diagrams",
+    "multi-platform",
     "workflow",
     "accessibility",
     "design-enforcement",
@@ -33,7 +36,7 @@
     },
     {
       "name": "diagram",
-      "description": "Create or improve mermaid diagram for specific slide",
+      "description": "Create multi-platform diagrams (Mermaid, PlantUML, Excalidraw) for specific slide with automatic translation",
       "file": "commands/diagram.md"
     },
     {
@@ -43,7 +46,7 @@
     },
     {
       "name": "enhance-visuals",
-      "description": "Add mermaid diagrams, stock photos, and AI image prompts to slides",
+      "description": "Add multi-platform diagrams (Mermaid, PlantUML, Excalidraw), stock photos, and AI image prompts to slides",
       "file": "commands/enhance-visuals.md"
     },
     {
@@ -92,9 +95,9 @@
     },
     {
       "name": "Visual Design",
-      "description": "Mermaid diagrams, colorblind-safe color palettes, stock photography, and AI image generation for presentations",
+      "description": "Multi-platform diagrams (Mermaid, PlantUML, Excalidraw), colorblind-safe color palettes, stock photography, and AI image generation for presentations",
       "file": "skills/visual-design/SKILL.md",
-      "version": "0.2.0"
+      "version": "0.3.0"
     },
     {
       "name": "LaTeX Handouts",

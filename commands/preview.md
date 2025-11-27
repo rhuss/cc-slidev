@@ -1,5 +1,5 @@
 ---
-name: preview
+name: slidev:preview
 description: Start Slidev dev server to preview presentation
 allowed-tools: ["Bash"]
 ---
@@ -18,7 +18,7 @@ Look for slides.md:
 - If multiple found, ask which one
 
 If not found:
-- Error: "No slides.md found. Generate slides first with `/slidedeck:slides`"
+- Error: "No slides.md found. Generate slides first with `/slidev:slides`"
 
 ### 2. Start Dev Server
 
@@ -84,9 +84,9 @@ Make changes to slides.md and see them live!
 Ask: "What would you like to do while previewing?"
 
 Options:
-- Edit slides while watching: `/slidedeck:edit-slide [N]`
-- Enhance visuals: `/slidedeck:enhance-visuals`
-- Export to PDF/PPTX: `/slidedeck:export`
+- Edit slides while watching: `/slidev:edit-slide [N]`
+- Enhance visuals: `/slidev:enhance-visuals`
+- Export to PDF/PPTX: `/slidev:export`
 - Just review and practice
 
 ### 5. Background Mode
@@ -117,7 +117,7 @@ PID saved to `/tmp/slidev-preview.pid` for reference.
 
 **Exporting:**
 - Don't export from dev server
-- Stop server and use `/slidedeck:export` for production exports
+- Stop server and use `/slidev:export` for production exports
 
 ## Troubleshooting
 

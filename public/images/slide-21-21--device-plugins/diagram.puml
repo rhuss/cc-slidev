@@ -1,0 +1,15 @@
+@startuml
+!theme plain
+skinparam backgroundColor white
+skinparam activity {
+  BackgroundColor #3b82f6
+  BorderColor #6b7280
+  FontColor white
+}
+
+start
+:DP;
+:Kubelet;
+:Scheduler;
+stop
+@enduml

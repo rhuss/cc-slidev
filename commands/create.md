@@ -1,11 +1,12 @@
 ---
-name: create
+name: slidev:create
 description: Create a complete presentation from brainstorming to handout generation
 argument-hint: "[optional-topic]"
-allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "Grep", "Glob", "Task", "AskUserQuestion", "TodoWrite"]
+allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "Grep", "Glob", "Task", "AskUserQuestion", "TodoWrite", "Skill"]
+skills: ["slidev:presentation-design"]
 ---
 
-# Slidedeck Creation - Complete Workflow
+# Slidev Creation - Complete Workflow
 
 Execute the full presentation creation workflow from initial brainstorming through final handout generation with enforced design limits and accessibility defaults.
 
@@ -426,7 +427,7 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/preview-slidev.sh slides.md
 
 Ask: "Should we enhance slides with diagrams and images?"
 
-If yes, proceed with `/slidedeck:enhance-visuals` logic:
+If yes, proceed with `/slidev:enhance-visuals` logic:
 
 1. Use visual-suggester agent to analyze slides
 2. Identify slides with visual opportunities
@@ -706,10 +707,10 @@ Present completion summary:
    ```
 
 3. **Edit specific slides:**
-   `/slidedeck:edit-slide [number]`
+   `/slidev:edit-slide [number]`
 
 4. **Enhance visuals:**
-   `/slidedeck:enhance-visuals` (if not done yet)
+   `/slidev:enhance-visuals` (if not done yet)
 
 **Presentation Stats:**
 - Duration: [X] minutes

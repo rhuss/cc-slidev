@@ -1,6 +1,6 @@
 # Presentation Best Practices
 
-Research-backed guidelines for creating effective scientific and technical presentations. The Slidedeck plugin enforces these rules automatically through hard limits and design checks.
+Research-backed guidelines for creating effective scientific and technical presentations. The Slidev plugin enforces these rules automatically through hard limits and design checks.
 
 **Key Principles:**
 - Cognitive load limits: ≤6 elements per slide (based on Miller's Law)
