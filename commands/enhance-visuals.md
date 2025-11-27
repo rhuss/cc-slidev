@@ -1,38 +1,78 @@
 ---
-name: enhance-visuals
+name: slides:enhance-visuals
 description: Comprehensive visual enhancement for all slides
-allowed-tools: ["Read", "Edit", "Bash", "WebSearch", "Task"]
+allowed-tools: ["Read", "Edit", "Bash", "WebSearch", "Task", "Skill"]
+skills: ["slidedeck:presentation-design"]
 ---
 
 # Visual Enhancement Workflow
 
-Analyze all slides and provide interactive visual enhancement with diagrams, images, and AI prompts using evidence-based best practices.
+Analyze all slides and provide interactive visual enhancement with **multi-platform diagrams** (Mermaid, PlantUML, Excalidraw), images, and AI prompts using evidence-based best practices.
 
 **Evidence Base**: Visual enhancements follow research-based principles for cognitive load, accessibility, and effective communication. See `references/presentation-best-practices.md` for guidelines.
+
+**Multi-Platform**: All diagrams are automatically generated in enabled formats (Mermaid + PlantUML + Excalidraw). Mermaid embedded inline, alternatives saved in organized directories for flexibility.
 
 ## Execution
 
 ### 1. Read Slides
 
-Find and parse slides.md:
-- Count total slides
-- Identify slides with existing visuals
-- Find slides with visual placeholders
-- Detect slides that need visuals
+Find and parse slides.md with CORRECT Slidev numbering:
+
+**IMPORTANT: Generate accurate slide numbering first**
+
+**CRITICAL: Slidev Slide Numbering**
+**Read master slides.md directly:**
+
+Read the master `slides.md` file containing slide comments:
+
+```markdown
+<!-- Slide 1: Title -->
+src: ./slides/title.md
+---
+
+<!-- Slide 5: Microservices Benefits -->
+src: ./slides/microservices-benefits.md
+---
+```
+
+Extract slide information by parsing comment pattern: `<!-- Slide \d+: .* -->`
+
+**Output Format for Analysis:**
+Always reference slides as: **"Slide X (Title)"**
+Example: "Slide 21 (Device Plugins Turn GPUs Into Schedulable Resources)"
+
+**Analysis Tasks:**
+- Read slides.md to extract all slide comments
+- Count total slides (count comments)
+- Extract slide titles from comment descriptions
+- Read individual slide files (from `src:` paths) to check for:
+  - Existing visuals (mermaid blocks, image references)
+  - Visual placeholders (`<!-- TODO: Visual`)
+  - Content that needs visuals
 
 ### 2. Analyze Visual Opportunities (Evidence-Based)
 
-Use visual-suggester agent to identify slides needing visuals based on:
+**When instructing the visual-suggester agent:**
+
+```
+Analyze slides.md for visual opportunities.
+
+Read the master slides.md file and extract slide numbers from comments:
+<!-- Slide X: Description -->
+
+Use these EXACT slide numbers in your analysis.
+
+When reporting opportunities, use format: "Slide X (Title)" where X matches the comment numbers.
+
+Identify slides needing visuals based on:
 - **One idea per slide**: Does visual support the single central message?
 - **Cognitive load**: Will visual + text + bullets stay ≤6 total elements?
 - **Visual over text**: Can diagram replace text-heavy explanations?
 - **Accessibility**: Can visual work with colorblind-safe colors?
-
-```
-Analyze all slides using visual-suggester agent to identify visual enhancement opportunities.
 ```
 
-Agent returns prioritized list of slides needing visuals.
+Agent returns prioritized list of slides needing visuals with CORRECT slide numbers (verified by Python script).
 
 ### 3. Present Overview
 
@@ -78,10 +118,25 @@ For each slide to enhance (based on user choice):
 
 **Visual Options:**
 
-### Option 1: Mermaid Flowchart ⚡
+**IMPORTANT: Platform-Specific Semantic Design**
+- Each platform below represents a **different visual thinking approach**
+- Don't convert between platforms - **redesign for each platform's strengths**
+- Consider slide semantics, not just diagram structure
 
-**Why this works:**
-[Explanation of how diagram supports slide's ONE IDEA]
+---
+
+### Option 1: Mermaid Diagram ⚡
+
+**Best for:** Flow, process, state transitions, sequences (clean, developer-friendly)
+
+**Why this works for this slide:**
+[Explanation of how Mermaid's linear/structured approach supports the slide's ONE IDEA]
+
+**Mermaid-specific design thinking:**
+- Emphasizes **flow and direction** (great for pipelines, workflows, state machines)
+- Clean, minimal aesthetic - good for technical audiences
+- Real-time rendering in Slidev (inline)
+- Best diagram type for this content: [flowchart/sequence/state/gantt/etc.]
 
 **Evidence-based design:**
 - Max 7-9 nodes (cognitive load research: working memory limit)
@@ -95,26 +150,85 @@ For each slide to enhance (based on user choice):
   'secondaryColor':'#f97316',
   'lineColor':'#6b7280'
 }}}%%
-[Complete working mermaid code with colorblind-safe theme colors]
+[Complete working mermaid code designed FOR Mermaid's strengths]
 ```
 
 **Element count check:** Diagram counts as 1 element. Current slide total: [X] elements (target: ≤6)
 
-**Preview:** Inline rendering (Slidev handles) or offline high-quality?
-
 ---
 
-### Option 2: Mermaid Sequence Diagram ⚡
+### Option 2: PlantUML Diagram 🏗️
 
-[Alternative diagram approach]
+**Best for:** UML, architecture, complex relationships, formal modeling
 
-```mermaid
-[Alternative code]
+**Why PlantUML for this slide:**
+[Explanation of how PlantUML's modeling capabilities fit the slide's semantic content]
+
+**PlantUML-specific design thinking:**
+- Emphasizes **relationships and structure** (components, classes, deployments)
+- Formal notation - good for architectural discussions
+- Rich set of diagram types (component, class, deployment, timing, etc.)
+- Best diagram type for this content: [component/class/deployment/sequence/activity]
+
+**Semantic redesign (not conversion from Mermaid):**
+- What architectural elements does this slide discuss?
+- What relationships need to be shown?
+- What UML stereotypes add clarity?
+
+**Diagram Code:**
+```plantuml
+@startuml
+!theme plain
+skinparam backgroundColor white
+
+[PlantUML code designed specifically for PlantUML's capabilities]
+- Uses PlantUML-specific features (stereotypes, packages, interfaces)
+- Leverages PlantUML's layout algorithms
+- Not a conversion - a semantic reimagining
+
+@enduml
 ```
 
+**Why not just convert from Mermaid?**
+PlantUML excels at showing component boundaries, deployment contexts, and formal relationships that Mermaid doesn't emphasize.
+
 ---
 
-### Option 3: Stock Photo 📷
+### Option 3: Excalidraw Diagram ✏️
+
+**Best for:** Sketchy/informal style, brainstorming feel, hand-drawn aesthetic, annotations
+
+**Why Excalidraw for this slide:**
+[Explanation of how Excalidraw's informal, sketchy style fits the slide's tone/message]
+
+**Excalidraw-specific design thinking:**
+- Emphasizes **approachability and informality** (great for brainstorming, ideation, workshops)
+- Hand-drawn style reduces intimidation
+- Flexible annotations and callouts
+- Editable at excalidraw.com for collaboration
+
+**Semantic redesign considerations:**
+- What spatial relationships matter? (Excalidraw has flexible positioning)
+- What annotations or callouts add insight?
+- How can hand-drawn style make concept more approachable?
+- What groupings or containers clarify structure?
+
+**Diagram approach:**
+[Description of diagram design leveraging Excalidraw's strengths:
+- Rough rectangles with annotations
+- Arrows with labels
+- Grouping boxes or containers
+- Spatial positioning to show relationships
+- Color-coded regions]
+
+**Note:** Will be generated as editable .excalidraw JSON that you can refine at https://excalidraw.com
+
+**Why not just convert from Mermaid?**
+Excalidraw excels at informal visual thinking, spatial reasoning, and collaborative sketching that structured diagrams miss.
+
+---
+
+### Option 4: Stock Photo 📷
 
 **Search Terms:**
 - "[Primary term]"
@@ -154,26 +268,25 @@ Negative: [negative]
 ---
 
 **Which option for Slide [N]?**
-1. Mermaid Option 1 (flowchart)
-2. Mermaid Option 2 (sequence)
-3. Stock Photo (I'll provide URL)
-4. AI Image (save prompts for later)
-5. Skip this slide
+1. Mermaid diagram (flow/process emphasis)
+2. PlantUML diagram (architecture/UML emphasis)
+3. Excalidraw diagram (sketchy/informal style)
+4. Stock Photo (I'll provide URL)
+5. AI Image (save prompts for later)
+6. Skip this slide
 ```
 
 ### 5. Implement Chosen Option
 
 Based on user choice:
 
-**Mermaid Diagram:**
-1. Ask: Inline or offline rendering?
-2. If inline: Add diagram code directly to slide
-3. If offline:
-   - Save diagram code to temp file
-   - Run render script if mermaid-cli available
-   - Add image reference to slide
+#### **Option 1: Mermaid Diagram (Semantic Design)**
 
-Example edit:
+1. Design Mermaid diagram based on slide semantics (not conversion)
+2. Extract slide title from the slide being enhanced
+3. Create Mermaid code leveraging Mermaid's strengths (flow, process, sequences)
+4. Add inline to slide (Slidev renders in real-time):
+
 ```markdown
 # Slide Title
 
@@ -181,11 +294,87 @@ Content here
 
 ```mermaid
 %%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#3b82f6'}}}%%
-graph TD
-    A[Start] --> B[Process]
-    B --> C[End]
+[Mermaid code designed for Mermaid's visual paradigm]
 ```
 ```
+
+5. Generate multi-platform versions:
+   ```bash
+   ${CLAUDE_PLUGIN_ROOT}/scripts/generate-multi-platform-diagram.sh \
+     "[Slide Title]" \
+     "[Mermaid Code]" \
+     "."
+   ```
+6. This saves all platform versions in `public/images/<readable-slug>/`
+
+#### **Option 2: PlantUML Diagram (Semantic Design)**
+
+1. Design PlantUML diagram from scratch based on slide's architectural/structural semantics
+2. Use PlantUML-specific features (stereotypes, packages, deployment nodes, etc.)
+3. Create PlantUML source:
+
+```plantuml
+@startuml
+!theme plain
+
+[PlantUML code leveraging UML notation strengths]
+
+@enduml
+```
+
+4. Save PlantUML as primary, generate others:
+   ```bash
+   # Save PlantUML source
+   cat > /tmp/diagram.puml <<'EOF'
+   [PlantUML code]
+   EOF
+
+   # Generate directory with PlantUML as source
+   ${CLAUDE_PLUGIN_ROOT}/scripts/generate-from-plantuml.sh \
+     "[Slide Title]" \
+     "$(cat /tmp/diagram.puml)" \
+     "."
+   ```
+
+5. Add reference to slide (PlantUML rendered image):
+   ```markdown
+   ![Architecture](./public/images/<slug>/diagram-plantuml.svg)
+   ```
+
+#### **Option 3: Excalidraw Diagram (Semantic Design)**
+
+1. Design Excalidraw diagram emphasizing spatial relationships and informal style
+2. Create Excalidraw JSON with semantic layout:
+   - Position elements to show conceptual relationships
+   - Use grouping containers for context
+   - Add annotations and callouts
+   - Hand-drawn style for approachability
+
+3. Generate Excalidraw source:
+   ```bash
+   # Create semantic Excalidraw design
+   ${CLAUDE_PLUGIN_ROOT}/scripts/create-excalidraw-diagram.sh \
+     "[Slide Title]" \
+     "[Design description]" \
+     "."
+   ```
+
+4. Inform user:
+   ```
+   ✅ Excalidraw diagram created at:
+   public/images/<slug>/diagram.excalidraw
+
+   To refine:
+   1. Open https://excalidraw.com
+   2. Load diagram.excalidraw
+   3. Adjust positioning, add annotations
+   4. Export as needed
+   ```
+
+5. Add reference to slide:
+   ```markdown
+   ![Concept](./public/images/<slug>/diagram-excalidraw.svg)
+   ```
 
 **Stock Photo:**
 1. Ask user: "Provide the image URL you chose"
