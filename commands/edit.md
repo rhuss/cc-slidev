@@ -20,6 +20,8 @@ Extract from `$ARGUMENTS`:
 - Must be a valid number
 - If missing or invalid: Ask user "Which slide number should we edit?"
 
+**IMPORTANT**: The slide number provided by the user is the EXACT slide to edit. Do NOT increment or modify it.
+
 ### 2. Read Master slides.md and Locate Slide File
 
 Find the presentation:
@@ -44,10 +46,11 @@ src: ./slides/05-microservices-benefits.md
 
 **To find a specific slide:**
 1. Read the master slides.md file using the Read tool
-2. Search for the comment pattern `<!-- Slide N: ... -->`
-3. Extract the description after the colon
+2. Search for the comment pattern `<!-- Slide N: ... -->` where N is the EXACT number requested
+3. Extract the description after the colon (this is the slide title)
 4. Find the `src:` line immediately preceding (in the frontmatter block above)
 5. Extract the file path
+6. Read the individual slide file to get full content
 
 **To build table of contents:**
 - Extract all comments matching `<!-- Slide \d+: .* -->`
@@ -57,31 +60,94 @@ src: ./slides/05-microservices-benefits.md
 If slide number > total slides:
 - Error: "Only [X] slides exist. Choose 1-[X]."
 
-### 3. Display Context
+If comment for requested slide N not found:
+- Error: "Slide [N] not found. Use slide numbers from table of contents."
 
-Show user the context:
+### 3. Gather Comprehensive Context
+
+**Read contextual files to understand slide purpose:**
+
+1. **Check for brainstorm.md** in presentation directory:
+   - If exists: Search for mentions of slide topic/keywords
+   - Extract relevant research, objectives, or key points
+   - Note if this slide relates to CfP commitments
+
+2. **Check for outline.md** in presentation directory:
+   - If exists: Find section where this slide appears
+   - Extract outline context (section goals, flow)
+   - Note slide's role in presentation structure
+
+3. **Read slide's presenter notes**:
+   - Extract any `<!-- PRESENTER NOTES: -->` sections from slide file
+   - Parse key points, timing, delivery tips
+   - Note transition guidance
+
+### 4. Display Context
+
+Show user comprehensive context:
 
 ```markdown
-## Table of Contents
+# Editing Slide [N]: [Slide Title]
+
+**Position:** Slide [N] of [X]
+
+---
+
+## 📋 Table of Contents
 
 1. [Slide 1 title]
 2. [Slide 2 title]
 3. [Slide 3 title]
 ...
-**→ SLIDE [N]: [Current slide title]** ← We're here
+**→ [N]. [Current slide title]** ← You are here
 ...
 [X]. [Last slide title]
 
 ---
 
-## Current Slide ([N] of [X])
+## 🎯 Slide Context
 
-[Full slide content including frontmatter, content, and notes]
+**From outline.md:**
+[If outline.md exists and mentions this slide:
+- Section: [Section name]
+- Purpose: [Why this slide is here]
+- Flow: [How it fits in narrative]
+]
+[If not found: "No outline context available"]
+
+**From brainstorm.md:**
+[If brainstorm.md exists and has relevant info:
+- Related key points: [List]
+- Research/sources: [Relevant findings]
+- CfP commitments: [If applicable]
+]
+[If not found: "No brainstorming context available"]
+
+**Presenter notes:**
+[If slide has presenter notes:
+- Key points to emphasize
+- Timing guidance
+- Delivery tips
+- Transitions
+]
+[If not found: "No presenter notes yet"]
+
+---
+
+## 📄 Current Slide Content
+
+### Frontmatter
+```yaml
+[Slide frontmatter - layout, image, etc.]
+```
+
+### Slide Body
+[Slide content - heading, bullets, diagrams]
 
 ---
 ```
 
-### 4. Analyze Slide (Evidence-Based Quality Check)
+### 5. Analyze Slide (Evidence-Based Quality Check)
 
 **Automatically** use slide-optimizer agent to check against 12-point quality criteria:
 ```
@@ -90,7 +156,11 @@ Analyze slide [N] using slide-optimizer agent to identify improvement opportunit
 
 Present analysis with evidence-based scoring:
 ```markdown
-**Evidence-Based Quality Score: [X/12]**
+## 📊 Evidence-Based Quality Analysis
+
+**Slide [N]: [Slide Title]**
+
+**Quality Score: [X/12]**
 
 **Current state:**
 - ✓/✗ One idea per slide
@@ -112,7 +182,7 @@ Present analysis with evidence-based scoring:
 1. [Priority order: CRITICAL → HIGH → MEDIUM → LOW]
 ```
 
-### 5. Interactive Editing
+### 6. Interactive Editing
 
 Ask user: "What would you like to change on this slide?"
 
@@ -153,7 +223,7 @@ Based on user choice:
 - Add or update presenter notes
 - Include timing, transitions, examples
 
-### 6. Preview Changes
+### 7. Preview Changes
 
 After edits, show updated slide:
 ```markdown
@@ -172,7 +242,7 @@ Ask: "Does this look good? Any other changes needed?"
 
 Allow iteration until satisfied.
 
-### 7. Optimization Check
+### 8. Optimization Check
 
 After user-requested changes, ask:
 "Should I run the optimizer to check if there are other improvements?"
@@ -182,7 +252,7 @@ If yes:
 - Show if any new issues found
 - Offer to apply suggestions
 
-### 8. Navigation
+### 9. Navigation
 
 Ask: "What would you like to do next?"
 
