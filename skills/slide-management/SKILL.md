@@ -1,7 +1,7 @@
 ---
 name: Slide Management
-description: This skill should be used when the user wants to "delete slide", "remove slide", "add slide", "insert slide", "create new slide between", "get rid of slide", or when they confirm deletion/addition of slides (e.g., answering "yes" to "should I delete slide N"). CRITICAL - Always use this skill instead of manually editing slides.md or renaming slide files, as it handles automatic renumbering and git-aware operations. Trigger immediately when user wants to modify slide count or order.
-version: 0.1.0
+description: This skill should be used when the user wants to "delete slide", "remove slide", "add slide", "insert slide", "create new slide between", "get rid of slide", "fix gaps", "renumber slides", or when they confirm deletion/addition of slides (e.g., answering "yes" to "should I delete slide N"). CRITICAL - Always use this skill instead of manually editing slides.md or renaming slide files, as it handles automatic renumbering, gap detection/fixing, and git-aware operations. Trigger immediately when user wants to modify slide count, order, or numbering.
+version: 0.2.0
 ---
 
 # Slide Management
@@ -26,6 +26,12 @@ find . -name "slides.md" -type f -not -path "*/node_modules/*" | head -1
 
 Then use Read tool on slides.md and parse all slide entries.
 
+**CRITICAL - Gap Detection:**
+After parsing slides, check for gaps in slide numbering:
+- Extract all slide numbers from the parsed slides
+- Look for missing numbers in the sequence (e.g., if you have slides 1, 2, 5, 6, then gaps are [3, 4])
+- A gap is when the sequence is not continuous (1, 2, 3, ...)
+
 Display current presentation structure to user:
 
 ```
@@ -37,16 +43,42 @@ Display current presentation structure to user:
 2. Introduction
    slides/02-introduction.md
 
-3. Main Topic
-   slides/03-main-topic.md
+5. Main Topic
+   slides/05-main-topic.md
 
 ... (show all slides with numbers, titles, and filenames)
 ```
 
+If gaps are detected, add a warning:
+
+```
+⚠️  Numbering gaps detected: [3, 4]
+Slides are not sequentially numbered. You can fix this with the renumber operation.
+```
+
 ### Step 2: Ask What to Do
 
-Use AskUserQuestion to ask the user what they want to do:
+Use AskUserQuestion to ask the user what they want to do.
 
+**IMPORTANT**: Dynamically build the options list based on whether gaps exist:
+
+If **gaps detected**, offer 4 options:
+```
+- question: "What would you like to do with the slides?"
+- header: "Action"
+- multiSelect: false
+- options:
+  1. label: "Fix gaps"
+     description: "Renumber all slides to be sequential (1, 2, 3, ...) and close gaps"
+  2. label: "Add slide"
+     description: "Insert a new slide at any position"
+  3. label: "Delete slide"
+     description: "Remove a slide"
+  4. label: "View only"
+     description: "Just browsing the current structure"
+```
+
+If **no gaps detected**, offer 3 options:
 ```
 - question: "What would you like to do with the slides?"
 - header: "Action"
@@ -61,6 +93,87 @@ Use AskUserQuestion to ask the user what they want to do:
 ```
 
 If user chooses "View only", end the skill.
+
+If user chooses "Fix gaps", go to Step 2b.
+
+### Step 2b: Fix Gaps Flow (if user chose "Fix gaps")
+
+#### 2b.1: Show Impact and Confirm
+
+Display what will happen:
+
+```
+🔧 Fix Numbering Gaps
+
+Current gaps: [3, 4, 7]
+
+This will renumber ALL slides to be sequential:
+- Slide 1 → Slide 1 (no change)
+- Slide 2 → Slide 2 (no change)
+- Slide 5 → Slide 3
+- Slide 6 → Slide 4
+- Slide 8 → Slide 5
+- Slide 9 → Slide 6
+... (show all renumbering)
+
+Result: Slides will be numbered 1-N with no gaps
+```
+
+Ask for confirmation:
+
+```
+- question: "Proceed with renumbering?"
+- header: "Confirm"
+- multiSelect: false
+- options:
+  1. label: "Yes, fix gaps"
+     description: "Renumber all slides to be sequential"
+  2. label: "Cancel"
+     description: "Keep current numbering"
+```
+
+If user cancels, return to Step 2.
+
+#### 2b.2: Execute Renumber Script
+
+Use Bash to execute:
+
+```bash
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py renumber
+```
+
+Capture both stdout and stderr, check exit code.
+
+#### 2b.3: Show Results
+
+If successful:
+
+```
+✅ Gaps Fixed Successfully
+
+Renumbered slides:
+- Slide 5 → Slide 3 (slides/03-main-topic.md)
+- Slide 6 → Slide 4 (slides/04-examples.md)
+- Slide 8 → Slide 5 (slides/05-advanced.md)
+... (show all renumbered)
+
+Total slides: N (all sequentially numbered 1-N)
+```
+
+Then offer next action:
+
+```
+- question: "What would you like to do next?"
+- header: "Next"
+- multiSelect: false
+- options:
+  1. label: "Add slide"
+     description: "Insert a new slide"
+  2. label: "Delete slide"
+     description: "Remove a slide"
+  3. label: "Done"
+     description: "Finish managing slides"
+```
 
 ### Step 3a: Delete Flow (if user chose "Delete slide")
 
@@ -82,19 +195,49 @@ Generate options dynamically from the slide list you parsed. For each slide, cre
   description: "Architecture Overview (slides/05-architecture-overview.md)"
 ```
 
-#### 3a.2: Show Impact and Confirm
+#### 3a.2: Ask About Renumbering
 
-Calculate and show the impact:
+Ask if user wants to renumber after deletion:
 
+```
+- question: "Should remaining slides be renumbered to close gaps?"
+- header: "Renumber"
+- multiSelect: false
+- options:
+  1. label: "Yes, renumber"
+     description: "Make slides sequential (1, 2, 3, ...) with no gaps"
+  2. label: "No, leave gaps"
+     description: "Keep slide numbers unchanged (may create gaps)"
+```
+
+#### 3a.3: Show Impact and Confirm
+
+Calculate and show the impact based on renumber choice:
+
+If **renumbering**:
 ```
 ⚠️ Confirm Deletion
 
 Deleting: Slide [N]: [Title]
 File: slides/0N-[slug].md
 
-Impact:
+Impact (with renumbering):
 - Slides [N+1] through [M] will be renumbered to [N] through [M-1]
+- All slides will be sequential (1, 2, 3, ...) with no gaps
 - Affects [X] slides total
+```
+
+If **not renumbering**:
+```
+⚠️ Confirm Deletion
+
+Deleting: Slide [N]: [Title]
+File: slides/0N-[slug].md
+
+Impact (without renumbering):
+- Slide will be removed
+- Remaining slides keep their current numbers
+- This will create a gap at position [N]
 ```
 
 Then ask for confirmation:
@@ -105,17 +248,23 @@ Then ask for confirmation:
 - multiSelect: false
 - options:
   1. label: "Yes, delete"
-     description: "Remove slide and renumber subsequent slides"
+     description: "Remove slide [with/without renumbering]"
   2. label: "Cancel"
      description: "Keep all slides unchanged"
 ```
 
 If user cancels, return to Step 2.
 
-#### 3a.3: Execute Delete Script
+#### 3a.4: Execute Delete Script
 
-Use Bash to execute the Python script:
+Use Bash to execute the Python script with or without --renumber flag:
 
+If renumbering:
+```bash
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py delete [N] --renumber
+```
+
+If not renumbering:
 ```bash
 python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py delete [N]
 ```
@@ -126,7 +275,7 @@ Check exit code:
 - Exit code 0: Success
 - Exit code > 0: Error (show error message from stderr)
 
-#### 3a.4: Show Results
+#### 3a.5: Show Results
 
 If successful, show summary:
 
@@ -225,10 +374,26 @@ Question 2:
 
 Extract the custom title from the "Other" response.
 
-#### 3b.3: Show Preview and Confirm
+#### 3b.3: Ask About Renumbering
 
-Generate slug from title (lowercase, hyphens, max 40 chars) and show preview:
+Ask if user wants to renumber after addition:
 
+```
+- question: "Should all slides be renumbered to be sequential?"
+- header: "Renumber"
+- multiSelect: false
+- options:
+  1. label: "Yes, renumber"
+     description: "Make all slides sequential (1, 2, 3, ...) with no gaps"
+  2. label: "No, use gaps"
+     description: "Insert at position, may create or use existing gaps"
+```
+
+#### 3b.4: Show Preview and Confirm
+
+Generate slug from title (lowercase, hyphens, max 40 chars) and show preview based on renumber choice:
+
+If **renumbering**:
 ```
 📋 New Slide Preview
 
@@ -237,9 +402,26 @@ Title: [User's title]
 Layout: [Selected layout]
 Filename: slides/0N-[generated-slug].md
 
-Impact:
+Impact (with renumbering):
+- New slide will be inserted at position [N]
 - Current slides [N] through [M] will become [N+1] through [M+1]
+- All slides will be sequential (1, 2, 3, ...) with no gaps
 - Affects [X] slides
+```
+
+If **not renumbering**:
+```
+📋 New Slide Preview
+
+Position: [N]
+Title: [User's title]
+Layout: [Selected layout]
+Filename: slides/0N-[generated-slug].md
+
+Impact (without renumbering):
+- New slide will be inserted at position [N]
+- Slide number will fit into existing sequence/gaps
+- May create or use existing gaps in numbering
 ```
 
 Ask for confirmation:
@@ -250,17 +432,26 @@ Ask for confirmation:
 - multiSelect: false
 - options:
   1. label: "Yes, create"
-     description: "Add slide and renumber subsequent slides"
+     description: "Add slide [with/without renumbering]"
   2. label: "Cancel"
      description: "Don't make changes"
 ```
 
 If cancelled, return to Step 2.
 
-#### 3b.4: Execute Add Script
+#### 3b.5: Execute Add Script
 
-Use Bash to execute:
+Use Bash to execute with or without --renumber flag:
 
+If renumbering:
+```bash
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py add [N] \
+  --title "[User's title]" \
+  --layout [layout] \
+  --renumber
+```
+
+If not renumbering:
 ```bash
 python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py add [N] \
   --title "[User's title]" \
@@ -269,7 +460,7 @@ python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py add [N] \
 
 Capture output and check exit code.
 
-#### 3b.5: Show Results and Next Steps
+#### 3b.6: Show Results and Next Steps
 
 If successful:
 
