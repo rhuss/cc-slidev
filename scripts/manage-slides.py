@@ -564,9 +564,14 @@ Presenter notes
 
     def renumber_all(self):
         """
-        Renumber all slides to be sequential starting from 1
+        Renumber all slides to close middle gaps while preserving beginning gap
 
-        This fixes any gaps in numbering.
+        Preserves the gap between slide 1 and slide 2 (typical: title at 1, content at 5+)
+        but fixes any gaps in the middle sequence.
+
+        Example:
+            Before: [1, 5, 6, 9, 10] (gap at beginning: 1->5, gap in middle: 6->9)
+            After:  [1, 5, 6, 7, 8]  (beginning gap preserved, middle gap fixed)
         """
         # Parse current slides
         slides = self.parse_slides_md()
@@ -575,55 +580,81 @@ Presenter notes
             print("No slides found", file=sys.stderr)
             sys.exit(ExitCode.SLIDE_NOT_FOUND)
 
-        # Check for gaps
-        gaps = self.detect_gaps(slides)
+        # Check for gaps (ignore beginning gap)
+        gaps = self.detect_gaps(slides, ignore_beginning=True)
         if not gaps:
-            print("No gaps detected. All slides are already sequentially numbered.")
+            print("No gaps detected in middle. Slides are properly numbered.")
+            print("(Beginning gap between slides 1 and 2 is preserved as designed)")
             return
 
-        print(f"Detected gaps at positions: {gaps}")
-        print(f"Renumbering {len(slides)} slides to be sequential (1, 2, 3, ...)...")
+        print(f"Detected gaps in middle at positions: {gaps}")
+        print(f"Renumbering {len(slides)} slides to close middle gaps...")
+        print(f"(Preserving gap between slide 1 and slide 2)")
 
         # Backup state
         self.backup_state()
 
         try:
-            # Renumber ALL slides to be sequential
-            for i, slide in enumerate(slides):
-                new_num = i + 1
-                old_path = self.slides_md.parent / slide.src
+            # Preserve first slide number
+            # Start sequential numbering from second slide onwards
+            if len(slides) >= 2:
+                first_slide_num = slides[0].number
+                second_slide_num = slides[1].number
 
-                # Parse old filename
-                match = re.match(r'slides/(\d+)-(.+)\.md', slide.src)
-                if not match:
-                    raise Exception(f"Invalid filename format: {slide.src}")
+                print(f"\nPreserving beginning gap: slide {first_slide_num} -> slide {second_slide_num}")
 
-                old_num = int(match.group(1))
-                slug = match.group(2)
+                # Keep first slide unchanged
+                # Renumber slides 2-N sequentially from second slide's number
+                for i, slide in enumerate(slides):
+                    if i == 0:
+                        # Keep first slide number unchanged
+                        new_num = first_slide_num
+                    else:
+                        # Sequential from second slide's number onwards
+                        new_num = second_slide_num + (i - 1)
 
-                if old_num != new_num:
-                    new_filename = f"{new_num:02d}-{slug}.md"
-                    new_path = self.slides_dir / new_filename
+                    old_path = self.slides_md.parent / slide.src
 
-                    print(f"  {old_path.name} -> {new_path.name}")
-                    self.move_file(old_path, new_path)
+                    # Parse old filename
+                    match = re.match(r'slides/(\d+)-(.+)\.md', slide.src)
+                    if not match:
+                        raise Exception(f"Invalid filename format: {slide.src}")
 
-                    # Update slide object
-                    slide.number = new_num
-                    slide.src = f"slides/{new_filename}"
+                    old_num = int(match.group(1))
+                    slug = match.group(2)
+
+                    if old_num != new_num:
+                        new_filename = f"{new_num:02d}-{slug}.md"
+                        new_path = self.slides_dir / new_filename
+
+                        print(f"  {old_path.name} -> {new_path.name}")
+                        self.move_file(old_path, new_path)
+
+                        # Update slide object
+                        slide.number = new_num
+                        slide.src = f"slides/{new_filename}"
+            else:
+                # Only one slide, keep it unchanged
+                print("Only one slide found, no renumbering needed")
 
             # Rebuild slides.md
             self.rebuild_slides_md(slides)
 
-            # Verify postconditions (no gaps allowed)
-            self.verify_postconditions(len(slides), allow_gaps=False)
+            # Verify postconditions (allow beginning gap)
+            # Check for middle gaps only
+            new_gaps = self.detect_gaps(slides, ignore_beginning=True)
+            if new_gaps:
+                raise Exception(f"Middle gaps still exist after renumbering: {new_gaps}")
 
             # Cleanup backup
             if self.backup_file:
                 self.backup_file.unlink()
 
             print(f"\n✓ Successfully renumbered all slides")
-            print(f"✓ Slides now numbered 1-{len(slides)} with no gaps")
+            if len(slides) >= 2:
+                print(f"✓ Slides: {slides[0].number}, {slides[1].number}-{slides[-1].number} (beginning gap preserved)")
+            else:
+                print(f"✓ Slide: {slides[0].number}")
 
         except Exception as e:
             print(f"Error during renumbering: {e}", file=sys.stderr)

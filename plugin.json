@@ -131,6 +131,12 @@
       "description": "Delete, remove, add, or insert slides with automatic renumbering and git-aware operations. Detects and fixes gaps in slide numbering (preserves beginning gaps like title→content). Correctly handles position vs slide number distinction. Use instead of manually editing slides.md or renaming files.",
       "file": "skills/slide-management/SKILL.md",
       "version": "0.3.0"
+    },
+    {
+      "name": "Excalidraw Generation",
+      "description": "This skill should be used when the user asks to \"create excalidraw diagram\", \"generate excalidraw\", \"hand-drawn diagram\", \"sketch diagram\", \"whiteboard style diagram\", or when informal, spatial, annotated diagrams would best convey conceptual relationships. Expert in both presentation design AND artistic Excalidraw JSON creation.",
+      "file": "skills/excalidraw-generation/SKILL.md",
+      "version": "1.0.0"
     }
   ],
   "agents": [
