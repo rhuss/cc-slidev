@@ -88,6 +88,11 @@
       "name": "redraw-diagrams",
       "description": "Extract inline diagrams and regenerate in all platforms (Mermaid, PlantUML, Excalidraw)",
       "file": "commands/redraw-diagrams.md"
+    },
+    {
+      "name": "manage-slides",
+      "description": "Add or delete slides with automatic renumbering (invokes Slide Management skill)",
+      "file": "commands/manage-slides.md"
     }
   ],
   "skills": [
@@ -123,7 +128,7 @@
     },
     {
       "name": "Slide Management",
-      "description": "Add or delete slides with automatic renumbering and git-aware file operations",
+      "description": "Delete, remove, add, or insert slides with automatic renumbering and git-aware operations. Use instead of manually editing slides.md or renaming files.",
       "file": "skills/slide-management/SKILL.md",
       "version": "0.1.0"
     }
