@@ -120,6 +120,12 @@
       "description": "Evidence-based slide quality evaluation using 12-point checklist (one idea per slide, meaningful title, ≤6 elements, <50 words, accessibility, cognitive load)",
       "file": "skills/slide-quality/SKILL.md",
       "version": "0.1.0"
+    },
+    {
+      "name": "Slide Management",
+      "description": "Add or delete slides with automatic renumbering and git-aware file operations",
+      "file": "skills/slide-management/SKILL.md",
+      "version": "0.1.0"
     }
   ],
   "agents": [
