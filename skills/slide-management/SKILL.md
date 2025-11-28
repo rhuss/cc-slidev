@@ -1,7 +1,7 @@
 ---
 name: Slide Management
-description: This skill should be used when the user wants to "delete slide", "remove slide", "add slide", "insert slide", "create new slide between", "get rid of slide", "fix gaps", "renumber slides", or when they confirm deletion/addition of slides (e.g., answering "yes" to "should I delete slide N"). CRITICAL - Always use this skill instead of manually editing slides.md or renaming slide files, as it handles automatic renumbering, gap detection/fixing, and git-aware operations. Trigger immediately when user wants to modify slide count, order, or numbering.
-version: 0.2.0
+description: This skill should be used when the user wants to "delete slide", "remove slide", "add slide", "insert slide", "create new slide between", "get rid of slide", "fix gaps", "renumber slides", or when they confirm deletion/addition of slides (e.g., answering "yes" to "should I delete slide N"). CRITICAL - Always use this skill instead of manually editing slides.md or renaming slide files, as it handles automatic renumbering, gap detection/fixing, and git-aware operations. Correctly handles position vs slide number distinction when gaps exist. Trigger immediately when user wants to modify slide count, order, or numbering.
+version: 0.3.0
 ---
 
 # Slide Management
@@ -29,31 +29,37 @@ Then use Read tool on slides.md and parse all slide entries.
 **CRITICAL - Gap Detection:**
 After parsing slides, check for gaps in slide numbering:
 - Extract all slide numbers from the parsed slides
-- Look for missing numbers in the sequence (e.g., if you have slides 1, 2, 5, 6, then gaps are [3, 4])
-- A gap is when the sequence is not continuous (1, 2, 3, ...)
+- **IMPORTANT**: Ignore gaps at the beginning (e.g., slide 1 then slide 5 is OK - title then content)
+- Only detect gaps in the MIDDLE of the sequence (e.g., slides 5, 6, 9, 10 - gap at 7-8)
+- Check from the second slide onwards
 
 Display current presentation structure to user:
 
 ```
 📊 Current Presentation Structure (N slides)
 
-1. Title Slide
-   slides/01-title.md
+Position 1 → Slide 1: Title Slide
+             slides/01-title.md
 
-2. Introduction
-   slides/02-introduction.md
+Position 2 → Slide 5: Introduction
+             slides/05-introduction.md
 
-5. Main Topic
-   slides/05-main-topic.md
+Position 3 → Slide 6: Main Topic
+             slides/06-main-topic.md
 
-... (show all slides with numbers, titles, and filenames)
+... (show all slides with BOTH position and slide number)
 ```
 
-If gaps are detected, add a warning:
+**CRITICAL - Always show both:**
+- Position: The order in the list (1st, 2nd, 3rd...)
+- Slide number: The number in the filename and comment
+
+If gaps are detected in the middle, add a warning:
 
 ```
-⚠️  Numbering gaps detected: [3, 4]
-Slides are not sequentially numbered. You can fix this with the renumber operation.
+⚠️  Numbering gaps detected in middle: [7, 8]
+(Note: Gap between slide 1 and 5 is preserved - typically title then content)
+You can fix middle gaps with the renumber operation.
 ```
 
 ### Step 2: Ask What to Do
@@ -179,21 +185,31 @@ Then offer next action:
 
 #### 3a.1: Ask Which Slide to Delete
 
-Generate options dynamically from the slide list you parsed. For each slide, create an option:
+**CRITICAL - Slide Number vs Position:**
+- The user thinks in terms of SLIDE NUMBERS (what they see: "Slide 24")
+- The script requires POSITION (where in the list: 1st, 2nd, 3rd)
+- You MUST convert slide number → position before calling the script
+
+Generate options dynamically from the slide list you parsed. For each slide, create an option showing BOTH:
 
 ```
-- question: "Which slide number would you like to delete?"
+- question: "Which slide would you like to delete?"
 - header: "Slide"
 - multiSelect: false
 - options:
-  [Generate options for each slide with format:]
-  label: "1"
-  description: "[Title] (slides/0N-slug.md)"
+  [Generate options for each slide. Use position as label, show slide number and title:]
 
-  Example:
-  label: "5"
-  description: "Architecture Overview (slides/05-architecture-overview.md)"
+  label: "1"
+  description: "Slide 1: Title Slide (slides/01-title.md)"
+
+  label: "2"
+  description: "Slide 5: Architecture Overview (slides/05-architecture-overview.md)"
+
+  label: "3"
+  description: "Slide 6: Main Topic (slides/06-main-topic.md)"
 ```
+
+**Store the mapping**: When user selects an option, the label gives you the POSITION to pass to the script.
 
 #### 3a.2: Ask About Renumbering
 
@@ -212,17 +228,19 @@ Ask if user wants to renumber after deletion:
 
 #### 3a.3: Show Impact and Confirm
 
+**CRITICAL**: User selected a position. Look up the slide at that position to get its slide number.
+
 Calculate and show the impact based on renumber choice:
 
 If **renumbering**:
 ```
 ⚠️ Confirm Deletion
 
-Deleting: Slide [N]: [Title]
+Deleting: Position [P] → Slide [N]: [Title]
 File: slides/0N-[slug].md
 
 Impact (with renumbering):
-- Slides [N+1] through [M] will be renumbered to [N] through [M-1]
+- All slides after position [P] will be renumbered sequentially
 - All slides will be sequential (1, 2, 3, ...) with no gaps
 - Affects [X] slides total
 ```
@@ -231,13 +249,13 @@ If **not renumbering**:
 ```
 ⚠️ Confirm Deletion
 
-Deleting: Slide [N]: [Title]
+Deleting: Position [P] → Slide [N]: [Title]
 File: slides/0N-[slug].md
 
 Impact (without renumbering):
 - Slide will be removed
 - Remaining slides keep their current numbers
-- This will create a gap at position [N]
+- This may create or enlarge a gap in numbering
 ```
 
 Then ask for confirmation:
@@ -257,17 +275,21 @@ If user cancels, return to Step 2.
 
 #### 3a.4: Execute Delete Script
 
-Use Bash to execute the Python script with or without --renumber flag:
+**CRITICAL**: The script expects POSITION (1-indexed position in list), NOT slide number!
+
+Use Bash to execute the Python script with the POSITION:
 
 If renumbering:
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py delete [N] --renumber
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py delete [POSITION] --renumber
 ```
 
 If not renumbering:
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py delete [N]
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py delete [POSITION]
 ```
+
+Where [POSITION] is the position the user selected (from the label in step 3a.1).
 
 Capture both stdout and stderr.
 
@@ -315,6 +337,10 @@ Then offer next action:
 
 #### 3b.1: Ask Position
 
+**CRITICAL - Position vs Slide Number:**
+- Ask for POSITION in the list (1st, 2nd, 3rd...)
+- Show what slide is currently at each position
+
 Generate position options (1 through N+1):
 
 ```
@@ -322,19 +348,24 @@ Generate position options (1 through N+1):
 - header: "Position"
 - multiSelect: false
 - options:
-  [Generate options for all valid positions:]
+  [Generate options for all valid positions, showing current slide at each:]
 
   label: "1"
-  description: "At beginning (before current Slide 1)"
+  description: "At beginning (before current position 1 → Slide 1: Title)"
 
   label: "2"
-  description: "After 'Title Slide' (before current Slide 2: Introduction)"
+  description: "After position 1 (before current position 2 → Slide 5: Introduction)"
+
+  label: "3"
+  description: "After position 2 (before current position 3 → Slide 6: Main Topic)"
 
   ...
 
   label: "[N+1]"
-  description: "At end (after Slide N: [Last Slide Title])"
+  description: "At end (after last slide)"
 ```
+
+The user selects a POSITION, which is what the script expects.
 
 #### 3b.2: Ask Title and Layout
 
@@ -441,11 +472,13 @@ If cancelled, return to Step 2.
 
 #### 3b.5: Execute Add Script
 
-Use Bash to execute with or without --renumber flag:
+**CRITICAL**: The script expects POSITION (1-indexed position in list), NOT slide number!
+
+Use Bash to execute with the POSITION from step 3b.1:
 
 If renumbering:
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py add [N] \
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py add [POSITION] \
   --title "[User's title]" \
   --layout [layout] \
   --renumber
@@ -453,10 +486,12 @@ python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py add [N] \
 
 If not renumbering:
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py add [N] \
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/manage-slides.py add [POSITION] \
   --title "[User's title]" \
   --layout [layout]
 ```
+
+Where [POSITION] is the position the user selected (from the label in step 3b.1).
 
 Capture output and check exit code.
 
@@ -533,11 +568,22 @@ Then ask:
 
 ## Important Notes
 
+- **CRITICAL - Position vs Slide Number**:
+  - POSITION: Order in the list (1st slide, 2nd slide, 3rd slide...)
+  - SLIDE NUMBER: Number in filename and comment (Slide 1, Slide 5, Slide 6...)
+  - If there are gaps, these are DIFFERENT! Example: slides [1, 5, 6, 7] means position 2 = slide 5
+  - The script always expects POSITION, never slide number
+  - The skill must convert user's slide number selection to position before calling script
+
+- **Gap handling**:
+  - Gaps at beginning are PRESERVED (e.g., slide 1 then slide 5 is OK for title + content)
+  - Gaps in middle are DETECTED and offered for fixing (e.g., slides 5, 6, 9, 10 - gaps 7-8)
+  - Use --renumber flag or renumber operation to make all slides sequential
+
 - **Git awareness**: The script automatically detects git-tracked files and uses `git mv` for them
 - **Rollback on error**: If any operation fails, all changes are automatically rolled back
 - **Validation**: Position ranges are validated before execution
 - **Atomic operations**: Backup is created before any changes, restored on error
-- **No gaps**: Slide numbers are always sequential (1, 2, 3, ...) with no gaps
 
 ## Edge Cases
 
@@ -555,33 +601,38 @@ Then ask:
 
 ## Example Interaction
 
+**Example 1: Add slide with sequential numbering**
+
 ```
 User invokes skill:
 
 📊 Current Presentation Structure (5 slides)
 
-1. Title Slide
-   slides/01-title.md
-2. Introduction
-   slides/02-introduction.md
-3. Main Topic
-   slides/03-main-topic.md
-4. Examples
-   slides/04-examples.md
-5. Conclusion
-   slides/05-conclusion.md
+Position 1 → Slide 1: Title Slide
+             slides/01-title.md
+Position 2 → Slide 2: Introduction
+             slides/02-introduction.md
+Position 3 → Slide 3: Main Topic
+             slides/03-main-topic.md
+Position 4 → Slide 4: Examples
+             slides/04-examples.md
+Position 5 → Slide 5: Conclusion
+             slides/05-conclusion.md
 
 What would you like to do?
 > User chooses: "Add slide"
 
 Where should the new slide be inserted?
-> User chooses: Position 3 (after "Introduction", before "Main Topic")
+> User chooses: label "3" (description: "After position 2, before position 3 → Slide 3: Main Topic")
 
 What should the slide title be?
 > User enters: "Architecture Overview"
 
 Which layout?
 > User chooses: "two-cols"
+
+Should all slides be renumbered?
+> User chooses: "Yes, renumber"
 
 📋 New Slide Preview
 
@@ -590,14 +641,16 @@ Title: Architecture Overview
 Layout: two-cols
 Filename: slides/03-architecture-overview.md
 
-Impact:
+Impact (with renumbering):
+- New slide will be inserted at position 3
 - Current slides 3-5 will become 4-6
+- All slides will be sequential with no gaps
 - Affects 3 slides
 
 Create this slide?
 > User confirms: "Yes, create"
 
-[Script executes...]
+[Script executes: python3 manage-slides.py add 3 --title "Architecture Overview" --layout two-cols --renumber]
 
 ✅ Slide Created Successfully
 
@@ -617,6 +670,65 @@ What next?
 > User chooses: "Edit new slide"
 
 [Invokes /slidev:edit 3]
+```
+
+**Example 2: Delete slide with gaps**
+
+```
+User invokes skill:
+
+📊 Current Presentation Structure (4 slides)
+
+Position 1 → Slide 1: Title
+             slides/01-title.md
+Position 2 → Slide 5: Introduction
+             slides/05-introduction.md
+Position 3 → Slide 6: Main Topic
+             slides/06-main-topic.md
+Position 4 → Slide 7: Conclusion
+             slides/07-conclusion.md
+
+⚠️  Numbering gaps detected in middle: [none]
+(Note: Gap between slide 1 and 5 is preserved - typically title then content)
+
+What would you like to do?
+> User chooses: "Delete slide"
+
+Which slide would you like to delete?
+> User chooses: label "3" (description: "Slide 6: Main Topic (slides/06-main-topic.md)")
+
+Should remaining slides be renumbered to close gaps?
+> User chooses: "No, leave gaps"
+
+⚠️ Confirm Deletion
+
+Deleting: Position 3 → Slide 6: Main Topic
+File: slides/06-main-topic.md
+
+Impact (without renumbering):
+- Slide will be removed
+- Remaining slides keep their current numbers
+- This may create or enlarge a gap in numbering
+
+Proceed with deletion?
+> User confirms: "Yes, delete"
+
+[Script executes: python3 manage-slides.py delete 3]
+
+✅ Slide Deleted Successfully
+
+Removed:
+- Position 3 → Slide 6: Main Topic
+- File: slides/06-main-topic.md
+
+Current slides:
+- Position 1 → Slide 1: Title
+- Position 2 → Slide 5: Introduction
+- Position 3 → Slide 7: Conclusion
+
+⚠️  Numbering gaps detected in middle: [6]
+
+Total slides: 3 (was 4)
 ```
 
 ## Tools Available
