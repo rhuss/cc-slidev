@@ -58,9 +58,14 @@ If gaps are detected in the middle, add a warning:
 
 ```
 ⚠️  Numbering gaps detected in middle: [7, 8]
-(Note: Gap between slide 1 and 5 is preserved - typically title then content)
+(Note: Gap at beginning preserved - typically title at 1, content starts at 5+)
 You can fix middle gaps with the renumber operation.
 ```
+
+**Important**: The renumber operation:
+- **PRESERVES** the gap between slide 1 and slide 2 (e.g., 1→5 stays as 1→5)
+- **FIXES** gaps in the middle sequence (e.g., 5,6,9,10 becomes 5,6,7,8)
+- This is by design: title slides often need separation from content slides
 
 ### Step 2: Ask What to Do
 
@@ -75,7 +80,7 @@ If **gaps detected**, offer 4 options:
 - multiSelect: false
 - options:
   1. label: "Fix gaps"
-     description: "Renumber all slides to be sequential (1, 2, 3, ...) and close gaps"
+     description: "Close middle gaps (preserves beginning gap like 1→5 for title separation)"
   2. label: "Add slide"
      description: "Insert a new slide at any position"
   3. label: "Delete slide"
@@ -111,18 +116,18 @@ Display what will happen:
 ```
 🔧 Fix Numbering Gaps
 
-Current gaps: [3, 4, 7]
+Current middle gaps: [7, 8]
+Beginning gap: 1 → 5 (preserved)
 
-This will renumber ALL slides to be sequential:
-- Slide 1 → Slide 1 (no change)
-- Slide 2 → Slide 2 (no change)
-- Slide 5 → Slide 3
-- Slide 6 → Slide 4
-- Slide 8 → Slide 5
-- Slide 9 → Slide 6
+This will close middle gaps while preserving the beginning gap:
+- Slide 1 → Slide 1 (no change - title)
+- Slide 5 → Slide 5 (no change - beginning gap preserved)
+- Slide 6 → Slide 6 (no change)
+- Slide 9 → Slide 7 (gap closed)
+- Slide 10 → Slide 8 (gap closed)
 ... (show all renumbering)
 
-Result: Slides will be numbered 1-N with no gaps
+Result: Slides will be 1, 5-N with no middle gaps
 ```
 
 Ask for confirmation:
@@ -158,12 +163,12 @@ If successful:
 ✅ Gaps Fixed Successfully
 
 Renumbered slides:
-- Slide 5 → Slide 3 (slides/03-main-topic.md)
-- Slide 6 → Slide 4 (slides/04-examples.md)
-- Slide 8 → Slide 5 (slides/05-advanced.md)
+- Slide 9 → Slide 7 (slides/07-advanced.md)
+- Slide 10 → Slide 8 (slides/08-conclusion.md)
 ... (show all renumbered)
 
-Total slides: N (all sequentially numbered 1-N)
+Beginning gap preserved: Slide 1 → Slide 5
+Total slides: N (numbered 1, 5-N with no middle gaps)
 ```
 
 Then offer next action:
@@ -578,7 +583,8 @@ Then ask:
 - **Gap handling**:
   - Gaps at beginning are PRESERVED (e.g., slide 1 then slide 5 is OK for title + content)
   - Gaps in middle are DETECTED and offered for fixing (e.g., slides 5, 6, 9, 10 - gaps 7-8)
-  - Use --renumber flag or renumber operation to make all slides sequential
+  - The renumber operation preserves beginning gap but fixes middle gaps
+  - Example: [1, 5, 6, 9, 10] becomes [1, 5, 6, 7, 8] (1→5 preserved, middle gaps fixed)
 
 - **Git awareness**: The script automatically detects git-tracked files and uses `git mv` for them
 - **Rollback on error**: If any operation fails, all changes are automatically rolled back

@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "Skill(plugin-dev:command-development)"
+      "Skill(plugin-dev:command-development)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []
