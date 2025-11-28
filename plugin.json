@@ -128,9 +128,9 @@
     },
     {
       "name": "Slide Management",
-      "description": "Delete, remove, add, or insert slides with automatic renumbering and git-aware operations. Use instead of manually editing slides.md or renaming files.",
+      "description": "Delete, remove, add, or insert slides with automatic renumbering and git-aware operations. Detects and fixes gaps in slide numbering. Use instead of manually editing slides.md or renaming files.",
       "file": "skills/slide-management/SKILL.md",
-      "version": "0.1.0"
+      "version": "0.2.0"
     }
   ],
   "agents": [

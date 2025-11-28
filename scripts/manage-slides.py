@@ -6,8 +6,9 @@ Manages slide additions and deletions with automatic renumbering and git-aware
 file operations for Slidev presentations.
 
 Usage:
-    python manage-slides.py delete <position>
-    python manage-slides.py add <position> --title "Slide Title" [--layout default]
+    python manage-slides.py delete <position> [--renumber]
+    python manage-slides.py add <position> --title "Slide Title" [--layout default] [--renumber]
+    python manage-slides.py renumber
 
 Exit Codes:
     0: Success
@@ -18,6 +19,7 @@ Exit Codes:
 """
 
 import argparse
+import os
 import re
 import shutil
 import subprocess
@@ -58,6 +60,8 @@ class SlideManager:
         """
         Extract slide entries from slides.md
 
+        Returns slides in the order they appear, preserving any gaps in numbering.
+
         Returns:
             List of Slide objects with number, src path, and title
         """
@@ -81,6 +85,28 @@ class SlideManager:
                     current_src = None
 
         return slides
+
+    def detect_gaps(self, slides: List[Slide]) -> List[int]:
+        """
+        Detect gaps in slide numbering
+
+        Args:
+            slides: List of slides
+
+        Returns:
+            List of missing slide numbers (empty if no gaps)
+        """
+        if not slides:
+            return []
+
+        slide_numbers = set(s.number for s in slides)
+        min_num = min(slide_numbers)
+        max_num = max(slide_numbers)
+
+        expected = set(range(min_num, max_num + 1))
+        gaps = sorted(expected - slide_numbers)
+
+        return gaps
 
     def is_git_tracked(self, filepath: Path) -> bool:
         """
@@ -294,12 +320,13 @@ Presenter notes
 
         return slides
 
-    def verify_postconditions(self, expected_count: int):
+    def verify_postconditions(self, expected_count: int, allow_gaps: bool = False):
         """
         Verify postconditions after operation
 
         Args:
             expected_count: Expected number of slides
+            allow_gaps: If True, don't fail on numbering gaps
 
         Raises:
             Exception: If verification fails
@@ -311,11 +338,13 @@ Presenter notes
         if len(new_slides) != expected_count:
             raise Exception(f"Slide count mismatch: expected {expected_count}, got {len(new_slides)}")
 
-        # Verify numbering sequence (no gaps)
-        for i, slide in enumerate(new_slides):
-            expected_num = i + 1
-            if slide.number != expected_num:
-                raise Exception(f"Numbering gap at position {i + 1}: expected {expected_num}, got {slide.number}")
+        # Verify numbering sequence (warn about gaps but don't fail if allow_gaps=True)
+        gaps = self.detect_gaps(new_slides)
+        if gaps and not allow_gaps:
+            raise Exception(f"Numbering gaps detected at positions: {gaps}")
+        elif gaps:
+            print(f"Warning: Numbering gaps exist at positions: {gaps}", file=sys.stderr)
+            print(f"Tip: Run 'manage-slides.py renumber' to fix gaps", file=sys.stderr)
 
         # Verify all files exist
         for slide in new_slides:
@@ -323,141 +352,266 @@ Presenter notes
             if not filepath.exists():
                 raise Exception(f"Missing file: {filepath}")
 
-    def delete_slide(self, position: int):
+    def delete_slide(self, position: int, renumber: bool = False):
         """
-        Delete slide at position and renumber subsequent slides
+        Delete slide at position
 
         Args:
-            position: Slide number to delete (1-indexed)
+            position: Position in list to delete (1-indexed, NOT slide number)
+            renumber: If True, renumber all slides after deletion to close gaps
         """
         # Validate preconditions
         slides = self.validate_preconditions('delete', position)
         target_slide = slides[position - 1]
 
-        print(f"Deleting slide {position}: {target_slide.title}")
-        print(f"File: {target_slide.src}")
+        print(f"Deleting slide at position {position}")
+        print(f"  Slide number: {target_slide.number}")
+        print(f"  Title: {target_slide.title}")
+        print(f"  File: {target_slide.src}")
 
         # Backup state
         self.backup_state()
 
         try:
-            # Renumber files from position+1 to end
-            for i in range(position, len(slides)):
-                slide = slides[i]
-                old_path = self.slides_md.parent / slide.src
-
-                # Parse old number from filename
-                match = re.match(r'slides/(\d+)-(.+)\.md', slide.src)
-                if not match:
-                    raise Exception(f"Invalid filename format: {slide.src}")
-
-                old_num = int(match.group(1))
-                slug = match.group(2)
-                new_num = old_num - 1
-
-                new_filename = f"{new_num:02d}-{slug}.md"
-                new_path = self.slides_dir / new_filename
-
-                print(f"Renumbering: {old_path.name} -> {new_path.name}")
-                self.move_file(old_path, new_path)
-
-                # Update slide object
-                slides[i].number = new_num
-                slides[i].src = f"slides/{new_filename}"
+            # Get the file to delete
+            target_file = self.slides_md.parent / target_slide.src
 
             # Remove target slide from list
             slides.pop(position - 1)
 
+            if renumber:
+                # Renumber ALL slides to be sequential (1, 2, 3, ...)
+                print("\nRenumbering all slides to close gaps...")
+                for i, slide in enumerate(slides):
+                    new_num = i + 1
+                    old_path = self.slides_md.parent / slide.src
+
+                    # Parse old filename
+                    match = re.match(r'slides/(\d+)-(.+)\.md', slide.src)
+                    if not match:
+                        raise Exception(f"Invalid filename format: {slide.src}")
+
+                    old_num = int(match.group(1))
+                    slug = match.group(2)
+
+                    if old_num != new_num:
+                        new_filename = f"{new_num:02d}-{slug}.md"
+                        new_path = self.slides_dir / new_filename
+
+                        print(f"  {old_path.name} -> {new_path.name}")
+                        self.move_file(old_path, new_path)
+
+                        # Update slide object
+                        slide.number = new_num
+                        slide.src = f"slides/{new_filename}"
+
             # Rebuild slides.md
             self.rebuild_slides_md(slides)
 
-            # Verify postconditions
-            self.verify_postconditions(len(slides))
+            # Delete target file (after slides.md is updated)
+            if target_file.exists():
+                if self.is_git_tracked(target_file):
+                    subprocess.run(['git', 'rm', str(target_file)], check=True, cwd=self.slides_md.parent)
+                else:
+                    target_file.unlink()
+
+            # Verify postconditions (allow gaps if not renumbering)
+            self.verify_postconditions(len(slides), allow_gaps=(not renumber))
 
             # Cleanup backup
             if self.backup_file:
                 self.backup_file.unlink()
 
-            print(f"Successfully deleted slide {position}")
-            print(f"Renumbered {len(slides) - position + 1} slides")
+            print(f"\n✓ Successfully deleted slide")
+            if renumber:
+                print(f"✓ Renumbered all slides sequentially")
+            else:
+                # Check for gaps
+                gaps = self.detect_gaps(slides)
+                if gaps:
+                    print(f"\n⚠ Warning: Numbering gaps exist at positions: {gaps}")
+                    print(f"Tip: Use --renumber flag to fix gaps automatically")
 
         except Exception as e:
             print(f"Error during deletion: {e}", file=sys.stderr)
             self.rollback()
             sys.exit(ExitCode.GENERAL_ERROR)
 
-    def add_slide(self, position: int, title: str, layout: str = 'default'):
+    def add_slide(self, position: int, title: str, layout: str = 'default', renumber: bool = False):
         """
-        Add slide at position and renumber subsequent slides
+        Add slide at position
 
         Args:
-            position: Position to insert new slide (1-indexed)
+            position: Position to insert new slide (1-indexed list position)
             title: New slide title
             layout: Slidev layout (default: 'default')
+            renumber: If True, renumber all slides after insertion to be sequential
         """
         # Validate preconditions
         slides = self.validate_preconditions('add', position)
 
+        # Determine the slide number for the new slide
+        if renumber or not slides:
+            # If renumbering, use position as slide number
+            new_slide_num = position
+        else:
+            # If not renumbering, find a suitable slide number
+            # Insert at position, use a number that fits
+            if position == 1:
+                # Insert at beginning
+                new_slide_num = slides[0].number if slides else 1
+            elif position > len(slides):
+                # Insert at end
+                new_slide_num = slides[-1].number + 1 if slides else 1
+            else:
+                # Insert in middle - use next available number after previous slide
+                prev_slide_num = slides[position - 2].number if position > 1 else 0
+                next_slide_num = slides[position - 1].number
+
+                # Find gap or use next number
+                if next_slide_num - prev_slide_num > 1:
+                    new_slide_num = prev_slide_num + 1
+                else:
+                    new_slide_num = next_slide_num
+
         slug = self.generate_slug(title)
-        new_filename = f"{position:02d}-{slug}.md"
+        new_filename = f"{new_slide_num:02d}-{slug}.md"
         new_filepath = self.slides_dir / new_filename
 
-        print(f"Adding slide at position {position}: {title}")
-        print(f"File: slides/{new_filename}")
-        print(f"Layout: {layout}")
+        print(f"Adding slide at position {position}")
+        print(f"  Slide number: {new_slide_num}")
+        print(f"  Title: {title}")
+        print(f"  File: slides/{new_filename}")
+        print(f"  Layout: {layout}")
 
         # Backup state
         self.backup_state()
 
         try:
-            # Renumber files from END to position (reverse order to prevent collisions)
-            for i in range(len(slides) - 1, position - 1, -1):
-                slide = slides[i]
-                old_path = self.slides_md.parent / slide.src
-
-                # Parse old number from filename
-                match = re.match(r'slides/(\d+)-(.+)\.md', slide.src)
-                if not match:
-                    raise Exception(f"Invalid filename format: {slide.src}")
-
-                old_num = int(match.group(1))
-                slug_part = match.group(2)
-                new_num = old_num + 1
-
-                new_filename_temp = f"{new_num:02d}-{slug_part}.md"
-                new_path = self.slides_dir / new_filename_temp
-
-                print(f"Renumbering: {old_path.name} -> {new_path.name}")
-                self.move_file(old_path, new_path)
-
-                # Update slide object
-                slides[i].number = new_num
-                slides[i].src = f"slides/{new_filename_temp}"
-
             # Create new slide file
-            print(f"Creating new slide: {new_filepath}")
+            print(f"\nCreating new slide: {new_filepath}")
             self.create_slide_file(new_filepath, title, layout)
 
             # Insert new slide into list
-            new_slide = Slide(number=position, src=f"slides/{new_filename}", title=title)
+            new_slide = Slide(number=new_slide_num, src=f"slides/{new_filename}", title=title)
             slides.insert(position - 1, new_slide)
+
+            if renumber:
+                # Renumber ALL slides to be sequential (1, 2, 3, ...)
+                print("\nRenumbering all slides to be sequential...")
+                for i, slide in enumerate(slides):
+                    new_num = i + 1
+                    old_path = self.slides_md.parent / slide.src
+
+                    # Parse old filename
+                    match = re.match(r'slides/(\d+)-(.+)\.md', slide.src)
+                    if not match:
+                        raise Exception(f"Invalid filename format: {slide.src}")
+
+                    old_num = int(match.group(1))
+                    slug_part = match.group(2)
+
+                    if old_num != new_num:
+                        new_filename_renumber = f"{new_num:02d}-{slug_part}.md"
+                        new_path = self.slides_dir / new_filename_renumber
+
+                        print(f"  {old_path.name} -> {new_path.name}")
+                        self.move_file(old_path, new_path)
+
+                        # Update slide object
+                        slide.number = new_num
+                        slide.src = f"slides/{new_filename_renumber}"
 
             # Rebuild slides.md
             self.rebuild_slides_md(slides)
 
-            # Verify postconditions
-            self.verify_postconditions(len(slides))
+            # Verify postconditions (allow gaps if not renumbering)
+            self.verify_postconditions(len(slides), allow_gaps=(not renumber))
 
             # Cleanup backup
             if self.backup_file:
                 self.backup_file.unlink()
 
-            print(f"Successfully added slide at position {position}")
-            if position <= len(slides) - 1:
-                print(f"Renumbered {len(slides) - position} subsequent slides")
+            print(f"\n✓ Successfully added slide at position {position}")
+            if renumber:
+                print(f"✓ Renumbered all slides sequentially")
+            else:
+                # Check for gaps
+                gaps = self.detect_gaps(slides)
+                if gaps:
+                    print(f"\n⚠ Warning: Numbering gaps exist at positions: {gaps}")
+                    print(f"Tip: Use --renumber flag to fix gaps automatically")
 
         except Exception as e:
             print(f"Error during addition: {e}", file=sys.stderr)
+            self.rollback()
+            sys.exit(ExitCode.GENERAL_ERROR)
+
+    def renumber_all(self):
+        """
+        Renumber all slides to be sequential starting from 1
+
+        This fixes any gaps in numbering.
+        """
+        # Parse current slides
+        slides = self.parse_slides_md()
+
+        if not slides:
+            print("No slides found", file=sys.stderr)
+            sys.exit(ExitCode.SLIDE_NOT_FOUND)
+
+        # Check for gaps
+        gaps = self.detect_gaps(slides)
+        if not gaps:
+            print("No gaps detected. All slides are already sequentially numbered.")
+            return
+
+        print(f"Detected gaps at positions: {gaps}")
+        print(f"Renumbering {len(slides)} slides to be sequential (1, 2, 3, ...)...")
+
+        # Backup state
+        self.backup_state()
+
+        try:
+            # Renumber ALL slides to be sequential
+            for i, slide in enumerate(slides):
+                new_num = i + 1
+                old_path = self.slides_md.parent / slide.src
+
+                # Parse old filename
+                match = re.match(r'slides/(\d+)-(.+)\.md', slide.src)
+                if not match:
+                    raise Exception(f"Invalid filename format: {slide.src}")
+
+                old_num = int(match.group(1))
+                slug = match.group(2)
+
+                if old_num != new_num:
+                    new_filename = f"{new_num:02d}-{slug}.md"
+                    new_path = self.slides_dir / new_filename
+
+                    print(f"  {old_path.name} -> {new_path.name}")
+                    self.move_file(old_path, new_path)
+
+                    # Update slide object
+                    slide.number = new_num
+                    slide.src = f"slides/{new_filename}"
+
+            # Rebuild slides.md
+            self.rebuild_slides_md(slides)
+
+            # Verify postconditions (no gaps allowed)
+            self.verify_postconditions(len(slides), allow_gaps=False)
+
+            # Cleanup backup
+            if self.backup_file:
+                self.backup_file.unlink()
+
+            print(f"\n✓ Successfully renumbered all slides")
+            print(f"✓ Slides now numbered 1-{len(slides)} with no gaps")
+
+        except Exception as e:
+            print(f"Error during renumbering: {e}", file=sys.stderr)
             self.rollback()
             sys.exit(ExitCode.GENERAL_ERROR)
 
@@ -469,26 +623,33 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  Delete slide 5:
+  Delete slide 5 (leaves gaps):
     python manage-slides.py delete 5
+
+  Delete slide 5 and renumber all slides:
+    python manage-slides.py delete 5 --renumber
 
   Add slide at position 3:
     python manage-slides.py add 3 --title "Architecture Overview"
 
-  Add slide with custom layout:
-    python manage-slides.py add 7 --title "Code Example" --layout two-cols
+  Add slide with custom layout and renumber:
+    python manage-slides.py add 7 --title "Code Example" --layout two-cols --renumber
+
+  Fix all gaps in slide numbering:
+    python manage-slides.py renumber
         """
     )
 
     parser.add_argument(
         'operation',
-        choices=['add', 'delete'],
+        choices=['add', 'delete', 'renumber'],
         help='Operation to perform'
     )
     parser.add_argument(
         'position',
         type=int,
-        help='Slide position (1-indexed)'
+        nargs='?',
+        help='Slide position (1-indexed, not required for renumber operation)'
     )
     parser.add_argument(
         '--title',
@@ -499,12 +660,23 @@ Examples:
         default='default',
         help='Slidev layout (default: default)'
     )
+    parser.add_argument(
+        '--renumber',
+        action='store_true',
+        help='Renumber all slides after operation to close gaps (for add/delete)'
+    )
 
     args = parser.parse_args()
 
     # Validate arguments
     if args.operation == 'add' and not args.title:
         parser.error("--title is required for add operation")
+
+    if args.operation in ['add', 'delete'] and args.position is None:
+        parser.error(f"position is required for {args.operation} operation")
+
+    if args.operation == 'renumber' and args.position is not None:
+        parser.error("position is not used for renumber operation")
 
     # Find slides.md
     slides_md = Path.cwd() / 'slides.md'
@@ -517,9 +689,11 @@ Examples:
     manager = SlideManager(slides_md)
 
     if args.operation == 'delete':
-        manager.delete_slide(args.position)
+        manager.delete_slide(args.position, renumber=args.renumber)
     elif args.operation == 'add':
-        manager.add_slide(args.position, args.title, args.layout)
+        manager.add_slide(args.position, args.title, args.layout, renumber=args.renumber)
+    elif args.operation == 'renumber':
+        manager.renumber_all()
 
     sys.exit(ExitCode.SUCCESS)
 
