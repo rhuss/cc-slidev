@@ -86,25 +86,36 @@ class SlideManager:
 
         return slides
 
-    def detect_gaps(self, slides: List[Slide]) -> List[int]:
+    def detect_gaps(self, slides: List[Slide], ignore_beginning: bool = True) -> List[int]:
         """
         Detect gaps in slide numbering
 
         Args:
             slides: List of slides
+            ignore_beginning: If True, ignore gaps before the second slide
+                            (e.g., slide 1 then slide 5 is OK, but gaps in middle are not)
 
         Returns:
             List of missing slide numbers (empty if no gaps)
         """
-        if not slides:
+        if not slides or len(slides) < 2:
             return []
 
-        slide_numbers = set(s.number for s in slides)
-        min_num = min(slide_numbers)
-        max_num = max(slide_numbers)
+        slide_numbers = sorted([s.number for s in slides])
 
-        expected = set(range(min_num, max_num + 1))
-        gaps = sorted(expected - slide_numbers)
+        if ignore_beginning:
+            # Start checking from the second slide
+            # This allows slide 1 (title) then slide 5 (first content)
+            start_num = slide_numbers[1]
+        else:
+            start_num = slide_numbers[0]
+
+        max_num = slide_numbers[-1]
+
+        # Find gaps from second slide onwards
+        existing = set(slide_numbers)
+        expected = set(range(start_num, max_num + 1))
+        gaps = sorted(expected - existing)
 
         return gaps
 
@@ -358,6 +369,8 @@ Presenter notes
 
         Args:
             position: Position in list to delete (1-indexed, NOT slide number)
+                     Example: If you have slides [1, 5, 6, 7], position 2 refers to slide 5
+                     (the second slide in the list), not slide number 2
             renumber: If True, renumber all slides after deletion to close gaps
         """
         # Validate preconditions
@@ -442,7 +455,9 @@ Presenter notes
         Add slide at position
 
         Args:
-            position: Position to insert new slide (1-indexed list position)
+            position: Position to insert new slide (1-indexed list position, NOT slide number)
+                     Example: If you have slides [1, 5, 6, 7], position 2 means insert
+                     after slide 1 (before slide 5), becoming the new second slide
             title: New slide title
             layout: Slidev layout (default: 'default')
             renumber: If True, renumber all slides after insertion to be sequential
