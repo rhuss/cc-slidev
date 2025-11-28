@@ -1,6 +1,6 @@
 ---
 name: Slide Management
-description: Add or delete slides with automatic renumbering and git-aware file operations. Use when the user asks to "add slide", "delete slide", "insert slide", "remove slide", or needs to manage slide structure with automatic renumbering.
+description: This skill should be used when the user wants to "delete slide", "remove slide", "add slide", "insert slide", "create new slide between", "get rid of slide", or when they confirm deletion/addition of slides (e.g., answering "yes" to "should I delete slide N"). CRITICAL - Always use this skill instead of manually editing slides.md or renaming slide files, as it handles automatic renumbering and git-aware operations. Trigger immediately when user wants to modify slide count or order.
 version: 0.1.0
 ---
 

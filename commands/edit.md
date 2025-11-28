@@ -87,6 +87,8 @@ Then use AskUserQuestion with:
      description: "Add or improve diagrams, images, or code examples"
   5. label: "Update notes"
      description: "Edit presenter notes and timing guidance"
+  6. label: "Delete this slide"
+     description: "Remove slide and renumber remaining slides (uses Slide Management skill)"
 
 ## Step 7: Handle User Choice
 
@@ -150,6 +152,27 @@ Use Edit tool to add the visual element to the slide file.
 ### If user chooses "Update notes":
 
 Use Edit tool to add or modify HTML comments in the slide file for presenter notes.
+
+### If user chooses "Delete this slide":
+
+**CRITICAL**: Invoke the Slide Management skill, do NOT manually edit files.
+
+Use Skill tool: `skill: "slidev:slide-management"`
+
+The skill will:
+1. Show current slide structure
+2. Pre-select delete operation
+3. Show impact of deleting this slide
+4. Ask for confirmation
+5. Execute deletion with automatic renumbering
+6. Show results
+
+**DO NOT**:
+- Manually edit slides.md to remove the slide
+- Manually rename slide files
+- Use git mv directly on slide files
+
+The skill ensures proper renumbering, git-aware operations, and rollback on errors.
 
 ## Evidence-Based Quality Criteria
 
