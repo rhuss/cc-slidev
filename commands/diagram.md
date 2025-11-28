@@ -40,7 +40,44 @@ Show user the slide:
 
 ### 3. Analyze Content for Diagram Type (Evidence-Based)
 
-Use visual-design skill to determine appropriate diagram types:
+**Determine Best Platform (Mermaid vs Excalidraw vs PlantUML):**
+
+Analyze slide content to determine which platform best conveys the concept:
+
+**Use Excalidraw (invoke skill) when:**
+- Conceptual relationships need spatial layout
+- Architecture with nested components (frames for boundaries)
+- Brainstorming/ideation context (hand-drawn aesthetic)
+- Informal, approachable style needed (whiteboard feel)
+- Annotations and callouts would add value
+- Mind maps or radial structures
+- Keywords detected: "architecture", "components", "system design", "overview", "spatial"
+
+**Use Mermaid (standard flow) when:**
+- Linear process/workflow flows
+- Sequence diagrams (time-based interactions)
+- State machines (formal state transitions)
+- Gantt charts (project timelines)
+- ER diagrams (database schemas)
+- Formal, structured diagrams preferred
+
+**Use PlantUML when:**
+- Formal UML notation required
+- Deployment diagrams
+- Complex class diagrams
+
+**If Excalidraw is best fit:**
+
+Invoke the Excalidraw Generation skill using Skill tool:
+```
+skill: "slidev:excalidraw-generation"
+```
+
+The skill will take over the generation process with semantic redesign approach.
+
+**If Mermaid/PlantUML is best fit, continue below:**
+
+Use visual-design skill to determine appropriate Mermaid diagram types:
 
 **Process/Workflow** → Flowchart (max 7-9 nodes)
 **System Interaction** → Sequence Diagram (max 5-7 participants)
