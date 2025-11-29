@@ -311,6 +311,21 @@ Expected output:
 - **Frame Membership**: Shape with `frameId` pointing to frame
 - **Grouping**: Multiple elements sharing same `groupIds` entry
 
+### Font Specification
+
+All text elements use `fontFamily: 1` which maps to Excalidraw's hand-drawn Virgil/Excalifont font:
+
+- **fontFamily: 1** → Virgil/Excalifont (hand-drawn, default for Excalidraw aesthetic)
+- **fontFamily: 2** → Helvetica (clean, modern)
+- **fontFamily: 3** → Cascadia (monospace, code)
+
+**SVG Rendering**: When rendering Excalidraw JSON to SVG, use the font-family specification:
+```css
+font-family: 'Virgil', 'Excalifont', cursive, sans-serif
+```
+
+This ensures proper hand-drawn font rendering with fallbacks for the authentic Excalidraw aesthetic.
+
 ## Resources
 
 - **Skill Documentation**: `skills/excalidraw-generation/SKILL.md`

@@ -119,7 +119,7 @@ function generatePlaceholderSVG(data) {
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBoxX} ${viewBoxY} ${width} ${height}" width="${width}" height="${height}">
   <defs>
     <style>
-      text { font-family: Arial, sans-serif; }
+      text { font-family: 'Virgil', 'Excalifont', cursive, sans-serif; }
     </style>
   </defs>
 `;
