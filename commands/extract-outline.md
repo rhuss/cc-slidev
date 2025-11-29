@@ -27,7 +27,7 @@ find . -name "slides.md" -type f -not -path "*/node_modules/*"
 
 **If no slides.md found**:
 - Inform user: "No presentation found in current directory"
-- Suggest: "Create a new presentation with `/slidev:create` or `/slidev:generate`"
+- Suggest: "Create a new presentation with `/slidev:init` or `/slidev:generate`"
 - Exit
 
 **If multiple slides.md found**:

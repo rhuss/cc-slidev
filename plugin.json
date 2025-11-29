@@ -30,8 +30,18 @@
       "file": "commands/brainstorm.md"
     },
     {
+      "name": "frame",
+      "description": "Define presentation scope, duration, and slide count targets",
+      "file": "commands/frame.md"
+    },
+    {
+      "name": "init",
+      "description": "Initialize new presentation project (orchestrates: brainstorm → frame → outline → generate → enhance → notes → handout)",
+      "file": "commands/init.md"
+    },
+    {
       "name": "create",
-      "description": "End-to-end workflow: brainstorming → slides → handout (with enforced design limits)",
+      "description": "[DEPRECATED: Use /slidev:init] End-to-end workflow orchestrator",
       "file": "commands/create.md"
     },
     {
