@@ -732,22 +732,26 @@ Ask: "Proceed with JSON generation?"
 
 File structure:
 ```
+diagrams/
+  └── <slide-title-slug>.excalidraw    # JSON source (editable)
+
 public/images/<slide-title-slug>/
-  ├── diagram.excalidraw       # JSON source (editable)
-  └── diagram-excalidraw.svg   # Rendered SVG
+  └── diagram-excalidraw.svg           # Rendered SVG (for slide)
 ```
 
-Use Write tool to save JSON, then inform user about rendering.
+**IMPORTANT**: Always save source files to `./diagrams/` directory.
+
+Use Write tool to save JSON to `diagrams/<slug>.excalidraw`, then inform user about rendering.
 
 ### Step 6: Offer Iterations
 
 ```
 ✅ Excalidraw Diagram Generated!
 
-File: public/images/<slug>/diagram.excalidraw
+Source: diagrams/<slug>.excalidraw
 Rendered: public/images/<slug>/diagram-excalidraw.svg
 
-Edit online: https://excalidraw.com (drag .excalidraw file)
+Edit online: https://excalidraw.com (drag diagrams/<slug>.excalidraw file)
 
 Refinement options:
 - Adjust layout (horizontal ↔ vertical)
@@ -862,8 +866,8 @@ if (!cognitiveCheck.withinLimit) {
   // Suggest splitting
 }
 
-// Save to file
-const filePath = "public/images/device-plugin-architecture/diagram.excalidraw";
+// Save to file (source goes in diagrams/)
+const filePath = "diagrams/device-plugin-architecture.excalidraw";
 writeFile(filePath, JSON.stringify(json, null, 2));
 ```
 
