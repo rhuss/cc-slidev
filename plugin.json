@@ -70,6 +70,11 @@
       "file": "commands/outline.md"
     },
     {
+      "name": "extract-outline",
+      "description": "Extract structured outline from existing slides (reverse engineering)",
+      "file": "commands/extract-outline.md"
+    },
+    {
       "name": "preview",
       "description": "Start Slidev dev server to preview presentation",
       "file": "commands/preview.md"
