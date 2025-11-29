@@ -161,7 +161,7 @@ function createText(text, x, y, options = {}) {
     link: null,
     locked: false,
     fontSize: options.fontSize || 20,
-    fontFamily: 1,  // 1 = Virgil/Excalifont (hand-drawn), 2 = Helvetica, 3 = Cascadia
+    fontFamily: 1,  // 1 = Excalifont/Virgil (hand-drawn), 2 = Helvetica, 3 = Cascadia
     text: text,
     textAlign: options.textAlign || "center",
     verticalAlign: options.verticalAlign || "middle",
@@ -173,10 +173,10 @@ function createText(text, x, y, options = {}) {
 }
 
 // Font family mapping for reference:
-// fontFamily: 1 → Virgil/Excalifont (hand-drawn, default for Excalidraw aesthetic)
+// fontFamily: 1 → Excalifont/Virgil (hand-drawn, default for Excalidraw aesthetic)
 // fontFamily: 2 → Helvetica (clean, modern)
 // fontFamily: 3 → Cascadia (monospace, code)
-// When rendering to SVG: font-family: 'Virgil', 'Excalifont', cursive, sans-serif
+// When rendering to SVG: font-family: 'Excalifont', 'Virgil', cursive, sans-serif
 
 
 function createBoundText(text, containerId, containerX, containerY, containerWidth, containerHeight) {
@@ -753,7 +753,7 @@ Use Write tool to save JSON to `diagrams/<slug>.excalidraw`, then inform user ab
 **SVG Rendering Requirements:**
 When rendering Excalidraw JSON to SVG, use font-family specification:
 ```css
-font-family: 'Virgil', 'Excalifont', cursive, sans-serif
+font-family: 'Excalifont', 'Virgil', cursive, sans-serif
 ```
 
 This ensures proper hand-drawn font rendering with fallbacks.
