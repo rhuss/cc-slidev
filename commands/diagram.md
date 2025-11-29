@@ -15,6 +15,11 @@ Focus on creating diagrams for a specific slide with **multi-platform support** 
 
 ## Execution
 
+**IMPORTANT - File Organization:**
+- **Source files** (`.mmd`, `.puml`, `.excalidraw`) → Always save to `./diagrams/`
+- **Rendered images** (`.svg`, `.png`) → Save to `./public/images/<slide-title>/`
+- This keeps sources version-controlled separately from generated outputs
+
 ### 1. Parse Slide Number
 
 Extract from `$ARGUMENTS`:
@@ -235,11 +240,25 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/generate-multi-platform-diagram.sh \
 ```
 
 This automatically:
-- Creates `public/images/<slide-title-mangled>/` directory
-- Generates Mermaid source (.mmd) and rendered image (.svg/.png)
-- Translates to PlantUML (.puml) and renders if enabled
-- Translates to Excalidraw (.excalidraw JSON) and renders if enabled
+- Creates `diagrams/` directory for source files
+- Creates `public/images/<slide-title-mangled>/` directory for rendered images
+- Generates Mermaid source (diagrams/<slug>.mmd) and rendered image (public/images/<slug>/diagram.svg)
+- Translates to PlantUML (diagrams/<slug>.puml) and renders if enabled
+- Translates to Excalidraw (diagrams/<slug>.excalidraw) and renders if enabled
 - Applies colorblind-safe theme to all formats
+
+**Directory Structure:**
+```
+diagrams/
+  ├── <slide-title>.mmd          # Mermaid source
+  ├── <slide-title>.puml         # PlantUML source
+  └── <slide-title>.excalidraw   # Excalidraw JSON source
+
+public/images/<slide-title>/
+  ├── diagram.svg                # Mermaid rendered
+  ├── diagram-plantuml.svg       # PlantUML rendered
+  └── diagram-excalidraw.svg     # Excalidraw rendered
+```
 
 **Step 3: Embed Mermaid inline in slide (default)**
 Add diagram directly to slide:
@@ -261,20 +280,24 @@ Remaining content
 
 **Embedded in slide**: Mermaid (inline rendering by Slidev)
 
-**All formats generated in** `public/images/[mangled-title]/`:
-- `diagram.mmd` - Mermaid source
+**Source files in** `diagrams/`:
+- `[slug].mmd` - Mermaid source
+- `[slug].puml` - PlantUML source (if enabled)
+- `[slug].excalidraw` - Excalidraw JSON source (if enabled)
+
+**Rendered images in** `public/images/[mangled-title]/`:
 - `diagram.svg` - Mermaid rendered (if mmdc available)
-- `diagram.puml` - PlantUML source (if enabled)
 - `diagram-plantuml.svg` - PlantUML rendered (if enabled)
-- `diagram.excalidraw` - Excalidraw JSON source (if enabled)
 - `diagram-excalidraw.svg` - Excalidraw rendered (if enabled)
 
 **To switch formats in slide:**
 Replace mermaid code block with image reference:
 ![Diagram](./public/images/[mangled-title]/diagram-plantuml.svg)
 
-**To edit in Excalidraw:**
-Open `public/images/[mangled-title]/diagram.excalidraw` at https://excalidraw.com
+**To edit sources:**
+- Mermaid: Edit `diagrams/[slug].mmd`
+- PlantUML: Edit `diagrams/[slug].puml`
+- Excalidraw: Open `diagrams/[slug].excalidraw` at https://excalidraw.com
 ```
 
 ### 6. Customize Diagram

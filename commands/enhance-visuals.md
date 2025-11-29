@@ -364,11 +364,12 @@ Content here
 4. Inform user:
    ```
    ✅ Excalidraw diagram created at:
-   public/images/<slug>/diagram.excalidraw
+   Source: diagrams/<slug>.excalidraw
+   Rendered: public/images/<slug>/diagram-excalidraw.svg
 
    To refine:
    1. Open https://excalidraw.com
-   2. Load diagram.excalidraw
+   2. Load diagrams/<slug>.excalidraw
    3. Adjust positioning, add annotations
    4. Export as needed
    ```

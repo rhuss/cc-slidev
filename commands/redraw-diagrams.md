@@ -177,16 +177,19 @@ EOF
 SLIDE_TITLE="Slide N: [Title]"
 SLUG=$(${CLAUDE_PLUGIN_ROOT}/scripts/create-diagram-slug.sh "$SLIDE_TITLE" N)
 
-# Create directory
+# Create directories
+mkdir -p "diagrams"
 mkdir -p "public/images/$SLUG"
 
-# Save all platform versions
-cp /tmp/diagram-mermaid.mmd "public/images/$SLUG/diagram.mmd"
-cp /tmp/diagram-plantuml.puml "public/images/$SLUG/diagram.puml"
+# Save all platform sources to diagrams/
+cp /tmp/diagram-mermaid.mmd "diagrams/$SLUG.mmd"
+cp /tmp/diagram-plantuml.puml "diagrams/$SLUG.puml"
+cp /tmp/diagram-excalidraw.excalidraw "diagrams/$SLUG.excalidraw"
 
-# Render each
-${CLAUDE_PLUGIN_ROOT}/scripts/render-mermaid.sh "public/images/$SLUG/diagram.mmd" "public/images/$SLUG/diagram.svg" "svg"
-${CLAUDE_PLUGIN_ROOT}/scripts/render-plantuml.sh "public/images/$SLUG/diagram.puml" "public/images/$SLUG/diagram-plantuml.svg" "svg"
+# Render each to public/images/
+${CLAUDE_PLUGIN_ROOT}/scripts/render-mermaid.sh "diagrams/$SLUG.mmd" "public/images/$SLUG/diagram.svg" "svg"
+${CLAUDE_PLUGIN_ROOT}/scripts/render-plantuml.sh "diagrams/$SLUG.puml" "public/images/$SLUG/diagram-plantuml.svg" "svg"
+${CLAUDE_PLUGIN_ROOT}/scripts/render-excalidraw.sh "diagrams/$SLUG.excalidraw" "public/images/$SLUG/diagram-excalidraw.svg"
 ```
 
 **Step 5: Track progress and explain redesigns**
@@ -194,12 +197,14 @@ ${CLAUDE_PLUGIN_ROOT}/scripts/render-plantuml.sh "public/images/$SLUG/diagram.pu
 Update user after each diagram:
 ```markdown
 ✅ Slide 21: Device Plugins Turn GPUs Into Schedulable Resources
-   Directory: public/images/slide-21-device-plugins-gpus/
 
    **Semantic Redesigns:**
    - **Mermaid:** flowchart emphasizing plugin→kubelet→scheduler flow
    - **PlantUML:** component diagram showing gRPC interfaces and packages
    - **Excalidraw:** spatial sketch with "node" container and control plane separation
+
+   **Sources:** diagrams/slide-21-device-plugins-gpus.*
+   **Rendered:** public/images/slide-21-device-plugins-gpus/diagram*.svg
 
    Generated:
    - diagram.mmd + diagram.svg (Mermaid)

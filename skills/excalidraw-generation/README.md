@@ -166,15 +166,19 @@ Claude analyzes slide 5, determines Excalidraw is best fit, and invokes skill au
 For slide "Device Plugin Architecture":
 
 ```
+diagrams/
+  └── device-plugin-architecture.excalidraw    # JSON source (editable)
+
 public/images/device-plugin-architecture/
-  ├── diagram.excalidraw       # JSON source (editable)
-  └── diagram-excalidraw.svg   # Rendered SVG (for slide)
+  └── diagram-excalidraw.svg                   # Rendered SVG (for slide)
 ```
+
+**Important**: Source files always go in `./diagrams/` directory for easy version control and organization.
 
 ### Editing Generated Diagrams
 
 1. Visit https://excalidraw.com
-2. Drag `diagram.excalidraw` file to browser
+2. Drag `diagrams/<slug>.excalidraw` file to browser
 3. Edit visually
 4. Export when done (or save back to JSON)
 

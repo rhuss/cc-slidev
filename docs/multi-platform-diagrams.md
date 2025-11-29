@@ -286,16 +286,17 @@ To use a different format, replace the Mermaid code block with an image referenc
 
 ### Editing Diagrams
 
-**Mermaid**: Edit the code block directly in `slides.md`
+**Mermaid**: Edit the code block directly in `slides.md` or source at `diagrams/<title>.mmd`
 
 **PlantUML**:
-- Edit `public/images/<title>/diagram.puml`
-- Re-render: `scripts/render-plantuml.sh diagram.puml diagram-plantuml.svg`
+- Edit `diagrams/<title>.puml`
+- Re-render: `scripts/render-plantuml.sh diagrams/<title>.puml public/images/<title>/diagram-plantuml.svg`
 
 **Excalidraw**:
-- Open `public/images/<title>/diagram.excalidraw` at https://excalidraw.com
+- Open `diagrams/<title>.excalidraw` at https://excalidraw.com
 - Edit visually with drag-and-drop
-- Export and save back to same location
+- Export and save back to `diagrams/<title>.excalidraw`
+- Re-render: `scripts/render-excalidraw.sh diagrams/<title>.excalidraw public/images/<title>/diagram-excalidraw.svg`
 
 ## Dependencies
 
