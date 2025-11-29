@@ -109,7 +109,7 @@ function createText(text, x, y, options = {}) {
     link: null,
     locked: false,
     fontSize: options.fontSize || 20,
-    fontFamily: 1,
+    fontFamily: 1,  // 1 = Virgil/Excalifont (hand-drawn), 2 = Helvetica, 3 = Cascadia
     text: text,
     textAlign: options.textAlign || "center",
     verticalAlign: options.verticalAlign || "middle",
