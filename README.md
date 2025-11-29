@@ -194,8 +194,9 @@ introduction-to-kubernetes/
 
 | Command | Description |
 |---------|-------------|
-| `/slidev:create <topic>` | End-to-end workflow from brainstorm to handout |
+| `/slidev:init <topic>` | Initialize new presentation project (full workflow orchestrator) |
 | `/slidev:brainstorm` | Interactive brainstorming with research |
+| `/slidev:frame` | Define scope, duration, and slide count targets |
 | `/slidev:outline` | Create/revise presentation outline |
 | `/slidev:generate` | Generate modular slides from outline |
 | `/slidev:edit <N>` | Edit specific slide with context |
@@ -374,7 +375,7 @@ npm install -g @mermaid-js/mermaid-cli
 cc --plugin-dir /path/to/slidev
 
 # Test workflow
-/slidev:create Test Presentation
+/slidev:init Test Presentation
 ```
 
 ## License
@@ -393,4 +394,4 @@ This is a personal plugin, but feedback and suggestions are welcome! File issues
 
 ---
 
-**Tip:** Start with `/slidev:create Your Topic` for a guided end-to-end workflow, or use individual commands for specific phases.
+**Tip:** Start with `/slidev:init Your Topic` for a guided end-to-end workflow, or use individual commands for specific phases.
