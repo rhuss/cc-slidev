@@ -85,7 +85,7 @@ Ask: "What would you like to do while previewing?"
 
 Options:
 - Edit slides while watching: `/slidev:edit [N]`
-- Enhance visuals: `/slidev:enhance-visuals`
+- Enhance visuals: `/slidev:visuals`
 - Export to PDF/PPTX: `/slidev:export`
 - Just review and practice
 

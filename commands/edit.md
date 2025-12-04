@@ -94,14 +94,19 @@ Then use AskUserQuestion with:
 
 ### If user chooses "Analyze quality":
 
-Invoke the "Slide Quality Assessment" skill to load the 12-point quality framework, then:
+**IMPORTANT**: First, read the evidence-based style guide from the plugin directory:
+```
+${CLAUDE_PLUGIN_ROOT}/references/presentation-best-practices.md
+```
+
+Then apply the 12-point quality framework:
 1. Read the slide file
-2. Apply each of the 12 quality criteria systematically
+2. Apply each of the 12 quality criteria systematically (using the style guide as reference)
 3. Calculate quality score (X/12)
 4. Identify critical violations
 5. Provide prioritized recommendations with specific examples
 
-Present results in the skill's standard format (see skill for template).
+Present results using the standard format from the Slide Quality Assessment skill.
 
 After providing the quality analysis, use AskUserQuestion:
 - question: "How would you like to proceed?"
@@ -187,7 +192,7 @@ When making any changes, ensure slides meet these standards:
 - ✓ Colorblind-safe
 - ✓ Explainable in ~90 seconds
 
-See `references/presentation-best-practices.md` for detailed guidelines.
+**Reference**: The complete guidelines are in `${CLAUDE_PLUGIN_ROOT}/references/presentation-best-practices.md` (read this file when performing quality analysis).
 
 ## Important Notes
 

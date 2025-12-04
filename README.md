@@ -11,6 +11,13 @@ A Claude Code plugin for creating technical presentations powered by **[Slidev](
 
 **Key differentiator:** Evidence-based design principles are **enforced as guardrails**, not suggestions. The plugin automatically prevents common presentation mistakes through hard limits based on cognitive science research.
 
+## Example Presentations
+
+See real-world technical presentations created with this plugin, including source code and PDF exports:
+
+- **[GPUs on Kubernetes Unlocked](https://github.com/ro14nd-talks/gpus-on-kubernetes-unlocked)** - Technical deep-dive on GPU scheduling ([PDF](https://github.com/ro14nd-talks/gpus-on-kubernetes-unlocked/blob/main/exports/slides.pdf))
+- **[Lifting LLMs on K8s](https://github.com/ro14nd-talks/lifting-llms-on-k8s)** - Running large language models on Kubernetes ([PDF](https://github.com/ro14nd-talks/lifting-llms-on-k8s/blob/main/exports/slides.pdf))
+
 ### Built on Slidev
 
 [Slidev](https://sli.dev) is a web-based presentation tool built for developers. Write your slides in markdown, use Vue components, live code with Monaco editor, and export to PDF/PPTX. This plugin adds intelligent automation, evidence-based guardrails, and complete workflow management on top of Slidev's powerful foundation.
@@ -43,13 +50,14 @@ These are not suggestions - they're automatic hard limits based on cognitive sci
 
 End-to-end presentation creation:
 
-1. **Interactive brainstorming** with web research and local file analysis
-2. **Structured outline** with validation
-3. **Modular slide generation** with enforced quality limits
-4. **Visual enhancement** with diagrams and images
-5. **Presenter notes** generation
-6. **LaTeX handout** with prose explanations and research links
-7. **Export** to PDF/PPTX/PNG
+1. **Frame presentation scope** - Set duration, audience, and calculate target slide count
+2. **Interactive brainstorming** - Web research and local file analysis
+3. **Structured outline** with validation
+4. **Modular slide generation** with enforced quality limits
+5. **Visual enhancement** with diagrams and images
+6. **Presenter notes** generation
+7. **LaTeX handout** with prose explanations and research links
+8. **Export** to PDF/PPTX/PNG
 
 ## Prerequisites
 
@@ -73,6 +81,13 @@ End-to-end presentation creation:
   npm install -g @mermaid-js/mermaid-cli
   ```
 
+- **excalidraw-brute-export-cli** - For Excalidraw diagram rendering (auto-installed on first use)
+  ```bash
+  npm install -g excalidraw-brute-export-cli
+  npx playwright install-deps
+  npx playwright install chromium
+  ```
+
 ## Installation
 
 ```bash
@@ -87,51 +102,58 @@ cp -r slidev ~/.claude-plugins/
 
 Here's a full end-to-end workflow for creating a technical presentation:
 
-### 1. Start with brainstorming
+### 1. Frame your presentation
+```
+/slidev:frame
+```
+Set presentation parameters: duration, audience level, and style. The plugin calculates target slide count using research-based timing (90s per slide default).
+
+### 2. Brainstorm content
 ```
 /slidev:brainstorm
 ```
-Interactive Q&A session about your presentation topic. The plugin researches the web, analyzes local files, and helps you frame your content.
+Interactive Q&A session about your presentation topic. The plugin researches the web, analyzes local files, and extracts key themes within your framing constraints.
 
-### 2. Create structured outline
+### 3. Create structured outline
 ```
 /slidev:outline
 ```
-Generates a structured outline with slide breakdown, validates timing (90s per slide default), and ensures logical flow.
+Generates a structured outline with slide breakdown, validates timing against your framing, and ensures logical flow.
 
-### 3. Generate modular slides
+### 4. Generate modular slides
 ```
 /slidev:generate
 ```
 Creates individual slide files in `slides/` directory:
 ```
 presentation/
-├── slides.md                    # Master file
+├── slides.md                    # Master file (slide 1 = title from frontmatter)
 ├── slides/
-│   ├── 01-title.md
-│   ├── 02-hook.md
-│   ├── 03-problem-statement.md
-│   ├── 04-architecture.md
+│   ├── 02-hook.md              # Slide 2
+│   ├── 03-problem-statement.md # Slide 3
+│   ├── 04-architecture.md       # Slide 4
 │   └── ...
 ```
 
+**Note:** Slide 1 (title) comes from frontmatter in `slides.md`, so slide files start at `02-`.
+
 Each slide is enforced to meet quality standards automatically.
 
-### 4. Preview with Slidev
+### 5. Preview with Slidev
 ```
 /slidev:preview
 ```
 Opens Slidev dev server at `localhost:3030`. Press `p` for presenter mode with notes. Hot reload on file changes.
 
-### 5. Edit specific slides
+### 6. Edit specific slides
 ```
 /slidev:edit 5
 ```
 Shows table of contents, current slide content, and quality analysis. Edit individual slide files directly.
 
-### 6. Enhance with visuals
+### 7. Enhance with visuals
 ```
-/slidev:enhance-visuals
+/slidev:visuals
 ```
 Analyzes all slides and suggests:
 - Mermaid diagrams (flowcharts, sequence, architecture)
@@ -140,7 +162,7 @@ Analyzes all slides and suggests:
 
 Generates multiple options per slide.
 
-### 7. Generate comprehensive handout
+### 8. Generate comprehensive handout
 ```
 /slidev:handout
 ```
@@ -150,7 +172,7 @@ Creates professional LaTeX handout with:
 - Research links and citations
 - Presenter notes
 
-### 8. Export final presentation
+### 9. Export final presentation
 ```
 /slidev:export pdf
 ```
@@ -164,21 +186,31 @@ When you create a presentation, the plugin generates this structure:
 
 ```
 introduction-to-kubernetes/
-├── slides.md                # Master Slidev file (includes from slides/)
+├── slides.md                # Master Slidev file (slide 1 = title from frontmatter)
 ├── slides/
-│   ├── 01-title.md         # Modular slide files
-│   ├── 02-hook.md
-│   ├── 03-problem.md
-│   ├── 04-kubernetes-architecture.md
-│   ├── 05-benefits.md
+│   ├── 02-hook.md          # Slide 2 (first slide file)
+│   ├── 03-problem.md       # Slide 3
+│   ├── 04-kubernetes-architecture.md  # Slide 4
+│   ├── 05-benefits.md      # Slide 5
 │   └── ...
+├── diagrams/                # ALL diagram sources (version controlled)
+│   ├── kubernetes-architecture.mmd
+│   ├── kubernetes-architecture.puml
+│   ├── kubernetes-architecture.excalidraw
+│   └── ...
+├── presentation-config.md  # Framing parameters (duration, audience, etc.)
 ├── brainstorm.md           # Research and ideation notes
 ├── outline.md              # Validated presentation outline
 ├── handout.tex             # LaTeX handout source
 ├── handout.pdf             # Compiled handout
 ├── package.json            # Slidev dependencies
 ├── public/
-│   └── images/             # Diagrams, photos
+│   └── images/             # Rendered diagrams and photos
+│       ├── kubernetes-architecture/
+│       │   ├── diagram.svg
+│       │   ├── diagram-plantuml.svg
+│       │   └── diagram-excalidraw.svg
+│       └── ...
 └── exports/
     ├── slides.pdf
     └── slides.pptx
@@ -190,18 +222,25 @@ introduction-to-kubernetes/
 - Individual edits without touching other slides
 - Git-friendly collaboration
 
+**Diagram organization:**
+- **Sources** (`diagrams/`): Version-controlled, editable (.mmd, .puml, .excalidraw)
+- **Renders** (`public/images/`): Generated artifacts (.svg, .png), can be regenerated
+- **NO EXCEPTIONS**: All sources MUST be in top-level `./diagrams/` directory
+
 ## All Commands
 
 | Command | Description |
 |---------|-------------|
 | `/slidev:init <topic>` | Initialize new presentation project (full workflow orchestrator) |
-| `/slidev:brainstorm` | Interactive brainstorming with research |
 | `/slidev:frame` | Define scope, duration, and slide count targets |
+| `/slidev:brainstorm` | Interactive brainstorming with research |
 | `/slidev:outline` | Create/revise presentation outline |
 | `/slidev:generate` | Generate modular slides from outline |
 | `/slidev:edit <N>` | Edit specific slide with context |
+| `/slidev:add <N>` | Insert new slide at position N (shifts others back) |
+| `/slidev:delete <N>` | Delete slide at position N with renumbering |
 | `/slidev:continue` | Resume work on existing presentation |
-| `/slidev:enhance-visuals` | Add diagrams and images to all slides |
+| `/slidev:visuals` | Add diagrams and images to all slides |
 | `/slidev:diagram <N>` | Create diagram for specific slide |
 | `/slidev:notes` | Generate/enhance presenter notes |
 | `/slidev:handout` | Generate LaTeX handout with slides and prose |
@@ -367,6 +406,17 @@ Install mermaid-cli for offline high-quality rendering:
 ```bash
 npm install -g @mermaid-js/mermaid-cli
 ```
+
+### Excalidraw rendering fails
+
+Install excalidraw-brute-export-cli and dependencies:
+```bash
+npm install -g excalidraw-brute-export-cli
+npx playwright install-deps
+npx playwright install chromium
+```
+
+Note: The script will auto-install these on first use if missing.
 
 ## Development
 
