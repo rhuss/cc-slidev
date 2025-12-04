@@ -1,5 +1,6 @@
 # User-specific settings
 .claude/*.local.md
+.claude/
 
 # OS files
 .DS_Store

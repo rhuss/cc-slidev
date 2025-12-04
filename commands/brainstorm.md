@@ -8,15 +8,38 @@ allowed-tools: ["Read", "Write", "WebSearch", "Grep", "Glob", "AskUserQuestion",
 
 Conduct interactive brainstorming session to gather ideas, research topic, and establish foundation for evidence-based presentation.
 
-**Approach**: Gather all context upfront in a structured way, then conduct focused research and ideation.
+**Approach**: Focus on content research - gather ideas, research materials, and identify themes.
+
+**Prerequisites**: Run `/slidev:frame` first to establish presentation parameters (duration, audience, etc.)
 
 **Note**: This phase gathers raw material. Structure and refinement come later using evidence-based principles (see `references/presentation-best-practices.md`).
 
 ## Execution
 
-### 1. Gather Context Upfront
+### 1. Check for Presentation Configuration
 
-**Use AskUserQuestion to collect all parameters systematically:**
+**Check if `presentation-config.md` exists:**
+
+```bash
+Use Read tool to check for presentation-config.md
+```
+
+**If exists:**
+- Read it to extract parameters for context:
+  - Duration and target slide count
+  - Audience and skill level
+  - Presentation context
+- Use these as constraints for research
+
+**If not exists:**
+- Inform user: "⚠️ No presentation config found. Run `/slidev:frame` first to establish parameters (duration, audience, etc.), or continue without constraints."
+- Ask: "Continue brainstorming without constraints?"
+- If no: Exit and suggest running `/slidev:frame`
+- If yes: Proceed (will need to frame later)
+
+### 2. Gather Research Context
+
+**Use AskUserQuestion to collect research parameters:**
 
 #### Question 1: Title & Abstract
 Ask user:
@@ -39,51 +62,22 @@ Ask user what materials to review:
   - Topics or concepts to research online
   - Or: "none" to skip web research
 
-#### Question 3: Presentation Parameters
-Ask user:
-- **Total length**: Duration in minutes (e.g., 20, 30, 45, 60)
-- **Time per slide**: Average time per slide, or "use default"
-  - **Default recommendations**:
-    - **Lightning talks** (5-10 min): 30-45 seconds per slide → ~12-15 slides
-    - **Standard talks** (20-30 min): 1-2 minutes per slide → ~15-20 slides
-    - **Conference talks** (40-50 min): 2 minutes per slide → ~20-25 slides
-    - **Deep dives** (60+ min): 2-3 minutes per slide → ~25-30 slides
-  - Note: These are guidelines; actual timing varies by content
-
-#### Question 4: Audience & Level
-Ask user:
-- **Target audience**: Who will watch this?
-  - Examples: developers, architects, DevOps engineers, managers, students, mixed technical
-- **Skill level**:
-  - Beginner (new to topic)
-  - Intermediate (some experience)
-  - Expert (deep knowledge)
-  - Mixed (varied backgrounds)
-- **Context**: Where/when will this be presented?
-  - Examples: conference, meetup, training session, internal presentation, webinar, university lecture
-
 **Format interaction as single multi-question prompt for efficiency.**
 
-### 2. Calculate Presentation Metrics
+### 3. Show Research Context
 
-Based on gathered parameters, calculate and display:
+**If presentation-config.md exists**, display summary:
 
 ```markdown
-## Presentation Framework
+## Research Context
 
 **Working Title**: [Title from user]
 
-**Duration & Pacing**:
-- Total time: [X] minutes
-- Time per slide: [Y] minutes (or default: [calculated])
-- **Target slide count**: ~[Z] slides
-  - Calculation: [X] min ÷ [Y] min/slide ≈ [Z] slides
-  - Flexibility: ±3 slides (some slides faster, some slower)
-
-**Audience Profile**:
-- Who: [Audience description]
-- Level: [Skill level]
-- Context: [Presentation setting]
+**Presentation Constraints** (from presentation-config.md):
+- Duration: [X] minutes
+- Target slides: ~[Z] slides
+- Audience: [Who/level]
+- Context: [Where]
 
 **Research Sources**:
 - Local: [Directory/files or "none"]
@@ -93,20 +87,26 @@ Based on gathered parameters, calculate and display:
 **Abstract Status**: [Provided / To be developed]
 ```
 
-**Show time-per-slide default reasoning**:
+**If no config**, display simplified summary:
+
+```markdown
+## Research Context
+
+**Working Title**: [Title from user]
+
+**Research Sources**:
+- Local: [Directory/files or "none"]
+- Web: [URLs or "none"]
+- Keywords: [Topics to research or "none"]
+
+**Abstract Status**: [Provided / To be developed]
+
+**Note**: Run `/slidev:frame` first (if you haven't already) to set duration and audience parameters.
 ```
-Example: 30-minute talk
-- Opening (slide 1): ~1 min
-- Content (slides 2-18): ~1.5 min average
-- Closing (slide 19-20): ~1 min
-- Total: ~20 slides for 30 minutes
-```
 
-**Inform user**: "These are planning targets. Actual slide count and timing will emerge during outline development."
+### 4. Review Abstract and Extract Commitments
 
-### 3. Review Abstract and Extract Commitments
-
-**If abstract was provided in Step 1:**
+**If abstract was provided in Step 2:**
 
 Analyze abstract and extract commitments:
 
@@ -149,9 +149,9 @@ Analyze abstract and extract commitments:
 **Initial angle**: [Based on title and discussion]
 ```
 
-### 4. Research from Local Materials
+### 5. Research from Local Materials
 
-**If user provided local directory or files in Step 1:**
+**If user provided local directory or files in Step 2:**
 
 1. **Scan directory structure** (if directory provided):
    ```bash
@@ -195,9 +195,9 @@ Analyze abstract and extract commitments:
 
 **If no local materials**: Skip to web research.
 
-### 5. Research from Web Resources
+### 6. Research from Web Resources
 
-**If user provided URLs in Step 1:**
+**If user provided URLs in Step 2:**
 
 1. **Fetch provided URLs**:
    ```bash
@@ -252,7 +252,7 @@ Analyze abstract and extract commitments:
 
 **If no web research requested**: Skip this step.
 
-### 6. Identify Key Themes and Messages
+### 7. Identify Key Themes and Messages
 
 Based on all gathered information (abstract, local files, web research), synthesize:
 
@@ -287,7 +287,7 @@ Based on all gathered information (abstract, local files, web research), synthes
 **Call to action** (if applicable): [What should they do after this talk?]
 ```
 
-### 7. Brainstorm Visual Opportunities
+### 8. Brainstorm Visual Opportunities
 
 Based on content gathered, identify where diagrams/images would help:
 
@@ -311,7 +311,7 @@ Based on content gathered, identify where diagrams/images would help:
 - [Data point]: Chart/graph showing [what]
 ```
 
-### 8. Note Potential Structure
+### 9. Note Potential Structure
 
 **Don't create full outline yet** - just note potential flow:
 
@@ -336,7 +336,7 @@ Based on content gathered, identify where diagrams/images would help:
 **Note**: This is exploratory - actual structure will be refined in outline phase.
 ```
 
-### 9. Organize Findings into Brainstorm Document
+### 10. Organize Findings into Brainstorm Document
 
 Create `brainstorm.md` with all collected information:
 
@@ -346,45 +346,41 @@ Create `brainstorm.md` with all collected information:
 **Date**: [Today's date]
 **Status**: Research complete, ready for outline
 
----
-
-## Presentation Framework
-
-[Copy from Step 2 - metrics and parameters]
+**Note**: See `presentation-config.md` for presentation parameters (duration, audience, etc.)
 
 ---
 
 ## Abstract & Commitments
 
-[Copy from Step 3 - abstract analysis or development status]
+[Copy from Step 4 - abstract analysis or development status]
 
 ---
 
 ## Research Summary
 
 ### Local Materials
-[Copy from Step 4 - if applicable]
+[Copy from Step 5 - if applicable]
 
 ### Web Research
-[Copy from Step 5 - if applicable]
+[Copy from Step 6 - if applicable]
 
 ---
 
 ## Key Themes & Messages
 
-[Copy from Step 6 - themes and messages]
+[Copy from Step 7 - themes and messages]
 
 ---
 
 ## Visual Opportunities
 
-[Copy from Step 7 - diagrams and images needed]
+[Copy from Step 8 - diagrams and images needed]
 
 ---
 
 ## Rough Structure Ideas
 
-[Copy from Step 8 - potential flow]
+[Copy from Step 9 - potential flow]
 
 ---
 
@@ -414,13 +410,14 @@ Create `brainstorm.md` with all collected information:
 ## Next Steps
 
 1. Review this brainstorm document
-2. Run `/slidev:outline` to create structured outline
-3. Develop slides from outline
+2. Ensure `/slidev:frame` has been run (if not, run it to set parameters)
+3. Run `/slidev:outline` to create structured outline
+4. Develop slides from outline
 ```
 
 **Save to `brainstorm.md`**
 
-### 10. Present Summary and Confirm
+### 11. Present Summary and Confirm
 
 Show user a concise summary:
 
@@ -428,11 +425,6 @@ Show user a concise summary:
 ## ✅ Brainstorming Complete!
 
 **Presentation**: [Title]
-
-**Framework**:
-- Duration: [X] minutes → ~[Z] slides target
-- Audience: [Who/level]
-- Context: [Where]
 
 **Research conducted**:
 - ✓ Abstract analyzed (if provided)
@@ -447,10 +439,12 @@ Show user a concise summary:
 
 **Visual opportunities**: [N] diagrams/images identified
 
-**Next step**: Create structured outline
-
 **Files created**:
 - `brainstorm.md` - Full research and findings
+
+**Next steps**:
+- Run `/slidev:frame` to set presentation parameters (if not already done)
+- Then run `/slidev:outline` to create structured outline
 ```
 
 Ask: **"Does this capture the direction you want? Anything to add or adjust before we create the outline?"**
@@ -465,37 +459,30 @@ Allow user to:
 ```
 Great! Your brainstorm is saved to `brainstorm.md`.
 
-Next: Run `/slidev:outline` to create a structured presentation outline
-based on these findings.
+Next steps:
+1. If you haven't run `/slidev:frame`, do that first to set presentation parameters
+2. Then run `/slidev:outline` to create a structured presentation outline
 ```
 
 ## Tips for Execution
 
 **Do:**
-- ✅ Gather ALL parameters upfront (don't ask incrementally)
-- ✅ Calculate slide count from time constraints
+- ✅ Check for presentation-config.md first
+- ✅ Gather research context upfront (don't ask incrementally)
 - ✅ Research efficiently (don't over-research)
 - ✅ Extract clear themes from research
 - ✅ Identify visual opportunities early
 - ✅ Save all findings to brainstorm.md
 
 **Don't:**
+- ❌ Ask about duration/audience (that's in `/slidev:frame`)
+- ❌ Calculate slide counts (frame handles that)
 - ❌ Ask follow-up questions during research (you have all context)
 - ❌ Create detailed outline yet (that's next phase)
 - ❌ Lock into rigid structure (keep it exploratory)
 - ❌ Research everything (focus on user's keywords/materials)
-- ❌ Skip calculation of slide count target
 
-**Pacing recommendations reference**:
-```
-Quick talks (5-10 min):   30-45 sec/slide → 10-15 slides
-Standard talks (20-30):   1-2 min/slide   → 15-20 slides
-Conference (40-50 min):   2 min/slide     → 20-25 slides
-Deep dives (60+ min):     2-3 min/slide   → 25-30 slides
-Workshops (90+ min):      Variable        → 30-40 slides + exercises
-```
-
-**Remember**: These are targets, not limits. Quality over quantity.
+**Remember**: Focus on content research. Parameters come from `/slidev:frame`.
 
 ---
 

@@ -350,12 +350,13 @@ Priority: [High/Medium/Low]
 For each slide in the outline, create a separate markdown file in `[topic-slug]/slides/` with a **descriptive filename** based on the slide content.
 
 **File Naming Convention:**
-- Use numeric prefix + descriptive name (e.g., `01-title.md`, `05-microservices-benefits.md`)
+- **IMPORTANT:** Slide 1 (title) comes from frontmatter in `slides.md`, NOT a file
+- First slide file starts at `02-` (second slide)
+- Use numeric prefix + descriptive name (e.g., `02-hook.md`, `05-microservices-benefits.md`)
 - Format: `NN-descriptive-name.md` where NN is zero-padded slide number
 - Use lowercase with hyphens (kebab-case) for descriptive part
 - Examples:
-  - `01-title.md` - Title/cover slide
-  - `02-hook.md` or `02-opening.md` - Opening hook
+  - `02-hook.md` or `02-opening.md` - Opening hook (first slide file)
   - `03-problem-statement.md` - Problem introduction
   - `04-kubernetes-architecture.md` - K8s architecture slide
   - `05-microservices-benefits.md` - Benefits of microservices
@@ -377,20 +378,22 @@ For each slide in the outline, create a separate markdown file in `[topic-slug]/
 - Update slide number comments
 - Git will track the rename with the descriptive name
 
-**Example: `[topic-slug]/slides/01-title.md` (Title Slide)**
+**Important:** Title slide comes from `slides.md` frontmatter, NOT a separate file.
+
+**Example: `[topic-slug]/slides/02-hook.md` (First Content Slide)**
 ```markdown
 ---
-layout: cover
+layout: default
 ---
 
-# [Title Slide - Assertion format]
+# [Hook - Assertion format]
 
-## Subtitle
+Content for opening hook
 
 Presenter · Date
 ```
 
-**Example: `[topic-slug]/slides/02-hook.md` (Hook Slide)**
+**Example: `[topic-slug]/slides/03-problem.md` (Problem Statement Slide)**
 ```markdown
 # [Hook Slide - Compelling opening]
 
@@ -482,10 +485,7 @@ body {
 }
 </style>
 
----
-src: ./slides/01-title.md
----
-<!-- Slide 1: Title -->
+<!-- Slide 1: Title (from frontmatter above, no file) -->
 
 ---
 src: ./slides/02-hook.md
@@ -605,10 +605,9 @@ Present summary to user:
 **File Organization:**
 ```
 [topic-slug]/
-├── slides.md                          # Master file with includes
+├── slides.md                          # Master file (slide 1 = title from frontmatter)
 ├── slides/
-│   ├── 01-title.md                    # Slide 1: Title
-│   ├── 02-hook.md                     # Slide 2: Opening hook
+│   ├── 02-hook.md                     # Slide 2: Opening hook (first file)
 │   ├── 03-problem-statement.md        # Slide 3: Problem
 │   ├── 04-[descriptive-name].md       # Content slides...
 │   ├── 18-conclusion.md               # Conclusion
@@ -617,6 +616,8 @@ Present summary to user:
 ├── public/images/
 └── exports/
 ```
+
+**Important:** Slide 1 (title) is defined in `slides.md` frontmatter, not as a separate file.
 
 **Design Limits Enforced:**
 - ✓ Meaningful assertion titles (not generic labels)
@@ -656,7 +657,7 @@ Use the "Slide Quality Assessment" skill to verify all slides meet evidence-base
    - Example: `vim slides/05-microservices-benefits.md`
 
 3. **Enhance visuals:**
-   `/slidev:enhance-visuals` - Add diagrams, photos, AI image prompts
+   `/slidev:visuals` - Add diagrams, photos, AI image prompts
 
 4. **Export:**
    `/slidev:export pdf` - Generate final PDF

@@ -8,6 +8,18 @@ version: 1.0.0
 
 **Core Philosophy**: Semantic redesign, not mechanical conversion. Think like both a presentation designer (clarity, accessibility, simplicity) and an artist (creative visual expression, spatial design, aesthetic beauty).
 
+## CRITICAL - Rendering Rule
+
+**ALWAYS use render-excalidraw.sh for SVG conversion - NO EXCEPTIONS**
+
+After creating Excalidraw JSON:
+1. Save JSON to `diagrams/<slug>.excalidraw`
+2. **MUST** render using: `${CLAUDE_PLUGIN_ROOT}/scripts/render-excalidraw.sh`
+3. NEVER attempt manual SVG conversion
+4. NEVER embed JSON in markdown - only reference the rendered SVG
+
+The script handles all rendering automatically with excalidraw-brute-export-cli.
+
 ## When to Use This Skill
 
 **Auto-trigger when:**
@@ -748,15 +760,24 @@ public/images/<slide-title-slug>/
 
 **IMPORTANT**: Always save source files to `./diagrams/` directory.
 
-Use Write tool to save JSON to `diagrams/<slug>.excalidraw`, then inform user about rendering.
+**CRITICAL - Rendering Process:**
 
-**SVG Rendering Requirements:**
-When rendering Excalidraw JSON to SVG, use font-family specification:
-```css
-font-family: 'Excalifont', 'Virgil', cursive, sans-serif
-```
+1. **Save JSON**: Use Write tool to save JSON to `diagrams/<slug>.excalidraw`
 
-This ensures proper hand-drawn font rendering with fallbacks.
+2. **Render to SVG**: ALWAYS use `render-excalidraw.sh` script - NEVER attempt manual rendering:
+   ```bash
+   ${CLAUDE_PLUGIN_ROOT}/scripts/render-excalidraw.sh \
+     diagrams/<slug>.excalidraw \
+     public/images/<slug>/diagram-excalidraw.svg
+   ```
+
+3. **Script handles**: The script automatically:
+   - Installs excalidraw-brute-export-cli if missing
+   - Installs playwright chromium dependencies
+   - Renders with correct parameters (--background 1, --embed-scene 0, etc.)
+   - Ensures proper font rendering (Excalifont → Virgil → cursive → sans-serif)
+
+**DO NOT** attempt to render Excalidraw any other way. ALWAYS use the script.
 
 ### Step 6: Offer Iterations
 
@@ -767,6 +788,11 @@ Source: diagrams/<slug>.excalidraw
 Rendered: public/images/<slug>/diagram-excalidraw.svg
 
 Edit online: https://excalidraw.com (drag diagrams/<slug>.excalidraw file)
+
+After editing, re-render with:
+${CLAUDE_PLUGIN_ROOT}/scripts/render-excalidraw.sh \
+  diagrams/<slug>.excalidraw \
+  public/images/<slug>/diagram-excalidraw.svg
 
 Refinement options:
 - Adjust layout (horizontal ↔ vertical)
@@ -1025,10 +1051,11 @@ When detected, suggest: "I recommend creating an Excalidraw diagram for this - i
 After successfully generating a diagram:
 
 1. Inform user of file locations
-2. Provide excalidraw.com editing instructions
-3. Offer refinement options
-4. Ask if they want to generate for another slide
-5. Suggest integration into slide (markdown embed code)
+2. Run render-excalidraw.sh to generate SVG
+3. Provide excalidraw.com editing instructions
+4. Offer refinement options
+5. Ask if they want to generate for another slide
+6. Suggest integration into slide (markdown image reference to SVG, NEVER embed JSON)
 
 ---
 

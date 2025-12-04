@@ -49,13 +49,13 @@ Use TodoWrite tool:
       "status": "pending"
     },
     {
-      "content": "Brainstorm and research",
-      "activeForm": "Brainstorming and researching",
+      "content": "Frame presentation scope",
+      "activeForm": "Framing presentation scope",
       "status": "pending"
     },
     {
-      "content": "Frame presentation scope",
-      "activeForm": "Framing presentation scope",
+      "content": "Brainstorm and research",
+      "activeForm": "Brainstorming and researching",
       "status": "pending"
     },
     {
@@ -222,30 +222,7 @@ Inform user: "✓ Project initialized at: $PROJECT_DIR"
 
 Mark "Set up project directory and git" as completed.
 
-### 4. Phase: Brainstorming
-
-Mark "Brainstorm and research" as in_progress.
-
-**Invoke brainstorm command:**
-
-Use SlashCommand tool:
-```json
-{
-  "command": "/slidev:brainstorm"
-}
-```
-
-**What happens:**
-- Command prompts user for context (title, abstract, materials, parameters, audience)
-- Conducts research from local files and/or web
-- Extracts themes and key messages
-- Saves `brainstorm.md` in PROJECT_DIR
-
-**Wait for brainstorm completion.**
-
-Mark "Brainstorm and research" as completed.
-
-### 5. Phase: Framing
+### 4. Phase: Framing
 
 Mark "Frame presentation scope" as in_progress.
 
@@ -259,14 +236,37 @@ Use SlashCommand tool:
 ```
 
 **What happens:**
-- Command reads brainstorm.md (if exists)
-- Asks user for duration, pacing, audience, style
+- Command asks user for duration, pacing, audience, style
 - Calculates target slide count
 - Saves `presentation-config.md` in PROJECT_DIR
 
 **Wait for framing completion.**
 
 Mark "Frame presentation scope" as completed.
+
+### 5. Phase: Brainstorming
+
+Mark "Brainstorm and research" as in_progress.
+
+**Invoke brainstorm command:**
+
+Use SlashCommand tool:
+```json
+{
+  "command": "/slidev:brainstorm"
+}
+```
+
+**What happens:**
+- Command reads presentation-config.md for constraints
+- Prompts user for context (title, abstract, materials)
+- Conducts research from local files and/or web
+- Extracts themes and key messages
+- Saves `brainstorm.md` in PROJECT_DIR
+
+**Wait for brainstorm completion.**
+
+Mark "Brainstorm and research" as completed.
 
 ### 6. Phase: Outline Creation
 
@@ -356,17 +356,17 @@ Would you like to add diagrams and images to slides now?
 
 Options:
 - Yes, enhance visuals now
-- Skip for now (can run /slidev:enhance-visuals later)
+- Skip for now (can run /slidev:visuals later)
 ```
 
 If yes, mark "Enhance visuals (optional)" as in_progress:
 
-**Invoke enhance-visuals command:**
+**Invoke visuals command:**
 
 Use SlashCommand tool:
 ```json
 {
-  "command": "/slidev:enhance-visuals"
+  "command": "/slidev:visuals"
 }
 ```
 
@@ -509,7 +509,7 @@ If no, mark as completed with note "(skipped)".
    - Or use: `/slidev:edit [number]`
 
 3. **Add/improve visuals** (if not done):
-   `/slidev:enhance-visuals`
+   `/slidev:visuals`
 
 4. **Generate handout** (if not done):
    `/slidev:handout`
@@ -538,11 +538,11 @@ If no, mark as completed with note "(skipped)".
 - ✓ Modular structure for easy editing
 
 **Workflow commands used**:
-1. `/slidev:brainstorm` - Research and ideation
-2. `/slidev:frame` - Scope and parameters
+1. `/slidev:frame` - Scope and parameters
+2. `/slidev:brainstorm` - Research and ideation
 3. `/slidev:outline` - Structure creation
 4. `/slidev:generate` - Slide generation
-5. `/slidev:enhance-visuals` - Visual enhancement (optional)
+5. `/slidev:visuals` - Visual enhancement (optional)
 6. `/slidev:notes` - Presenter notes (optional)
 7. `/slidev:handout` - LaTeX handout (optional)
 
@@ -569,15 +569,15 @@ This command orchestrates the full workflow:
     ├─ Initialize git
     └─ Check Slidev dependencies
     ↓
-2. Brainstorm (calls /slidev:brainstorm)
-    ├─ Gather context
-    ├─ Research materials
-    └─ Extract themes
-    ↓
-3. Frame (calls /slidev:frame)
+2. Frame (calls /slidev:frame)
     ├─ Set duration
     ├─ Calculate slide count
     └─ Define audience/style
+    ↓
+3. Brainstorm (calls /slidev:brainstorm)
+    ├─ Gather context
+    ├─ Research materials
+    └─ Extract themes
     ↓
 4. Outline (calls /slidev:outline)
     ├─ Create structure
@@ -588,7 +588,7 @@ This command orchestrates the full workflow:
     ├─ Generate individual slides
     └─ Add notes/placeholders
     ↓
-6. Enhance (calls /slidev:enhance-visuals) [optional]
+6. Enhance (calls /slidev:visuals) [optional]
     ├─ Suggest diagrams
     ├─ Add images
     └─ Interactive selection

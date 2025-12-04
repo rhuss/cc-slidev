@@ -5,6 +5,11 @@
 #
 # Generates diagrams in all enabled formats (Mermaid, PlantUML, Excalidraw)
 # and stores them in an organized directory structure.
+#
+# CRITICAL STORAGE RULE:
+# - ALL sources (.mmd, .puml, .excalidraw) → ./diagrams/ (top-level, version controlled)
+# - Rendered images (.svg, .png) → ./public/images/<slug>/ (generated artifacts)
+# NO EXCEPTIONS TO THIS RULE
 
 set -euo pipefail
 
@@ -83,15 +88,20 @@ BASE_DIR=$(echo "$CONFIG" | jq -r '.diagrams.storage.baseDir // "public/images"'
 # Extract slide number from title if present (e.g., "21. Title" or "Slide 21: Title")
 SLIDE_NUM=$(echo "$SLIDE_TITLE" | grep -oE '^[0-9]+' || echo "")
 SLUG=$(create_slug "$SLIDE_TITLE" "$SLIDE_NUM")
-DIAGRAM_DIR="$PRESENTATION_DIR/$BASE_DIR/$SLUG"
+
+# CRITICAL: Sources and rendered files are stored separately
+SOURCE_DIR="$PRESENTATION_DIR/diagrams"      # ALL sources (.mmd, .puml, .excalidraw)
+RENDER_DIR="$PRESENTATION_DIR/$BASE_DIR/$SLUG"  # Rendered images (.svg, .png)
 
 echo -e "${BLUE}Slide title: $SLIDE_TITLE${NC}"
 echo -e "${BLUE}Directory slug: $SLUG${NC}"
-echo -e "${BLUE}Full path: $DIAGRAM_DIR${NC}"
+echo -e "${BLUE}Source directory: $SOURCE_DIR${NC}"
+echo -e "${BLUE}Render directory: $RENDER_DIR${NC}"
 echo -e ""
 
-# Create diagram directory
-mkdir -p "$DIAGRAM_DIR"
+# Create directories
+mkdir -p "$SOURCE_DIR"
+mkdir -p "$RENDER_DIR"
 
 # Track generated files
 GENERATED_FILES=()
@@ -103,15 +113,15 @@ GENERATED_FILES=()
 if [[ "$MERMAID_ENABLED" == "true" ]]; then
     echo -e "${CYAN}Generating Mermaid diagram...${NC}"
 
-    # Save Mermaid source
-    MERMAID_FILE="$DIAGRAM_DIR/diagram.mmd"
+    # Save Mermaid source to diagrams/
+    MERMAID_FILE="$SOURCE_DIR/$SLUG.mmd"
     echo "$MERMAID_CODE" > "$MERMAID_FILE"
     GENERATED_FILES+=("$MERMAID_FILE")
     echo -e "${GREEN}✓ Mermaid source: $MERMAID_FILE${NC}"
 
-    # Render Mermaid if enabled
+    # Render Mermaid to public/images/ if enabled
     if [[ "$MERMAID_RENDER" == "true" ]]; then
-        MERMAID_OUTPUT="$DIAGRAM_DIR/diagram.$MERMAID_FORMAT"
+        MERMAID_OUTPUT="$RENDER_DIR/diagram.$MERMAID_FORMAT"
 
         if "$SCRIPT_DIR/render-mermaid.sh" "$MERMAID_FILE" "$MERMAID_OUTPUT" "$MERMAID_FORMAT" 2>&1; then
             GENERATED_FILES+=("$MERMAID_OUTPUT")
@@ -131,16 +141,17 @@ fi
 if [[ "$PLANTUML_ENABLED" == "true" ]]; then
     echo -e "${CYAN}Generating PlantUML diagram...${NC}"
 
-    PLANTUML_FILE="$DIAGRAM_DIR/diagram.puml"
+    # Save PlantUML source to diagrams/
+    PLANTUML_FILE="$SOURCE_DIR/$SLUG.puml"
 
     # Translate Mermaid to PlantUML
     if node "$SCRIPT_DIR/translate-diagram.js" mermaid plantuml "$MERMAID_FILE" "$PLANTUML_FILE" 2>&1; then
         GENERATED_FILES+=("$PLANTUML_FILE")
         echo -e "${GREEN}✓ PlantUML source: $PLANTUML_FILE${NC}"
 
-        # Render PlantUML if enabled
+        # Render PlantUML to public/images/ if enabled
         if [[ "$PLANTUML_RENDER" == "true" ]]; then
-            PLANTUML_OUTPUT="$DIAGRAM_DIR/diagram-plantuml.$PLANTUML_FORMAT"
+            PLANTUML_OUTPUT="$RENDER_DIR/diagram-plantuml.$PLANTUML_FORMAT"
 
             if "$SCRIPT_DIR/render-plantuml.sh" "$PLANTUML_FILE" "$PLANTUML_OUTPUT" "$PLANTUML_FORMAT" "$PLANTUML_SERVER" 2>&1; then
                 GENERATED_FILES+=("$PLANTUML_OUTPUT")
@@ -163,7 +174,8 @@ fi
 if [[ "$EXCALIDRAW_ENABLED" == "true" ]]; then
     echo -e "${CYAN}Generating Excalidraw diagram...${NC}"
 
-    EXCALIDRAW_FILE="$DIAGRAM_DIR/diagram.excalidraw"
+    # Save Excalidraw source to diagrams/
+    EXCALIDRAW_FILE="$SOURCE_DIR/$SLUG.excalidraw"
 
     # Translate Mermaid to Excalidraw
     if [[ "$EXCALIDRAW_SOURCE" == "true" ]]; then
@@ -171,9 +183,9 @@ if [[ "$EXCALIDRAW_ENABLED" == "true" ]]; then
             GENERATED_FILES+=("$EXCALIDRAW_FILE")
             echo -e "${GREEN}✓ Excalidraw source: $EXCALIDRAW_FILE${NC}"
 
-            # Render Excalidraw if enabled
+            # Render Excalidraw to public/images/ if enabled
             if [[ "$EXCALIDRAW_RENDER" == "true" ]]; then
-                EXCALIDRAW_OUTPUT="$DIAGRAM_DIR/diagram-excalidraw.$EXCALIDRAW_FORMAT"
+                EXCALIDRAW_OUTPUT="$RENDER_DIR/diagram-excalidraw.$EXCALIDRAW_FORMAT"
 
                 if "$SCRIPT_DIR/render-excalidraw.sh" "$EXCALIDRAW_FILE" "$EXCALIDRAW_OUTPUT" "$EXCALIDRAW_FORMAT" 2>&1; then
                     GENERATED_FILES+=("$EXCALIDRAW_OUTPUT")
@@ -199,11 +211,16 @@ echo -e "${GREEN}✅ Multi-Platform Diagram Generated${NC}"
 echo -e "${GREEN}========================================${NC}"
 echo ""
 echo -e "${BLUE}Slide:${NC} $SLIDE_TITLE"
-echo -e "${BLUE}Directory:${NC} $DIAGRAM_DIR"
+echo -e "${BLUE}Slug:${NC} $SLUG"
+echo ""
+echo -e "${BLUE}Sources saved to:${NC} $SOURCE_DIR"
+echo -e "${BLUE}Renders saved to:${NC} $RENDER_DIR"
 echo ""
 echo -e "${BLUE}Generated Files (${#GENERATED_FILES[@]}):${NC}"
 for file in "${GENERATED_FILES[@]}"; do
-    echo -e "  • $(basename "$file")"
+    # Show relative path for clarity
+    rel_path="${file#$PRESENTATION_DIR/}"
+    echo -e "  • $rel_path"
 done
 echo ""
 

@@ -2,13 +2,23 @@
 """
 Slide Management Script
 
-Manages slide additions and deletions with automatic renumbering and git-aware
+Manages slide additions, deletions, and moves with automatic renumbering and git-aware
 file operations for Slidev presentations.
 
+IMPORTANT: Slide 1 is always the title from frontmatter (no file).
+           First slide file is ALWAYS 02-xxx.md (never 01-).
+           Renumbering preserves this gap: 02, 03, 04, ... (never 01)
+
 Usage:
-    python manage-slides.py delete <position> [--renumber]
-    python manage-slides.py add <position> --title "Slide Title" [--layout default] [--renumber]
+    python manage-slides.py delete <slide-number> [--renumber]
+    python manage-slides.py add <slide-number> --title "Slide Title" [--layout default] [--renumber]
+    python manage-slides.py move <slide-number> --after <target-slide-number>
     python manage-slides.py renumber
+
+Arguments:
+    <slide-number>: The slide number from <!-- Slide N: ... --> comment (NOT list position)
+                    Example: "delete 6" deletes the slide marked as "Slide 6"
+                    Example: "move 6 --after 3" moves slide 6 to position after slide 3
 
 Exit Codes:
     0: Success
@@ -363,22 +373,40 @@ Presenter notes
             if not filepath.exists():
                 raise Exception(f"Missing file: {filepath}")
 
-    def delete_slide(self, position: int, renumber: bool = False):
+    def delete_slide(self, slide_number: int, renumber: bool = False):
         """
-        Delete slide at position
+        Delete slide by slide number
 
         Args:
-            position: Position in list to delete (1-indexed, NOT slide number)
-                     Example: If you have slides [1, 5, 6, 7], position 2 refers to slide 5
-                     (the second slide in the list), not slide number 2
+            slide_number: Slide number to delete (from <!-- Slide N: ... --> comment)
+                         Example: slide_number=6 deletes the slide marked as "Slide 6"
             renumber: If True, renumber all slides after deletion to close gaps
         """
-        # Validate preconditions
-        slides = self.validate_preconditions('delete', position)
-        target_slide = slides[position - 1]
+        # Parse slides first
+        slides = self.parse_slides_md()
 
-        print(f"Deleting slide at position {position}")
-        print(f"  Slide number: {target_slide.number}")
+        if not slides:
+            print("Error: No slides found in slides.md", file=sys.stderr)
+            sys.exit(ExitCode.SLIDE_NOT_FOUND)
+
+        # Find slide by number
+        target_slide = None
+        target_position = None
+        for i, slide in enumerate(slides):
+            if slide.number == slide_number:
+                target_slide = slide
+                target_position = i + 1  # 1-indexed position
+                break
+
+        if not target_slide:
+            print(f"Error: Slide {slide_number} not found", file=sys.stderr)
+            print(f"Available slides: {[s.number for s in slides]}", file=sys.stderr)
+            sys.exit(ExitCode.SLIDE_NOT_FOUND)
+
+        # Validate preconditions using position
+        slides = self.validate_preconditions('delete', target_position)
+
+        print(f"Deleting Slide {slide_number} (position {target_position} in list)")
         print(f"  Title: {target_slide.title}")
         print(f"  File: {target_slide.src}")
 
@@ -390,13 +418,18 @@ Presenter notes
             target_file = self.slides_md.parent / target_slide.src
 
             # Remove target slide from list
-            slides.pop(position - 1)
+            slides.pop(target_position - 1)
 
             if renumber:
-                # Renumber ALL slides to be sequential (1, 2, 3, ...)
-                print("\nRenumbering all slides to close gaps...")
+                # Renumber slides sequentially, preserving gap at beginning
+                # Slide 1 = title (frontmatter), first file = 02-
+                print("\nRenumbering all slides sequentially (preserving slide 1 gap)...")
+
+                # First slide file should always be 02- (after title which is slide 1)
+                first_file_num = 2
+
                 for i, slide in enumerate(slides):
-                    new_num = i + 1
+                    new_num = first_file_num + i
                     old_path = self.slides_md.parent / slide.src
 
                     # Parse old filename
@@ -450,51 +483,46 @@ Presenter notes
             self.rollback()
             sys.exit(ExitCode.GENERAL_ERROR)
 
-    def add_slide(self, position: int, title: str, layout: str = 'default', renumber: bool = False):
+    def add_slide(self, slide_number: int, title: str, layout: str = 'default', renumber: bool = False):
         """
-        Add slide at position
+        Add slide at slide number
 
         Args:
-            position: Position to insert new slide (1-indexed list position, NOT slide number)
-                     Example: If you have slides [1, 5, 6, 7], position 2 means insert
-                     after slide 1 (before slide 5), becoming the new second slide
+            slide_number: Slide number where to insert (from <!-- Slide N: ... --> comment)
+                         Example: slide_number=6 inserts a new "Slide 6", shifting existing 6+ forward
             title: New slide title
             layout: Slidev layout (default: 'default')
             renumber: If True, renumber all slides after insertion to be sequential
         """
-        # Validate preconditions
-        slides = self.validate_preconditions('add', position)
+        # Parse slides first to find position
+        slides = self.parse_slides_md()
 
-        # Determine the slide number for the new slide
-        if renumber or not slides:
-            # If renumbering, use position as slide number
-            new_slide_num = position
+        if not slides:
+            # Empty presentation, add as first slide
+            target_position = 1
         else:
-            # If not renumbering, find a suitable slide number
-            # Insert at position, use a number that fits
-            if position == 1:
-                # Insert at beginning
-                new_slide_num = slides[0].number if slides else 1
-            elif position > len(slides):
-                # Insert at end
-                new_slide_num = slides[-1].number + 1 if slides else 1
-            else:
-                # Insert in middle - use next available number after previous slide
-                prev_slide_num = slides[position - 2].number if position > 1 else 0
-                next_slide_num = slides[position - 1].number
+            # Find where to insert based on slide number
+            target_position = None
+            for i, slide in enumerate(slides):
+                if slide.number >= slide_number:
+                    target_position = i + 1  # Insert before this slide
+                    break
 
-                # Find gap or use next number
-                if next_slide_num - prev_slide_num > 1:
-                    new_slide_num = prev_slide_num + 1
-                else:
-                    new_slide_num = next_slide_num
+            if target_position is None:
+                # Insert at end
+                target_position = len(slides) + 1
+
+        # Validate preconditions
+        slides = self.validate_preconditions('add', target_position)
+
+        # Use the requested slide number
+        new_slide_num = slide_number
 
         slug = self.generate_slug(title)
         new_filename = f"{new_slide_num:02d}-{slug}.md"
         new_filepath = self.slides_dir / new_filename
 
-        print(f"Adding slide at position {position}")
-        print(f"  Slide number: {new_slide_num}")
+        print(f"Adding Slide {slide_number} at position {target_position}")
         print(f"  Title: {title}")
         print(f"  File: slides/{new_filename}")
         print(f"  Layout: {layout}")
@@ -509,13 +537,18 @@ Presenter notes
 
             # Insert new slide into list
             new_slide = Slide(number=new_slide_num, src=f"slides/{new_filename}", title=title)
-            slides.insert(position - 1, new_slide)
+            slides.insert(target_position - 1, new_slide)
 
             if renumber:
-                # Renumber ALL slides to be sequential (1, 2, 3, ...)
-                print("\nRenumbering all slides to be sequential...")
+                # Renumber slides sequentially, preserving gap at beginning
+                # Slide 1 = title (frontmatter), first file = 02-
+                print("\nRenumbering all slides sequentially (preserving slide 1 gap)...")
+
+                # First slide file should always be 02- (after title which is slide 1)
+                first_file_num = 2
+
                 for i, slide in enumerate(slides):
-                    new_num = i + 1
+                    new_num = first_file_num + i
                     old_path = self.slides_md.parent / slide.src
 
                     # Parse old filename
@@ -547,7 +580,7 @@ Presenter notes
             if self.backup_file:
                 self.backup_file.unlink()
 
-            print(f"\n✓ Successfully added slide at position {position}")
+            print(f"\n✓ Successfully added Slide {slide_number} at position {target_position}")
             if renumber:
                 print(f"✓ Renumbered all slides sequentially")
             else:
@@ -559,6 +592,145 @@ Presenter notes
 
         except Exception as e:
             print(f"Error during addition: {e}", file=sys.stderr)
+            self.rollback()
+            sys.exit(ExitCode.GENERAL_ERROR)
+
+    def move_slide(self, from_slide_number: int, after_slide_number: int):
+        """
+        Move slide to position after specified slide number
+
+        Args:
+            from_slide_number: Slide number to move (from <!-- Slide N: ... --> comment)
+            after_slide_number: Slide number to place FROM slide after
+                               Example: from=6, after=3 → slide 6 becomes new slide 4
+
+        Example:
+            Current: Slide 2, 3, 4, 5, 6, 7
+            move_slide(6, 3)
+            Result:  Slide 2, 3, 4, 5, 6, 7 (renumbered: old 2,3,6,4,5,7 → new 2,3,4,5,6,7)
+        """
+        # 1. Parse slides
+        slides = self.parse_slides_md()
+
+        if not slides:
+            print("Error: No slides found in slides.md", file=sys.stderr)
+            sys.exit(ExitCode.SLIDE_NOT_FOUND)
+
+        # 2. Find FROM slide
+        from_slide = None
+        from_position = None
+        for i, slide in enumerate(slides):
+            if slide.number == from_slide_number:
+                from_slide = slide
+                from_position = i + 1  # 1-indexed
+                break
+
+        if not from_slide:
+            print(f"Error: Slide {from_slide_number} not found", file=sys.stderr)
+            print(f"Available slides: {[s.number for s in slides]}", file=sys.stderr)
+            sys.exit(ExitCode.SLIDE_NOT_FOUND)
+
+        # 3. Validate FROM slide is not slide 1
+        if from_slide_number == 1:
+            print("Error: Cannot move slide 1 (title from frontmatter)", file=sys.stderr)
+            sys.exit(ExitCode.INVALID_ARGS)
+
+        # 4. Find AFTER slide position
+        after_position = None
+        if after_slide_number == 1:
+            # Move to beginning (becomes slide 2)
+            after_position = 0
+        else:
+            for i, slide in enumerate(slides):
+                if slide.number == after_slide_number:
+                    after_position = i + 1  # 1-indexed
+                    break
+
+            if after_position is None:
+                print(f"Error: Target slide {after_slide_number} not found", file=sys.stderr)
+                print(f"Available slides: {[s.number for s in slides]}", file=sys.stderr)
+                sys.exit(ExitCode.SLIDE_NOT_FOUND)
+
+        # 5. Validate move makes sense
+        if from_slide_number == after_slide_number:
+            print(f"Error: Cannot move slide {from_slide_number} after itself", file=sys.stderr)
+            sys.exit(ExitCode.INVALID_ARGS)
+
+        # Check if already in position (from is immediately after target)
+        if from_position == after_position + 1:
+            print(f"Slide {from_slide_number} is already after slide {after_slide_number}")
+            print("No changes needed.")
+            return
+
+        # 6. Preview move
+        print(f"Moving Slide {from_slide_number} to position after Slide {after_slide_number}")
+        print(f"  Title: {from_slide.title}")
+        print(f"  File: {from_slide.src}")
+        print(f"  Current position: {from_position}")
+        print(f"  New position: {after_position + 1}")
+
+        # 7. Backup state
+        self.backup_state()
+
+        try:
+            # 8. Remove slide from current position
+            slides.pop(from_position - 1)
+
+            # 9. Calculate insert position (adjust if moving forward)
+            if from_position < after_position:
+                # Removed from earlier, so target position shifted back by 1
+                insert_index = after_position - 1
+            else:
+                # Moving backward, insert position stays same
+                insert_index = after_position
+
+            # 10. Insert at new position
+            slides.insert(insert_index, from_slide)
+
+            # 11. Renumber all slides sequentially (always for move)
+            print("\nRenumbering all slides sequentially (preserving slide 1 gap)...")
+
+            # First slide file should always be 02- (after title which is slide 1)
+            first_file_num = 2
+
+            for i, slide in enumerate(slides):
+                new_num = first_file_num + i
+                old_path = self.slides_md.parent / slide.src
+
+                # Parse old filename
+                match = re.match(r'slides/(\d+)-(.+)\.md', slide.src)
+                if not match:
+                    raise Exception(f"Invalid filename format: {slide.src}")
+
+                old_num = int(match.group(1))
+                slug = match.group(2)
+
+                if old_num != new_num:
+                    new_filename = f"{new_num:02d}-{slug}.md"
+                    new_path = self.slides_dir / new_filename
+
+                    print(f"  {old_path.name} -> {new_path.name}")
+                    self.move_file(old_path, new_path)
+
+                    # Update slide object
+                    slide.number = new_num
+                    slide.src = f"slides/{new_filename}"
+
+            # 12. Rebuild slides.md
+            self.rebuild_slides_md(slides)
+
+            # 13. Verify postconditions (no gaps after renumbering)
+            self.verify_postconditions(len(slides), allow_gaps=False)
+
+            # 14. Cleanup backup
+            if self.backup_file:
+                self.backup_file.unlink()
+
+            print(f"\n✓ Successfully moved slide {from_slide_number} to position after {after_slide_number}")
+            print(f"✓ Renumbered all slides sequentially")
+
+        except Exception as e:
+            print(f"Error during move: {e}", file=sys.stderr)
             self.rollback()
             sys.exit(ExitCode.GENERAL_ERROR)
 
@@ -669,33 +841,41 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  Delete slide 5 (leaves gaps):
+  Delete slide 5 (by slide number, leaves gaps):
     python manage-slides.py delete 5
 
-  Delete slide 5 and renumber all slides:
+  Delete slide 5 and renumber all slides sequentially:
     python manage-slides.py delete 5 --renumber
 
-  Add slide at position 3:
+  Add new slide as slide 3 (slides 3+ shift forward):
     python manage-slides.py add 3 --title "Architecture Overview"
 
-  Add slide with custom layout and renumber:
+  Add slide with custom layout and renumber all:
     python manage-slides.py add 7 --title "Code Example" --layout two-cols --renumber
+
+  Move slide 6 to position after slide 3 (becomes slide 4):
+    python manage-slides.py move 6 --after 3
+
+  Move slide 4 to beginning (after title, becomes slide 2):
+    python manage-slides.py move 4 --after 1
 
   Fix all gaps in slide numbering:
     python manage-slides.py renumber
+
+Note: Arguments are SLIDE NUMBERS (from <!-- Slide N: ... -->), not list positions
         """
     )
 
     parser.add_argument(
         'operation',
-        choices=['add', 'delete', 'renumber'],
+        choices=['add', 'delete', 'move', 'renumber'],
         help='Operation to perform'
     )
     parser.add_argument(
-        'position',
+        'slide_number',
         type=int,
         nargs='?',
-        help='Slide position (1-indexed, not required for renumber operation)'
+        help='Slide number (from <!-- Slide N: ... --> comment, not required for renumber)'
     )
     parser.add_argument(
         '--title',
@@ -711,6 +891,11 @@ Examples:
         action='store_true',
         help='Renumber all slides after operation to close gaps (for add/delete)'
     )
+    parser.add_argument(
+        '--after',
+        type=int,
+        help='Target slide number to move after (required for move operation)'
+    )
 
     args = parser.parse_args()
 
@@ -718,11 +903,17 @@ Examples:
     if args.operation == 'add' and not args.title:
         parser.error("--title is required for add operation")
 
-    if args.operation in ['add', 'delete'] and args.position is None:
-        parser.error(f"position is required for {args.operation} operation")
+    if args.operation in ['add', 'delete'] and args.slide_number is None:
+        parser.error(f"slide_number is required for {args.operation} operation")
 
-    if args.operation == 'renumber' and args.position is not None:
-        parser.error("position is not used for renumber operation")
+    if args.operation == 'renumber' and args.slide_number is not None:
+        parser.error("slide_number is not used for renumber operation")
+
+    if args.operation == 'move':
+        if args.slide_number is None:
+            parser.error("slide_number is required for move operation")
+        if args.after is None:
+            parser.error("--after is required for move operation")
 
     # Find slides.md
     slides_md = Path.cwd() / 'slides.md'
@@ -735,9 +926,11 @@ Examples:
     manager = SlideManager(slides_md)
 
     if args.operation == 'delete':
-        manager.delete_slide(args.position, renumber=args.renumber)
+        manager.delete_slide(args.slide_number, renumber=args.renumber)
     elif args.operation == 'add':
-        manager.add_slide(args.position, args.title, args.layout, renumber=args.renumber)
+        manager.add_slide(args.slide_number, args.title, args.layout, renumber=args.renumber)
+    elif args.operation == 'move':
+        manager.move_slide(args.slide_number, args.after)
     elif args.operation == 'renumber':
         manager.renumber_all()
 

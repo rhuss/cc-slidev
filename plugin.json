@@ -1,7 +1,7 @@
 {
   "name": "slidev",
   "version": "0.1.0",
-  "description": "Create developer-focused technical presentations using Slidev with enforced evidence-based design guardrails. Modular slide structure, multi-platform diagrams (Mermaid, PlantUML, Excalidraw), and complete workflow from brainstorming to LaTeX handouts. Hard limits: ≤6 elements, <50 words, 18pt+ fonts, colorblind-safe colors.",
+  "description": "Create developer-focused technical presentations using Slidev with enforced evidence-based design guardrails. Modular slide structure, multi-platform diagrams (Mermaid, PlantUML, Excalidraw), and complete workflow from framing to LaTeX handouts. Hard limits: ≤6 elements, <50 words, 18pt+ fonts, colorblind-safe colors.",
   "author": {
     "name": "Roland Huss",
     "email": "cc-slidev@ro14nd.de"
@@ -36,13 +36,8 @@
     },
     {
       "name": "init",
-      "description": "Initialize new presentation project (orchestrates: brainstorm → frame → outline → generate → enhance → notes → handout)",
+      "description": "Initialize new presentation project (orchestrates: frame → brainstorm → outline → generate → enhance → notes → handout)",
       "file": "commands/init.md"
-    },
-    {
-      "name": "create",
-      "description": "[DEPRECATED: Use /slidev:init] End-to-end workflow orchestrator",
-      "file": "commands/create.md"
     },
     {
       "name": "diagram",
@@ -55,9 +50,24 @@
       "file": "commands/edit.md"
     },
     {
-      "name": "enhance-visuals",
+      "name": "add",
+      "description": "Insert new empty slide at specified position with automatic renumbering",
+      "file": "commands/add.md"
+    },
+    {
+      "name": "delete",
+      "description": "Delete slide at specified position with automatic renumbering",
+      "file": "commands/delete.md"
+    },
+    {
+      "name": "move",
+      "description": "Move slide to new position with automatic renumbering (syntax: /slidev:move <from> --after <to>)",
+      "file": "commands/move.md"
+    },
+    {
+      "name": "visuals",
       "description": "Add multi-platform diagrams (Mermaid, PlantUML, Excalidraw), stock photos, and AI image prompts to slides",
-      "file": "commands/enhance-visuals.md"
+      "file": "commands/visuals.md"
     },
     {
       "name": "export",
@@ -103,11 +113,6 @@
       "name": "redraw-diagrams",
       "description": "Extract inline diagrams and regenerate in all platforms (Mermaid, PlantUML, Excalidraw)",
       "file": "commands/redraw-diagrams.md"
-    },
-    {
-      "name": "manage-slides",
-      "description": "Add or delete slides with automatic renumbering (invokes Slide Management skill)",
-      "file": "commands/manage-slides.md"
     }
   ],
   "skills": [
@@ -143,15 +148,21 @@
     },
     {
       "name": "Slide Management",
-      "description": "Delete, remove, add, or insert slides with automatic renumbering and git-aware operations. Detects and fixes gaps in slide numbering (preserves beginning gaps like title→content). Correctly handles position vs slide number distinction. Use instead of manually editing slides.md or renaming files.",
+      "description": "Add, delete, move, or renumber slides with automatic renumbering and git-aware operations. Detects and fixes gaps in slide numbering (preserves beginning gaps like title→content). Correctly handles position vs slide number distinction. Use instead of manually editing slides.md or renaming files.",
       "file": "skills/slide-management/SKILL.md",
-      "version": "0.3.0"
+      "version": "0.4.0"
     },
     {
       "name": "Excalidraw Generation",
       "description": "This skill should be used when the user asks to \"create excalidraw diagram\", \"generate excalidraw\", \"hand-drawn diagram\", \"sketch diagram\", \"whiteboard style diagram\", or when informal, spatial, annotated diagrams would best convey conceptual relationships. Expert in both presentation design AND artistic Excalidraw JSON creation.",
       "file": "skills/excalidraw-generation/SKILL.md",
       "version": "1.0.0"
+    },
+    {
+      "name": "Diagram Design Philosophy",
+      "description": "Multi-platform diagram design using semantic thinking - Mermaid for flow, PlantUML for architecture, Excalidraw for sketching. Design platform-specific diagrams instead of mechanical conversions.",
+      "file": "skills/diagram-design/SKILL.md",
+      "version": "0.1.0"
     }
   ],
   "agents": [

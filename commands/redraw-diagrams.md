@@ -10,6 +10,12 @@ Extract inline diagrams from slides and **semantically redesign** them for each 
 
 **Philosophy:** Each diagram platform (Mermaid, PlantUML, Excalidraw) has unique visual paradigms. This command analyzes the slide's semantic content and existing diagrams, then **redesigns** diagrams to leverage each platform's specific capabilities.
 
+**CRITICAL - Excalidraw Rule**: NEVER embed Excalidraw JSON in markdown files. Always:
+1. Write JSON to `diagrams/<slug>.excalidraw`
+2. Convert to SVG using `render-excalidraw.sh`
+3. Put SVG in `public/images/<slug>/diagram-excalidraw.svg`
+4. Reference only the SVG image in markdown
+
 **Use Cases:**
 - Redesign existing diagrams to better utilize platform features
 - Create platform-specific versions that aren't just conversions
@@ -173,23 +179,25 @@ EOF
 
 **Step 4: Generate all formats**
 
+**CRITICAL: ALL sources go to top-level `./diagrams/`, renders to `./public/images/<slug>/`**
+
 ```bash
 SLIDE_TITLE="Slide N: [Title]"
 SLUG=$(${CLAUDE_PLUGIN_ROOT}/scripts/create-diagram-slug.sh "$SLIDE_TITLE" N)
 
-# Create directories
-mkdir -p "diagrams"
-mkdir -p "public/images/$SLUG"
+# Create directories (sources at top-level)
+mkdir -p "./diagrams"
+mkdir -p "./public/images/$SLUG"
 
-# Save all platform sources to diagrams/
-cp /tmp/diagram-mermaid.mmd "diagrams/$SLUG.mmd"
-cp /tmp/diagram-plantuml.puml "diagrams/$SLUG.puml"
-cp /tmp/diagram-excalidraw.excalidraw "diagrams/$SLUG.excalidraw"
+# Save all platform sources to top-level diagrams/
+cp /tmp/diagram-mermaid.mmd "./diagrams/$SLUG.mmd"
+cp /tmp/diagram-plantuml.puml "./diagrams/$SLUG.puml"
+cp /tmp/diagram-excalidraw.excalidraw "./diagrams/$SLUG.excalidraw"
 
-# Render each to public/images/
-${CLAUDE_PLUGIN_ROOT}/scripts/render-mermaid.sh "diagrams/$SLUG.mmd" "public/images/$SLUG/diagram.svg" "svg"
-${CLAUDE_PLUGIN_ROOT}/scripts/render-plantuml.sh "diagrams/$SLUG.puml" "public/images/$SLUG/diagram-plantuml.svg" "svg"
-${CLAUDE_PLUGIN_ROOT}/scripts/render-excalidraw.sh "diagrams/$SLUG.excalidraw" "public/images/$SLUG/diagram-excalidraw.svg"
+# Render each to public/images/<slug>/
+${CLAUDE_PLUGIN_ROOT}/scripts/render-mermaid.sh "./diagrams/$SLUG.mmd" "./public/images/$SLUG/diagram.svg" "svg"
+${CLAUDE_PLUGIN_ROOT}/scripts/render-plantuml.sh "./diagrams/$SLUG.puml" "./public/images/$SLUG/diagram-plantuml.svg" "svg"
+${CLAUDE_PLUGIN_ROOT}/scripts/render-excalidraw.sh "./diagrams/$SLUG.excalidraw" "./public/images/$SLUG/diagram-excalidraw.svg"
 ```
 
 **Step 5: Track progress and explain redesigns**
@@ -322,14 +330,14 @@ Not lowest-common-denominator conversions!
 - **Export:** Use platform-specific images in docs, reports, architecture diagrams
 
 **Documentation:**
-See `docs/semantic-diagram-design.md` for philosophy and examples.
+See the `Diagram Design Philosophy` skill for philosophy and examples.
 ```
 
 ## Error Handling
 
 **No diagrams found:**
 - Inform user
-- Suggest running `/slides:enhance-visuals` to add diagrams
+- Suggest running `/slidev:visuals` to add diagrams
 
 **Extraction fails:**
 - Show problematic slide

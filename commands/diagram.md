@@ -20,6 +20,11 @@ Focus on creating diagrams for a specific slide with **multi-platform support** 
 - **Rendered images** (`.svg`, `.png`) → Save to `./public/images/<slide-title>/`
 - This keeps sources version-controlled separately from generated outputs
 
+**CRITICAL - Embedding Rules:**
+- **Mermaid**: CAN be embedded inline in markdown (Slidev renders it)
+- **PlantUML**: NEVER embed - only reference rendered SVG images
+- **Excalidraw**: NEVER embed - only reference rendered SVG images
+
 ### 1. Parse Slide Number
 
 Extract from `$ARGUMENTS`:
@@ -73,12 +78,24 @@ Analyze slide content to determine which platform best conveys the concept:
 
 **If Excalidraw is best fit:**
 
-Invoke the Excalidraw Generation skill using Skill tool:
-```
-skill: "slidev:excalidraw-generation"
-```
+**CRITICAL: Excalidraw Workflow (NEVER embed JSON in markdown)**
 
-The skill will take over the generation process with semantic redesign approach.
+1. Invoke the Excalidraw Generation skill using Skill tool:
+   ```
+   skill: "slidev:excalidraw-generation"
+   ```
+
+2. The skill will:
+   - Create Excalidraw JSON at `diagrams/<slug>.excalidraw`
+   - Render to SVG at `public/images/<slug>/diagram-excalidraw.svg`
+   - **NOT embed JSON in markdown**
+
+3. Add SVG image reference to slide (NOT the JSON):
+   ```markdown
+   ![Diagram](./public/images/<slug>/diagram-excalidraw.svg)
+   ```
+
+The skill takes over the complete generation process with semantic redesign approach.
 
 **If Mermaid/PlantUML is best fit, continue below:**
 
@@ -249,16 +266,18 @@ This automatically:
 
 **Directory Structure:**
 ```
-diagrams/
-  ├── <slide-title>.mmd          # Mermaid source
-  ├── <slide-title>.puml         # PlantUML source
-  └── <slide-title>.excalidraw   # Excalidraw JSON source
+diagrams/                            # ALL sources (top-level, version controlled)
+  ├── <slug>.mmd                     # Mermaid source
+  ├── <slug>.puml                    # PlantUML source
+  └── <slug>.excalidraw              # Excalidraw JSON source
 
-public/images/<slide-title>/
-  ├── diagram.svg                # Mermaid rendered
-  ├── diagram-plantuml.svg       # PlantUML rendered
-  └── diagram-excalidraw.svg     # Excalidraw rendered
+public/images/<slug>/                # Rendered images only
+  ├── diagram.svg                    # Mermaid rendered
+  ├── diagram-plantuml.svg           # PlantUML rendered
+  └── diagram-excalidraw.svg         # Excalidraw rendered
 ```
+
+**NO EXCEPTIONS**: Sources ALWAYS go in `./diagrams/`, renders go in `./public/images/<slug>/`
 
 **Step 3: Embed Mermaid inline in slide (default)**
 Add diagram directly to slide:
