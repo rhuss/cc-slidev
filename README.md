@@ -318,31 +318,31 @@ Generic presentation tools fail developers because:
 ### Developer Features
 
 **Code Syntax Highlighting:**
-```markdown
-\`\`\`python {2-3}
+````markdown
+```python {2-3}
 def process():
     important_line()      # Highlighted
     another_important()   # Highlighted
     return result
-\`\`\`
 ```
+````
 
 **Live Coding (Monaco Editor):**
-```markdown
-\`\`\`python {monaco}
+````markdown
+```python {monaco}
 def editable():
     return "Users can edit this code live"
-\`\`\`
 ```
+````
 
 **Mermaid Diagrams:**
-```markdown
-\`\`\`mermaid
+````markdown
+```mermaid
 graph TD
     A[Client] --> B[API Server]
     B --> C[Database]
-\`\`\`
 ```
+````
 
 **Multi-Platform Diagrams:**
 The plugin auto-generates equivalent diagrams in:
