@@ -138,7 +138,7 @@ src: ./slides/05-descriptive-name.md
 - ✅ `default.json` - Multi-platform diagram configuration
 
 ### Documentation
-- ✅ `docs/multi-platform-diagrams.md` - Comprehensive usage guide
+- ✅ `skills/diagram-design/SKILL.md` - Comprehensive design philosophy
 - ✅ `tests/test-diagram-workflow.md` - Test procedures
 - ✅ `tests/workflow-verification.md` - This report
 

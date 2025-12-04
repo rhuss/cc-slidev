@@ -6,6 +6,10 @@
  * - Mermaid → PlantUML (flowcharts, sequence diagrams)
  * - Mermaid → Excalidraw JSON (basic shapes and flows)
  *
+ * IMPORTANT: This script only creates .excalidraw JSON files.
+ * To render Excalidraw JSON to SVG, ALWAYS use render-excalidraw.sh:
+ *   ${CLAUDE_PLUGIN_ROOT}/scripts/render-excalidraw.sh diagram.excalidraw diagram.svg
+ *
  * Usage: node translate-diagram.js <input-format> <output-format> <input-file> <output-file>
  *
  * Examples:

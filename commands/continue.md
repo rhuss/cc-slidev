@@ -149,7 +149,7 @@ Based on the current state, here are recommended actions:
 ### Option 2: Complete Visual Enhancement
 - [N] slides marked for visual enhancement
 - [M] visual placeholders to fill
-**Action:** Run `/slides:enhance-visuals` to add diagrams and images
+**Action:** Run `/slidev:visuals` to add diagrams and images
 
 ### Option 3: Add Presenter Notes
 - [Z] slides missing comprehensive notes
@@ -200,7 +200,7 @@ options:
 
 Based on user choice:
 - **Fix critical issues**: Use Task tool to systematically fix violations
-- **Enhance visuals**: Invoke `/slides:enhance-visuals` command
+- **Enhance visuals**: Invoke `/slidev:visuals` command
 - **Add notes**: Invoke `/slides:notes` command
 - **Generate handout**: Invoke `/slides:handout` command
 - **Edit slide**: Ask for slide number, then invoke `/slidev:edit [N]`

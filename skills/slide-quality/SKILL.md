@@ -8,7 +8,13 @@ version: 0.1.0
 
 Evaluate presentation slides using evidence-based quality criteria grounded in cognitive load research, accessibility standards, and presentation best practices from TED, MIT Communication Lab, and technical conference guidelines.
 
-**Research Foundation**: Quality assessment based on working memory limits (Miller's Law), David JP Phillips' cognitive load studies, WCAG accessibility standards, and analysis of effective technical presentations. See `references/presentation-best-practices.md` for detailed citations.
+**Research Foundation**: Quality assessment based on working memory limits (Miller's Law), David JP Phillips' cognitive load studies, WCAG accessibility standards, and analysis of effective technical presentations.
+
+**IMPORTANT**: Before analyzing slides, use the Read tool to load the style guide from the plugin directory:
+```
+${CLAUDE_PLUGIN_ROOT}/references/presentation-best-practices.md
+```
+This contains the complete research-backed guidelines and validation criteria supporting the 12-point checklist.
 
 ## The 12-Point Quality Checklist
 

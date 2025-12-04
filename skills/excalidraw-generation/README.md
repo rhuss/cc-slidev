@@ -208,7 +208,7 @@ Expected output:
 ### With Commands
 
 - **`/slidev:diagram`**: Primary integration point
-- **`/slidev:enhance-visuals`**: Can suggest Excalidraw for visual enhancement
+- **`/slidev:visuals`**: Can suggest Excalidraw for visual enhancement
 - **`/slidev:edit`**: Can edit slides containing Excalidraw diagrams
 
 ## Next Phases (Future Work)
@@ -231,9 +231,9 @@ Expected output:
 - Fill style variations
 - Roughness customization
 
-### Phase 5: Full Integration
-- Rendering script integration
-- Multi-platform diagram workflow
+### Phase 5: Full Integration ✅
+- ✅ Rendering script integration (render-excalidraw.sh with excalidraw-brute-export-cli)
+- ✅ Multi-platform diagram workflow
 - Progressive disclosure support
 - Template library
 
@@ -319,12 +319,18 @@ All text elements use `fontFamily: 1` which maps to Excalidraw's hand-drawn Exca
 - **fontFamily: 2** → Helvetica (clean, modern)
 - **fontFamily: 3** → Cascadia (monospace, code)
 
-**SVG Rendering**: When rendering Excalidraw JSON to SVG, use the font-family specification:
-```css
-font-family: 'Excalifont', 'Virgil', cursive, sans-serif
+**SVG Rendering**: ALWAYS use `render-excalidraw.sh` to convert Excalidraw JSON to SVG:
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/render-excalidraw.sh diagram.excalidraw diagram.svg
 ```
 
-This ensures proper hand-drawn font rendering with fallbacks for the authentic Excalidraw aesthetic.
+The script automatically:
+- Installs `excalidraw-brute-export-cli` if missing
+- Installs `playwright chromium` dependencies
+- Renders with correct parameters
+- Ensures proper hand-drawn font rendering: `'Excalifont', 'Virgil', cursive, sans-serif`
+
+**DO NOT** attempt manual SVG rendering. Always use the script.
 
 ## Resources
 

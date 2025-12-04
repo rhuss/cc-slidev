@@ -1,5 +1,5 @@
 ---
-name: slidev:enhance-visuals
+name: slidev:visuals
 description: Comprehensive visual enhancement for all slides
 allowed-tools: ["Read", "Edit", "Bash", "WebSearch", "Task", "Skill"]
 skills: ["slidev:presentation-design"]
@@ -12,6 +12,12 @@ Analyze all slides and provide interactive visual enhancement with **multi-platf
 **Evidence Base**: Visual enhancements follow research-based principles for cognitive load, accessibility, and effective communication. See `references/presentation-best-practices.md` for guidelines.
 
 **Multi-Platform**: All diagrams are automatically generated in enabled formats (Mermaid + PlantUML + Excalidraw). Mermaid embedded inline, alternatives saved in organized directories for flexibility.
+
+**CRITICAL - Excalidraw Rule**: NEVER embed Excalidraw JSON in markdown files. Always:
+1. Write JSON to `diagrams/<slug>.excalidraw`
+2. Convert to SVG using `render-excalidraw.sh`
+3. Put SVG in `public/images/<slug>/diagram-excalidraw.svg`
+4. Include only the SVG image reference in markdown
 
 ## Execution
 
@@ -345,21 +351,24 @@ Content here
 
 #### **Option 3: Excalidraw Diagram (Semantic Design)**
 
-1. Design Excalidraw diagram emphasizing spatial relationships and informal style
-2. Create Excalidraw JSON with semantic layout:
-   - Position elements to show conceptual relationships
-   - Use grouping containers for context
-   - Add annotations and callouts
-   - Hand-drawn style for approachability
+**IMPORTANT: Never embed Excalidraw JSON in markdown - only reference the rendered SVG**
 
-3. Generate Excalidraw source:
-   ```bash
-   # Create semantic Excalidraw design
-   ${CLAUDE_PLUGIN_ROOT}/scripts/create-excalidraw-diagram.sh \
-     "[Slide Title]" \
-     "[Design description]" \
-     "."
+1. Design Excalidraw diagram emphasizing spatial relationships and informal style
+2. **Use Excalidraw Generation skill** to create JSON:
    ```
+   Use Skill tool with: skill: "slidev:excalidraw-generation"
+
+   Provide the skill with:
+   - Slide title: [Title]
+   - Concept description: [What to visualize]
+   - Design constraints from slide content
+   ```
+
+3. The skill will:
+   - Create semantic Excalidraw JSON at `diagrams/<slug>.excalidraw`
+   - Render to SVG at `public/images/<slug>/diagram-excalidraw.svg`
+   - Follow cognitive load limits (≤9 elements)
+   - Use colorblind-safe palette
 
 4. Inform user:
    ```
@@ -371,7 +380,9 @@ Content here
    1. Open https://excalidraw.com
    2. Load diagrams/<slug>.excalidraw
    3. Adjust positioning, add annotations
-   4. Export as needed
+   4. Re-render: ${CLAUDE_PLUGIN_ROOT}/scripts/render-excalidraw.sh \
+                    diagrams/<slug>.excalidraw \
+                    public/images/<slug>/diagram-excalidraw.svg
    ```
 
 5. Add reference to slide:
