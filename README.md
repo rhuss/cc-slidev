@@ -15,8 +15,8 @@ A Claude Code plugin for creating technical presentations powered by **[Slidev](
 
 See real-world technical presentations created with this plugin, including source code and PDF exports:
 
-- **[GPUs on Kubernetes Unlocked](https://github.com/ro14nd-talks/gpus-on-kubernetes-unlocked)** - Technical deep-dive on GPU scheduling ([PDF](https://github.com/ro14nd-talks/gpus-on-kubernetes-unlocked/blob/main/exports/slides.pdf))
-- **[Lifting LLMs on K8s](https://github.com/ro14nd-talks/lifting-llms-on-k8s)** - Running large language models on Kubernetes ([PDF](https://github.com/ro14nd-talks/lifting-llms-on-k8s/blob/main/exports/slides.pdf))
+- **[GPUs on Kubernetes Unlocked](https://github.com/ro14nd-talks/gpus-on-kubernetes-unlocked)** - Technical deep-dive on GPU scheduling ([PDF](https://github.com/ro14nd-talks/gpus-on-kubernetes-unlocked/blob/main/exports/GPUs%20on%20Kubernetes%20Unlocked.pdf))
+- **[Lifting LLMs on K8s](https://github.com/ro14nd-talks/lifting-llms-on-k8s)** - Running large language models on Kubernetes ([PDF](https://github.com/ro14nd-talks/lifting-llms-on-k8s/blob/main/exports/Lifting%20Large%20Language%20Models%20on%20Kubernetes.pdf))
 
 ### Built on Slidev
 
