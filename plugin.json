@@ -24,161 +24,37 @@
   ],
   "license": "MIT",
   "commands": [
-    {
-      "name": "brainstorm",
-      "description": "Interactive brainstorming with web research and CfP analysis",
-      "file": "commands/brainstorm.md"
-    },
-    {
-      "name": "frame",
-      "description": "Define presentation scope, duration, and slide count targets",
-      "file": "commands/frame.md"
-    },
-    {
-      "name": "init",
-      "description": "Initialize new presentation project (orchestrates: frame → brainstorm → outline → generate → enhance → notes → handout)",
-      "file": "commands/init.md"
-    },
-    {
-      "name": "diagram",
-      "description": "Create multi-platform diagrams (Mermaid, PlantUML, Excalidraw) for specific slide with automatic translation",
-      "file": "commands/diagram.md"
-    },
-    {
-      "name": "edit",
-      "description": "Edit a specific slide with table of contents context",
-      "file": "commands/edit.md"
-    },
-    {
-      "name": "add",
-      "description": "Insert new empty slide at specified position with automatic renumbering",
-      "file": "commands/add.md"
-    },
-    {
-      "name": "delete",
-      "description": "Delete slide at specified position with automatic renumbering",
-      "file": "commands/delete.md"
-    },
-    {
-      "name": "move",
-      "description": "Move slide to new position with automatic renumbering (syntax: /slidev:move <from> --after <to>)",
-      "file": "commands/move.md"
-    },
-    {
-      "name": "visuals",
-      "description": "Add multi-platform diagrams (Mermaid, PlantUML, Excalidraw), stock photos, and AI image prompts to slides",
-      "file": "commands/visuals.md"
-    },
-    {
-      "name": "export",
-      "description": "Export presentation to PDF, PPTX, or other formats",
-      "file": "commands/export.md"
-    },
-    {
-      "name": "handout",
-      "description": "Generate LaTeX handout with slide images, prose explanations, and research links",
-      "file": "commands/handout.md"
-    },
-    {
-      "name": "notes",
-      "description": "Generate or enhance presenter notes for all slides",
-      "file": "commands/notes.md"
-    },
-    {
-      "name": "outline",
-      "description": "Create or revise presentation outline from brainstorming notes",
-      "file": "commands/outline.md"
-    },
-    {
-      "name": "extract-outline",
-      "description": "Extract structured outline from existing slides (reverse engineering)",
-      "file": "commands/extract-outline.md"
-    },
-    {
-      "name": "preview",
-      "description": "Start Slidev dev server to preview presentation",
-      "file": "commands/preview.md"
-    },
-    {
-      "name": "generate",
-      "description": "Generate clean, accessible Slidev slides from outline (enforces ≤6 elements, <50 words)",
-      "file": "commands/generate.md"
-    },
-    {
-      "name": "continue",
-      "description": "Resume work on an existing presentation with context and next steps",
-      "file": "commands/continue.md"
-    },
-    {
-      "name": "redraw-diagrams",
-      "description": "Extract inline diagrams and regenerate in all platforms (Mermaid, PlantUML, Excalidraw)",
-      "file": "commands/redraw-diagrams.md"
-    }
+    "./commands/brainstorm.md",
+    "./commands/frame.md",
+    "./commands/init.md",
+    "./commands/diagram.md",
+    "./commands/edit.md",
+    "./commands/add.md",
+    "./commands/delete.md",
+    "./commands/move.md",
+    "./commands/visuals.md",
+    "./commands/export.md",
+    "./commands/handout.md",
+    "./commands/notes.md",
+    "./commands/outline.md",
+    "./commands/extract-outline.md",
+    "./commands/preview.md",
+    "./commands/generate.md",
+    "./commands/continue.md",
+    "./commands/redraw-diagrams.md"
   ],
   "skills": [
-    {
-      "name": "Presentation Design",
-      "description": "Research-backed presentation design principles, storytelling, visual hierarchy, and audience engagement strategies with hard limits to prevent overcrowded slides",
-      "file": "skills/presentation-design/SKILL.md",
-      "version": "0.2.0"
-    },
-    {
-      "name": "Slidev Mastery",
-      "description": "Comprehensive Slidev expertise for markdown-based presentations with layouts, animations, and accessibility features",
-      "file": "skills/slidev-mastery/SKILL.md",
-      "version": "0.2.0"
-    },
-    {
-      "name": "Visual Design",
-      "description": "Multi-platform diagrams (Mermaid, PlantUML, Excalidraw), colorblind-safe color palettes, stock photography, and AI image generation for presentations",
-      "file": "skills/visual-design/SKILL.md",
-      "version": "0.3.0"
-    },
-    {
-      "name": "LaTeX Handouts",
-      "description": "Professional LaTeX document creation for presentation handouts with slides, notes, and supplementary materials",
-      "file": "skills/latex-handouts/SKILL.md",
-      "version": "0.1.0"
-    },
-    {
-      "name": "Slide Quality Assessment",
-      "description": "Evidence-based slide quality evaluation using 12-point checklist (one idea per slide, meaningful title, ≤6 elements, <50 words, accessibility, cognitive load)",
-      "file": "skills/slide-quality/SKILL.md",
-      "version": "0.1.0"
-    },
-    {
-      "name": "Slide Management",
-      "description": "Add, delete, move, or renumber slides with automatic renumbering and git-aware operations. Detects and fixes gaps in slide numbering (preserves beginning gaps like title→content). Correctly handles position vs slide number distinction. Use instead of manually editing slides.md or renaming files.",
-      "file": "skills/slide-management/SKILL.md",
-      "version": "0.4.0"
-    },
-    {
-      "name": "Excalidraw Generation",
-      "description": "This skill should be used when the user asks to \"create excalidraw diagram\", \"generate excalidraw\", \"hand-drawn diagram\", \"sketch diagram\", \"whiteboard style diagram\", or when informal, spatial, annotated diagrams would best convey conceptual relationships. Expert in both presentation design AND artistic Excalidraw JSON creation.",
-      "file": "skills/excalidraw-generation/SKILL.md",
-      "version": "1.0.0"
-    },
-    {
-      "name": "Diagram Design Philosophy",
-      "description": "Multi-platform diagram design using semantic thinking - Mermaid for flow, PlantUML for architecture, Excalidraw for sketching. Design platform-specific diagrams instead of mechanical conversions.",
-      "file": "skills/diagram-design/SKILL.md",
-      "version": "0.1.0"
-    }
+    "./skills/presentation-design/SKILL.md",
+    "./skills/slidev-mastery/SKILL.md",
+    "./skills/visual-design/SKILL.md",
+    "./skills/latex-handouts/SKILL.md",
+    "./skills/slide-quality/SKILL.md",
+    "./skills/slide-management/SKILL.md",
+    "./skills/excalidraw-generation/SKILL.md",
+    "./skills/diagram-design/SKILL.md"
   ],
   "agents": [
-    {
-      "name": "outline-validator",
-      "description": "Validate presentation outline structure, flow, completeness, and time constraints (90s/slide default timing)",
-      "file": "agents/outline-validator.md",
-      "color": "yellow",
-      "model": "inherit"
-    },
-    {
-      "name": "visual-suggester",
-      "description": "Suggest visual enhancements (mermaid diagrams, stock photos, AI images) for slides based on content analysis",
-      "file": "agents/visual-suggester.md",
-      "color": "magenta",
-      "model": "inherit"
-    }
+    "./agents/outline-validator.md",
+    "./agents/visual-suggester.md"
   ]
 }
