@@ -91,12 +91,18 @@ End-to-end presentation creation:
 ## Installation
 
 ```bash
-# From local directory (development)
-cc --plugin-dir /path/to/slidev
+# Clone the repository
+git clone https://github.com/rhuss/cc-slidev.git
+cd cc-slidev
 
-# Or copy to plugin directory
-cp -r slidev ~/.claude-plugins/
+# Install plugin via Makefile
+make install
+
+# After making changes, reinstall
+make reinstall
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development workflow.
 
 ## Complete Workflow Example
 
@@ -420,13 +426,19 @@ Note: The script will auto-install these on first use if missing.
 
 ## Development
 
-### Testing
 ```bash
-cc --plugin-dir /path/to/slidev
+# Validate plugin manifests
+make validate
+
+# Install or reinstall
+make install
+make reinstall
 
 # Test workflow
 /slidev:init Test Presentation
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details and [ARCHITECTURE.md](ARCHITECTURE.md) for system design.
 
 ## License
 
@@ -440,7 +452,7 @@ MIT © Roland Huss
 
 ## Contributing
 
-This is a personal plugin, but feedback and suggestions are welcome! File issues or reach out via email.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and workflow. Feedback and suggestions are welcome via issues.
 
 ---
 

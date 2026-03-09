@@ -1,6 +1,6 @@
 # User-specific settings
 .claude/*.local.md
-.claude/
+.claude/settings.local.json
 
 # OS files
 .DS_Store
@@ -13,8 +13,17 @@ Thumbs.db
 *.swo
 *~
 
+# Python
+__pycache__/
+*.pyc
+
 # Node modules (if testing locally)
 node_modules/
+dist/
+.slidev/
 
-# Test presentations (optional)
+# Logs
+*.log
+
+# Test presentations
 test-presentations/

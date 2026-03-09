@@ -1,0 +1,27 @@
+{
+  "name": "slidev",
+  "version": "0.1.0",
+  "description": "Evidence-based presentation creation with Slidev, enforced design guardrails, and multi-platform diagrams",
+  "author": {
+    "name": "Roland Huss",
+    "email": "cc-slidev@ro14nd.de"
+  },
+  "keywords": [
+    "slidev",
+    "presentation",
+    "slides",
+    "latex",
+    "handout",
+    "mermaid",
+    "plantuml",
+    "excalidraw",
+    "diagrams",
+    "workflow",
+    "accessibility",
+    "design-enforcement"
+  ],
+  "license": "MIT",
+  "commands": "./commands",
+  "skills": "./skills",
+  "agents": "./agents"
+}

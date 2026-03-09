@@ -1,23 +1,15 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "schemaVersion": "1.0",
   "name": "slidev-dev-marketplace",
-  "version": "1.0.0",
-  "description": "Local development marketplace for slidev plugin",
   "owner": {
-    "name": "Roland Huss"
+    "name": "rhuss"
   },
   "plugins": [
     {
       "name": "slidev",
       "version": "0.1.0",
-      "description": "Evidence-based presentation creation workflow using Slidev - from brainstorming to handout generation. Features research-backed design principles, 11 interactive commands, 4 specialized skills, and 3 validation agents for creating professional, accessible presentations.",
-      "author": {
-        "name": "Roland Huss",
-        "email": "cc-slidev@ro14nd.de"
-      },
-      "source": "./",
-      "category": "productivity",
-      "license": "MIT"
+      "description": "Evidence-based presentation creation with Slidev, enforced design guardrails, and multi-platform diagrams",
+      "source": "./slidev"
     }
   ]
 }
