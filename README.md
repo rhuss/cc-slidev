@@ -90,8 +90,19 @@ End-to-end presentation creation:
 
 ## Installation
 
+**Via Marketplace (recommended):**
+
 ```bash
-# Clone the repository
+# Add the marketplace (once)
+/plugin marketplace add rhuss/cc-rhuss-marketplace
+
+# Install the plugin
+/plugin install slidev@cc-rhuss-marketplace
+```
+
+**From source:**
+
+```bash
 git clone https://github.com/rhuss/cc-slidev.git
 cd cc-slidev
 
