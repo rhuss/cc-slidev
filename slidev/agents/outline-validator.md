@@ -1,33 +1,34 @@
 ---
 name: outline-validator
-description: Use this agent when the user needs to validate presentation outline, asks to "check outline", "review presentation structure", "validate flow", "ensure completeness", "check if outline makes sense", or after creating an outline and before generating slides. Examples:
+description: |
+  Use this agent when the user needs to validate presentation outline, asks to "check outline", "review presentation structure", "validate flow", "ensure completeness", "check if outline makes sense", or after creating an outline and before generating slides. Examples:
 
-<example>
-Context: User has created presentation outline
-user: "Can you review my outline and make sure it's solid before I generate slides?"
-assistant: "I'll use the outline-validator agent to check your outline for logical flow, completeness, and time constraints."
-<commentary>
-Agent validates outline structure, checks for gaps, ensures logical progression, and verifies presentation fits target duration.
-</commentary>
-</example>
+  <example>
+  Context: User has created presentation outline
+  user: "Can you review my outline and make sure it's solid before I generate slides?"
+  assistant: "I'll use the outline-validator agent to check your outline for logical flow, completeness, and time constraints."
+  <commentary>
+  Agent validates outline structure, checks for gaps, ensures logical progression, and verifies presentation fits target duration.
+  </commentary>
+  </example>
 
-<example>
-Context: User completed brainstorming and framing phases
-user: "I've outlined my presentation. Does the structure make sense?"
-assistant: "Let me validate your outline using the outline-validator agent to ensure it covers all necessary points and flows well."
-<commentary>
-Agent should verify outline against presentation objectives, check section balance, and identify missing elements.
-</commentary>
-</example>
+  <example>
+  Context: User completed brainstorming and framing phases
+  user: "I've outlined my presentation. Does the structure make sense?"
+  assistant: "Let me validate your outline using the outline-validator agent to ensure it covers all necessary points and flows well."
+  <commentary>
+  Agent should verify outline against presentation objectives, check section balance, and identify missing elements.
+  </commentary>
+  </example>
 
-<example>
-Context: User wants to improve outline before proceeding
-user: "My outline feels incomplete. What am I missing?"
-assistant: "I'll use the outline-validator agent to analyze your outline and identify gaps or weaknesses."
-<commentary>
-Agent identifies missing sections, weak transitions, and suggests improvements to strengthen outline.
-</commentary>
-</example>
+  <example>
+  Context: User wants to improve outline before proceeding
+  user: "My outline feels incomplete. What am I missing?"
+  assistant: "I'll use the outline-validator agent to analyze your outline and identify gaps or weaknesses."
+  <commentary>
+  Agent identifies missing sections, weak transitions, and suggests improvements to strengthen outline.
+  </commentary>
+  </example>
 
 model: inherit
 color: yellow

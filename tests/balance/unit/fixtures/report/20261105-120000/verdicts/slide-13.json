@@ -1,0 +1,25 @@
+{
+  "no": 13,
+  "density": "sparse",
+  "intentional": false,
+  "reason": "The architecture idea would read better as a picture.",
+  "fixes": [
+    {
+      "id": "image-ai",
+      "kind": "approval",
+      "summary": "Add an image of the pipeline in the empty right half",
+      "change": {
+        "image": {
+          "aspect": "4:5",
+          "placement": "right",
+          "prompt": "p",
+          "file": "public/images/pipeline.png"
+        }
+      },
+      "projected": {
+        "elements": 3,
+        "words": 8
+      }
+    }
+  ]
+}

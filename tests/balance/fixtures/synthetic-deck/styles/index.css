@@ -1,0 +1,8 @@
+/*
+ * Body text at the plugin default of 1.25rem (20px, about 19.6pt), so only the
+ * small-text fixture slide falls below the 18pt threshold. The :where() wrapper
+ * keeps the specificity low, so a slide's scoped <style> overrides it.
+ */
+:where(.slidev-layout) :is(p, li, td, th):not(svg *) {
+  font-size: 1.25rem;
+}

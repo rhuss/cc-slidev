@@ -129,6 +129,7 @@ Based on current state, prioritize next steps:
 
 **Low Priority (Polish):**
 - AI image prompts to generate
+- Visual balance check of the rendered slides (optional, once the deck is finished)
 - Export to final formats
 - Preview and rehearse
 
@@ -167,6 +168,10 @@ Based on the current state, here are recommended actions:
 
 ### Option 7: Export Final Version
 **Action:** `/slides:export pdf` or `/slides:export pptx`
+
+### Optional: Check Visual Balance
+- Renders each slide and flags sparse, crowded or overflowing ones
+**Action:** Run `/slidev:balance` on the finished deck
 
 ---
 

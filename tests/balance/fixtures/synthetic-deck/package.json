@@ -1,0 +1,13 @@
+{
+  "name": "balance-synthetic-deck",
+  "private": true,
+  "description": "Synthetic fixture deck for the /slidev:balance render test.",
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build"
+  },
+  "dependencies": {
+    "@slidev/cli": "53.0.0",
+    "@slidev/theme-default": "0.25.0"
+  }
+}

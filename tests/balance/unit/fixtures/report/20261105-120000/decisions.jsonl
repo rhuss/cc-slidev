@@ -1,0 +1,10 @@
+{"ts":"2026-11-05T12:01:00Z","no":2,"round":1,"fix_id":"zoom","kind":"auto","outcome":"applied","before":{"file":"slides.md","start":20,"end":28,"text":"---\nlayout: default\n---\n\n# Why reviews stall\n\n- Context is missing\n- Nobody owns the follow-up\n"},"after_png":"round-2/slide-02.png"}
+{"ts":"2026-11-05T12:02:00Z","no":2,"round":2,"fix_id":"zoom","kind":"auto","outcome":"reverted","reason":"Zoom 1.3 caused overflow"}
+{"ts":"2026-11-05T12:02:30Z","no":2,"round":2,"fix_id":"zoom","kind":"auto","outcome":"applied","before":{"file":"slides.md","start":20,"end":28,"text":"---\nlayout: default\n---\n\n# Why reviews stall\n\n- Context is missing\n- Nobody owns the follow-up\n"},"after_png":"round-3/slide-02.png"}
+{"ts":"2026-11-05T12:01:10Z","no":7,"round":1,"fix_id":"layout","kind":"auto","outcome":"applied","before":{"file":"slides.md","start":70,"end":78,"text":"# Setup\n\n```bash\nnpm install\nnpx slidev\n```\n"}}
+{"ts":"2026-11-05T12:04:00Z","no":7,"round":3,"fix_id":"handed-back","kind":"approval","outcome":"skipped","reason":"Presenter ended the pass"}
+{"ts":"2026-11-05T12:01:20Z","no":10,"round":1,"fix_id":"verdict-intentional","kind":"approval","outcome":"skipped"}
+{"ts":"2026-11-05T12:01:30Z","no":11,"round":1,"fix_id":"merge","kind":"approval","outcome":"rejected-limits","reason":"Would reach 8 elements and 60 words"}
+{"ts":"2026-11-05T12:01:40Z","no":11,"round":1,"fix_id":"notes-extend","kind":"approval","outcome":"skipped"}
+{"ts":"2026-11-05T12:01:50Z","no":12,"round":1,"fix_id":"notes-extend","kind":"approval","outcome":"applied","before":{"file":"slides/12-demo.md","start":1,"end":9,"text":"---\nlayout: center\n---\n\n# Run the demo\n\n````md\n```bash\nmake demo\n```\n````\n"},"after_png":"previews/slide-12-fix-1.png"}
+{"ts":"2026-11-05T12:02:10Z","no":13,"round":1,"fix_id":"image-ai","kind":"approval","outcome":"pending-image"}

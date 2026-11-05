@@ -659,6 +659,8 @@ Use the "Slide Quality Assessment" skill to verify all slides meet evidence-base
 
 4. **Export:**
    `/slidev:export pdf` - Generate final PDF
+
+Optional, once the deck is finished: `/slidev:balance` renders each slide and fixes sparse, crowded or overflowing ones.
 ```
 
 Ask: "Would you like to preview the slides now?"
@@ -720,4 +722,4 @@ Use variety to maintain visual interest:
 - Default to professional/default theme
 - Can change later in frontmatter
 
-Inform user slides are ready and guide to next steps.
+Inform user slides are ready and guide to next steps. You may mention `/slidev:balance` as an optional pass for the finished deck; do not run it from this command.

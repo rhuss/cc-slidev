@@ -1,0 +1,33 @@
+{
+  "no": 11,
+  "density": "sparse",
+  "intentional": false,
+  "reason": "Two bullets with rich notes behind them.",
+  "fixes": [
+    {
+      "id": "notes-extend",
+      "kind": "approval",
+      "summary": "Pull the example from the notes",
+      "change": {
+        "markdown": "x"
+      },
+      "projected": {
+        "elements": 4,
+        "words": 30
+      }
+    },
+    {
+      "id": "merge",
+      "kind": "approval",
+      "summary": "Merge with slide 12",
+      "change": {
+        "markdown": "y",
+        "merge_with": 12
+      },
+      "projected": {
+        "elements": 8,
+        "words": 60
+      }
+    }
+  ]
+}

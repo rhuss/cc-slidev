@@ -1,0 +1,36 @@
+{
+  "no": 7,
+  "density": "crowded",
+  "intentional": false,
+  "reason": "The code block runs past the bottom edge.",
+  "fixes": [
+    {
+      "id": "layout",
+      "kind": "auto",
+      "summary": "Move the code into a right column",
+      "change": {
+        "layout": "two-cols",
+        "slots": "right-before-code"
+      },
+      "projected": {
+        "elements": 6,
+        "words": 48
+      }
+    },
+    {
+      "id": "split",
+      "kind": "approval",
+      "summary": "Split into setup and usage slides",
+      "change": {
+        "slides": [
+          "a",
+          "b"
+        ]
+      },
+      "projected": {
+        "elements": 3,
+        "words": 24
+      }
+    }
+  ]
+}

@@ -52,7 +52,8 @@ echo -e "${BLUE}URL: $IMAGE_URL${NC}"
 echo -e "${BLUE}Output: $OUTPUT_PATH${NC}"
 
 # Download with curl
-if curl -L -o "$OUTPUT_PATH" "$IMAGE_URL" 2>&1 | grep -q "HTTP"; then
+# -f makes HTTP errors (404, 403) fail instead of saving the error page
+if curl -fsSL -o "$OUTPUT_PATH" "$IMAGE_URL"; then
     # Check if file was actually downloaded
     if [[ -f "$OUTPUT_PATH" ]] && [[ -s "$OUTPUT_PATH" ]]; then
         echo -e "${GREEN}✓ Download successful${NC}"

@@ -1,0 +1,13 @@
+{
+  "clean": [],
+  "sparse": ["sparse", "low-spread"],
+  "crowded": ["crowded"],
+  "overflow": ["overflow"],
+  "lopsided": ["lopsided"],
+  "small-text": ["small-text"],
+  "tiny-labels": ["small-labels"],
+  "statement": [],
+  "opt-out": [],
+  "reveal": [],
+  "hidden": "hidden"
+}

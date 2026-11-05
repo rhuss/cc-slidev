@@ -81,6 +81,11 @@ End-to-end presentation creation:
   npm install -g @mermaid-js/mermaid-cli
   ```
 
+- **Node.js 20+** - For `/slidev:balance` (see [Visual Balance Pass](#visual-balance-pass))
+
+- **ImageMagick 7** (`magick`) - Crops images for `/slidev:balance` image fixes. Without it, images are fitted with CSS `object-fit: cover`
+  - macOS: `brew install imagemagick`
+
 - **excalidraw-brute-export-cli** - For Excalidraw diagram rendering (auto-installed on first use)
   ```bash
   npm install -g excalidraw-brute-export-cli
@@ -179,6 +184,8 @@ Analyzes all slides and suggests:
 
 Generates multiple options per slide.
 
+**Optional:** Once the deck is finished, run `/slidev:balance` to check how each slide looks when rendered. See [Visual Balance Pass](#visual-balance-pass).
+
 ### 8. Generate comprehensive handout
 ```
 /slidev:handout
@@ -259,11 +266,88 @@ introduction-to-kubernetes/
 | `/slidev:continue` | Resume work on existing presentation |
 | `/slidev:visuals` | Add diagrams and images to all slides |
 | `/slidev:diagram <N>` | Create diagram for specific slide |
+| `/slidev:balance [range]` | Render, measure and fix unbalanced slides (sparse, crowded, overflowing) |
 | `/slidev:notes` | Generate/enhance presenter notes |
 | `/slidev:handout` | Generate LaTeX handout with slides and prose |
 | `/slidev:preview` | Start Slidev dev server |
 | `/slidev:export <format>` | Export to PDF, PPTX, PNG |
 | `/slidev:redraw-diagrams` | Regenerate diagrams in multiple formats |
+
+## Visual Balance Pass
+
+The other quality checks read the Markdown source. `/slidev:balance` looks at the slides the audience sees. Run it on a finished deck.
+
+```
+/slidev:balance [range] [--palette default|okabe-ito|custom|harvested] [--max-rounds N]
+```
+
+- `range`: `N`, `N-M` or a comma list such as `2,5-7`. Default: all slides. Hidden and disabled slides are skipped and listed in the report.
+- `--palette`: choose the box palette again for this deck. The box stylesheet is regenerated and every slide with boxes is re-rendered.
+- `--max-rounds N`: limit the fix rounds per slide (at most 3).
+
+### What it does
+
+1. **Render.** Starts the deck's dev server (or reuses one that already serves this deck) and renders every slide in scope in its last click state, at the deck's canvas size.
+2. **Measure.** Reads fill ratio, vertical spread, overflow, smallest body text, smallest diagram label, word count and column heights from the rendered page.
+3. **Flag.** Marks slides that are sparse, crowded, overflowing, use text below 18pt or diagram labels below 14pt, or have lopsided columns.
+4. **Judge.** The `visual-reviewer` agent looks at each flagged slide's image, metrics and source. It decides whether any emptiness is intentional (a statement, a big number, a section opener) and ranks up to three fixes.
+5. **Fix automatically.** Layout and zoom changes are applied without asking. They only touch the slide's frontmatter (`layout`, `zoom`, `class`) and column slot markers, never the text or its order. Zoom only scales up, from 1.0 to at most 1.5.
+6. **Ask for content fixes.** Anything that changes content (extend from notes, merge, split, move detail to notes, boxes, images) is shown as the current rendering next to a rendered preview of the fix. You accept it, pick another ranked option, or skip. Previews never touch the slide file, and fixes that would exceed 6 elements or 50 words are never offered.
+7. **Repeat.** Changed slides are re-rendered and re-measured, at most 3 rounds per slide. Overflow is always fixed: if no layout change resolves it, you choose a content fix, and there is no skip option. A slide still unbalanced after the last round is handed back with its screenshots.
+8. **Report.** Each run writes screenshots and `exports/balance/<timestamp>/report.md`, with before and after images, measured values, verdicts, your decisions and a revert record for every automatic edit. The report also holds a contact sheet of all slides and deck rhythm notes (long runs of the same layout, large density swings). Rhythm problems are reported, not fixed.
+
+### Prerequisites
+
+- **Node.js 20+**.
+- **The deck installed with its own `@slidev/cli`** (run `npm install` in the deck). The pass starts the dev server with `npx slidev` from the deck directory.
+- **Render tooling, installed on first run.** The first run installs `playwright-core` 1.64.1 into `${XDG_CACHE_HOME:-~/.cache}/cc-slidev/render` and prints a notice while it does so. It reuses the Chromium build in the shared Playwright browser cache and downloads one only when the matching revision is missing. If the install is impossible (for example offline), the pass stops before rendering and prints the setup command.
+- **No changes to your deck's dependencies.** The deck's `package.json` and lockfile are never modified, and no Playwright MCP server is needed.
+
+### Intentionally sparse slides
+
+Add `balance: sparse-ok` to a slide's frontmatter to keep it from being flagged as sparse:
+
+```markdown
+---
+layout: center
+balance: sparse-ok
+---
+
+# Ship it on Friday
+```
+
+The marker only turns off the sparse, low-spread and lopsided-column flags. Overflow, text size and diagram label checks still apply. Slides with the `cover`, `image`, `section`, `statement`, `fact`, `quote` or `end` layouts skip the density flags by default.
+
+### Thresholds
+
+All thresholds (fill ratio band, vertical spread, minimum text and label sizes, column ratio, zoom cap, round limit, rhythm rules) live in the `balance-thresholds` block of [`slidev/references/design-constraints.md`](slidev/references/design-constraints.md). Change the numbers there to tune the pass.
+
+### Box palette
+
+The boxes fix turns two or three bullets of a sparse slide into tinted boxes. It is always offered, never applied automatically. The first time you accept a box fix in a deck, the pass asks for a palette:
+
+- `default`: the plugin's blue, orange, purple and slate
+- `okabe-ito`: the colorblind-safe Okabe-Ito colors
+- `custom`: your own brand colors
+- `harvested`: colors already used in the deck's box classes
+
+The choice is stored as `balance.boxes` in the frontmatter of `presentation-config.md`. The pass generates one stylesheet, `styles/balance-boxes.css`, and imports it from `styles/index.css`. Each color has one meaning across the deck, and changing the palette restyles every box without editing slides. See [`slidev/references/box-styles.md`](slidev/references/box-styles.md) for the markup and color rules.
+
+### Image fixes
+
+An image fix is only offered when a picture supports the slide's idea. There are three routes:
+
+- **Prompt handover (default).** The pass appends a tool-neutral prompt to the deck's `ai-image-prompts.md`, sized to the measured empty area (aspect ratio, where text overlaps, no text in the image), with the target file name and slide. No external service is called. The slide is listed as pending until the file exists; on a later run (or when you say it is placed) the image is fitted and the slide is checked again.
+- **Stock image.** The pass suggests search terms and, on request, up to three candidates with licenses that allow reuse. The chosen image is downloaded into the deck and its attribution goes into the presenter notes.
+- **Generate now (opt-in).** The pass asks once per deck which route to use and stores the answer as `balance.images` in `presentation-config.md`:
+  - `codex`: the Codex CLI
+  - `gemini-cli`: the Gemini CLI with the nanobanana extension
+  - `openai-api`: the OpenAI image API, needs `OPENAI_API_KEY`
+  - `gemini-api`: the Gemini image API, needs `GEMINI_API_KEY`
+
+  The route is checked before generating. If it is unavailable or generation fails, the pass falls back to prompt handover and tells you why.
+
+Images are cropped to the gap with ImageMagick (`magick`) when it is installed, otherwise fitted with CSS `object-fit: cover`.
 
 ## Evidence-Based Design Principles
 
@@ -440,6 +524,12 @@ Note: The script will auto-install these on first use if missing.
 ```bash
 # Validate plugin manifests
 make validate
+
+# Run unit tests (no browser needed)
+make test
+
+# Also run the render tests (renders the fixture decks in Chromium)
+RUN_RENDER_TESTS=1 make test
 
 # Install or reinstall
 make install

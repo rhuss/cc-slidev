@@ -1,0 +1,9 @@
+{
+  "name": "cc-slidev-balance-render",
+  "private": true,
+  "type": "module",
+  "description": "Install manifest for the /slidev:balance render tooling. Copied into the plugin cache and installed there, never installed in place.",
+  "dependencies": {
+    "playwright-core": "1.64.1"
+  }
+}

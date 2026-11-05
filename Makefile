@@ -1,4 +1,4 @@
-.PHONY: validate install uninstall reinstall clean help
+.PHONY: validate install uninstall reinstall clean test help
 
 MARKETPLACE := slidev-dev-marketplace
 PLUGIN := slidev@$(MARKETPLACE)
@@ -40,6 +40,15 @@ reinstall: uninstall install
 clean:
 	find . -name ".DS_Store" -delete
 
+# Run tests (unit always; render integration with RUN_RENDER_TESTS=1)
+test:
+	node --test tests/balance/unit/
+	@if [ "$(RUN_RENDER_TESTS)" = "1" ]; then \
+		bash tests/balance/render.test.sh; \
+	else \
+		echo "Skipping render tests (set RUN_RENDER_TESTS=1 to run them)"; \
+	fi
+
 # Show available targets
 help:
 	@echo "Available targets:"
@@ -48,3 +57,4 @@ help:
 	@echo "  uninstall   - Remove plugin and marketplace"
 	@echo "  reinstall   - Full clean reinstall (removes marketplace too)"
 	@echo "  clean       - Remove generated files"
+	@echo "  test        - Run unit tests (RUN_RENDER_TESTS=1 adds render tests)"

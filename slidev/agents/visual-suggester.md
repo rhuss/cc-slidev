@@ -1,33 +1,34 @@
 ---
 name: visual-suggester
-description: Use this agent when the user needs visual enhancement suggestions, asks to "suggest visuals", "add diagrams to slides", "enhance slides with images", "what visuals should I use", "suggest mermaid diagrams", or during visual enhancement phase. Examples:
+description: |
+  Use this agent when the user needs visual enhancement suggestions, asks to "suggest visuals", "add diagrams to slides", "enhance slides with images", "what visuals should I use", "suggest mermaid diagrams", or during visual enhancement phase. Examples:
 
-<example>
-Context: User has generated slides and wants to add visuals
-user: "Can you suggest what visuals would work best for my slides?"
-assistant: "I'll use the visual-suggester agent to analyze your slides and recommend appropriate diagrams, images, and visual elements."
-<commentary>
-Agent analyzes slide content and suggests mermaid diagrams, stock photos, AI image prompts, and other visual elements that would enhance each slide.
-</commentary>
-</example>
+  <example>
+  Context: User has generated slides and wants to add visuals
+  user: "Can you suggest what visuals would work best for my slides?"
+  assistant: "I'll use the visual-suggester agent to analyze your slides and recommend appropriate diagrams, images, and visual elements."
+  <commentary>
+  Agent analyzes slide content and suggests mermaid diagrams, stock photos, AI image prompts, and other visual elements that would enhance each slide.
+  </commentary>
+  </example>
 
-<example>
-Context: User calls /slidev:visuals command
-user: "/slidev:visuals"
-assistant: "I'm analyzing your slides to suggest visual enhancements using the visual-suggester agent."
-<commentary>
-Agent triggers automatically during visual enhancement workflow to provide comprehensive visual suggestions for all slides.
-</commentary>
-</example>
+  <example>
+  Context: User calls /slidev:visuals command
+  user: "/slidev:visuals"
+  assistant: "I'm analyzing your slides to suggest visual enhancements using the visual-suggester agent."
+  <commentary>
+  Agent triggers automatically during visual enhancement workflow to provide comprehensive visual suggestions for all slides.
+  </commentary>
+  </example>
 
-<example>
-Context: User working on specific slide and wants visual ideas
-user: "Slide 8 is too text-heavy. What diagram could I add?"
-assistant: "Let me use the visual-suggester agent to propose diagram options for slide 8."
-<commentary>
-Agent provides multiple mermaid diagram variations and explains why each would work for the content.
-</commentary>
-</example>
+  <example>
+  Context: User working on specific slide and wants visual ideas
+  user: "Slide 8 is too text-heavy. What diagram could I add?"
+  assistant: "Let me use the visual-suggester agent to propose diagram options for slide 8."
+  <commentary>
+  Agent provides multiple mermaid diagram variations and explains why each would work for the content.
+  </commentary>
+  </example>
 
 model: inherit
 color: magenta

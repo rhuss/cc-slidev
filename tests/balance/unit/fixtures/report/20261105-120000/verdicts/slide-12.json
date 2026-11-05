@@ -1,0 +1,20 @@
+{
+  "no": 12,
+  "density": "sparse",
+  "intentional": false,
+  "reason": "The demo slide only shows a command.",
+  "fixes": [
+    {
+      "id": "notes-extend",
+      "kind": "approval",
+      "summary": "Add the expected output from the notes",
+      "change": {
+        "markdown": "z"
+      },
+      "projected": {
+        "elements": 4,
+        "words": 30
+      }
+    }
+  ]
+}

@@ -76,6 +76,7 @@ Edit files in `slidev/`:
 
 ```bash
 make validate
+make test    # unit tests; RUN_RENDER_TESTS=1 make test also renders the fixture decks
 ```
 
 ### 3. Reinstall

@@ -1,0 +1,11 @@
+[
+  {
+    "no_at_creation": 13,
+    "source_file": "slides.md",
+    "slide_title": "How the pipeline fits together",
+    "target_file": "public/images/pipeline.png",
+    "aspect": "4:5",
+    "prompt_ref": "ai-image-prompts.md#slide-13",
+    "created": "2026-11-05T12:02:10Z"
+  }
+]

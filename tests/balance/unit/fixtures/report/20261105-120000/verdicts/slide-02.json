@@ -1,0 +1,20 @@
+{
+  "no": 2,
+  "density": "sparse",
+  "intentional": false,
+  "reason": "Two short bullets sit in the top third and leave the slide unfinished.",
+  "fixes": [
+    {
+      "id": "zoom",
+      "kind": "auto",
+      "summary": "Scale the slide up to fill the canvas",
+      "change": {
+        "zoom": 1.3
+      },
+      "projected": {
+        "elements": 2,
+        "words": 9
+      }
+    }
+  ]
+}

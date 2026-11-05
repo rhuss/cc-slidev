@@ -1,0 +1,75 @@
+[
+  {
+    "no": 2,
+    "start_no": 2,
+    "source": {
+      "file": "slides.md",
+      "start": 20,
+      "end": 28
+    },
+    "layout": "default",
+    "balance": null,
+    "hidden": false,
+    "png": "round-3/slide-02.png",
+    "fill_ratio": 0.4,
+    "vertical_spread": 0.62,
+    "overflow": {
+      "any": false,
+      "elements": []
+    },
+    "min_body_pt": 19.6,
+    "min_label_pt": null,
+    "words": 9,
+    "elements": 2,
+    "columns": null,
+    "gap": {
+      "x": 56,
+      "y": 400,
+      "w": 868,
+      "h": 112
+    },
+    "flags": [],
+    "render_error": null
+  },
+  {
+    "no": 7,
+    "start_no": 7,
+    "source": {
+      "file": "slides.md",
+      "start": 70,
+      "end": 78
+    },
+    "layout": "two-cols",
+    "balance": null,
+    "hidden": false,
+    "png": "round-3/slide-07.png",
+    "fill_ratio": 0.85,
+    "vertical_spread": 1,
+    "overflow": {
+      "any": true,
+      "elements": [
+        "pre.shiki"
+      ]
+    },
+    "min_body_pt": 19.6,
+    "min_label_pt": null,
+    "words": 48,
+    "elements": 6,
+    "columns": {
+      "left_px": 400,
+      "right_px": 420,
+      "ratio": 0.95
+    },
+    "gap": {
+      "x": 56,
+      "y": 400,
+      "w": 868,
+      "h": 112
+    },
+    "flags": [
+      "crowded",
+      "overflow"
+    ],
+    "render_error": null
+  }
+]

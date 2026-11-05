@@ -27,3 +27,8 @@ dist/
 
 # Test presentations
 test-presentations/
+
+# Balance pass test fixtures and transient files
+tests/balance/fixtures/**/node_modules/
+tests/balance/fixtures/**/exports/
+**/.balance-preview.md

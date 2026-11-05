@@ -1,0 +1,112 @@
+[
+  {
+    "no": 2,
+    "start_no": 2,
+    "source": {
+      "file": "slides.md",
+      "start": 20,
+      "end": 28
+    },
+    "layout": "default",
+    "balance": null,
+    "hidden": false,
+    "png": "round-2/slide-02.png",
+    "fill_ratio": 0.81,
+    "vertical_spread": 1.02,
+    "overflow": {
+      "any": true,
+      "elements": [
+        "ul"
+      ]
+    },
+    "min_body_pt": 19.6,
+    "min_label_pt": null,
+    "words": 9,
+    "elements": 2,
+    "columns": null,
+    "gap": {
+      "x": 56,
+      "y": 400,
+      "w": 868,
+      "h": 112
+    },
+    "flags": [
+      "crowded",
+      "overflow"
+    ],
+    "render_error": null
+  },
+  {
+    "no": 7,
+    "start_no": 7,
+    "source": {
+      "file": "slides.md",
+      "start": 70,
+      "end": 78
+    },
+    "layout": "two-cols",
+    "balance": null,
+    "hidden": false,
+    "png": "round-2/slide-07.png",
+    "fill_ratio": 0.8,
+    "vertical_spread": 1,
+    "overflow": {
+      "any": true,
+      "elements": [
+        "pre.shiki"
+      ]
+    },
+    "min_body_pt": 19.6,
+    "min_label_pt": null,
+    "words": 48,
+    "elements": 6,
+    "columns": {
+      "left_px": 300,
+      "right_px": 420,
+      "ratio": 0.71
+    },
+    "gap": {
+      "x": 56,
+      "y": 400,
+      "w": 868,
+      "h": 112
+    },
+    "flags": [
+      "crowded",
+      "overflow"
+    ],
+    "render_error": null
+  },
+  {
+    "no": 12,
+    "start_no": 12,
+    "source": {
+      "file": "slides/12-demo.md",
+      "start": 1,
+      "end": 9
+    },
+    "layout": "center",
+    "balance": null,
+    "hidden": false,
+    "png": "round-2/slide-12.png",
+    "fill_ratio": 0.5,
+    "vertical_spread": 0.7,
+    "overflow": {
+      "any": false,
+      "elements": []
+    },
+    "min_body_pt": 19.6,
+    "min_label_pt": null,
+    "words": 30,
+    "elements": 4,
+    "columns": null,
+    "gap": {
+      "x": 56,
+      "y": 400,
+      "w": 868,
+      "h": 112
+    },
+    "flags": [],
+    "render_error": null
+  }
+]
