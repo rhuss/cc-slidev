@@ -1,5 +1,5 @@
 ---
-name: slidev:handout
+name: handout
 description: Generate comprehensive LaTeX handout from presentation
 allowed-tools: ["Read", "Write", "Bash", "Grep"]
 ---

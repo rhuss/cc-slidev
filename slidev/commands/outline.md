@@ -1,5 +1,5 @@
 ---
-name: slidev:outline
+name: outline
 description: Create or revise presentation outline from brainstorming notes
 allowed-tools: ["Read", "Write", "Edit", "Task"]
 ---

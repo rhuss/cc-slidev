@@ -6,15 +6,9 @@ version: 0.1.0
 
 # Slide Quality Assessment
 
-Evaluate presentation slides using evidence-based quality criteria grounded in cognitive load research, accessibility standards, and presentation best practices from TED, MIT Communication Lab, and technical conference guidelines.
+Evaluate presentation slides using a systematic 12-point quality checklist.
 
-**Research Foundation**: Quality assessment based on working memory limits (Miller's Law), David JP Phillips' cognitive load studies, WCAG accessibility standards, and analysis of effective technical presentations.
-
-**IMPORTANT**: Before analyzing slides, use the Read tool to load the style guide from the plugin directory:
-```
-${CLAUDE_PLUGIN_ROOT}/references/presentation-best-practices.md
-```
-This contains the complete research-backed guidelines and validation criteria supporting the 12-point checklist.
+**Design constraints**: Apply hard limits and accessibility requirements from `${CLAUDE_PLUGIN_ROOT}/references/design-constraints.md`. Research citations are in `${CLAUDE_PLUGIN_ROOT}/references/presentation-best-practices.md`.
 
 ## The 12-Point Quality Checklist
 

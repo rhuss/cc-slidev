@@ -1,5 +1,5 @@
 ---
-name: slidev:preview
+name: preview
 description: Start Slidev dev server to preview presentation
 allowed-tools: ["Bash"]
 ---

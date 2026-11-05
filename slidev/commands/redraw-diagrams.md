@@ -1,5 +1,5 @@
 ---
-name: slidev:redraw-diagrams
+name: redraw-diagrams
 description: Extract inline diagrams and regenerate in all platforms (Mermaid, PlantUML, Excalidraw)
 allowed-tools: ["Read", "Bash", "Grep", "Write"]
 ---

@@ -1,5 +1,5 @@
 ---
-name: slidev:edit
+name: edit
 description: Edit a specific slide with table of contents context
 argument-hint: "[slide-number]"
 allowed-tools: ["Read", "Edit", "Grep", "Bash", "Skill", "AskUserQuestion"]

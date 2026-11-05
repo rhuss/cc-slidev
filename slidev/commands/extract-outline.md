@@ -1,5 +1,5 @@
 ---
-name: slidev:extract-outline
+name: extract-outline
 description: Extract structured outline from existing slides
 allowed-tools: ["Read", "Write", "Grep", "Glob", "Bash"]
 ---

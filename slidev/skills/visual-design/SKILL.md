@@ -6,9 +6,9 @@ version: 0.2.0
 
 # Visual Design for Presentations
 
-Effective visual design combines diagrams, images, and consistent theming to create engaging, professional, accessible presentations. Master mermaid diagrams, stock photography, AI image generation, colorblind-safe palettes, and visual cohesion.
+Effective visual design combines diagrams, images, and consistent theming for engaging, accessible presentations.
 
-**Evidence-based accessibility**: This skill incorporates research-based best practices for accessible visual design. See `references/presentation-best-practices.md` for full guidelines.
+**Design constraints**: Apply hard limits and colorblind-safe palette from `${CLAUDE_PLUGIN_ROOT}/references/design-constraints.md`.
 
 ## Mermaid Diagrams
 
@@ -650,85 +650,27 @@ Regular: Body text, most content
 Light: Captions, metadata, fine print
 ```
 
-## Best Practices (Evidence-Based)
+## Best Practices
+
+**Design constraints**: Apply accessibility requirements from `${CLAUDE_PLUGIN_ROOT}/references/design-constraints.md`.
 
 ### Diagrams
-
-✅ **Do:**
-- **Choose diagram type matching content** (flowchart for process, sequence for interaction)
-- **Apply theme colors consistently** via mermaid init directive
-- **Keep diagrams simple** (max 7-9 nodes - cognitive load research)
-- **Label clearly** with readable font sizes (match slide minimum 18pt)
-- **Use directional flow** (typically left-to-right or top-to-bottom)
-- **Progressive disclosure** for complex diagrams (build across multiple slides)
-- **Test colorblind-safe** (use patterns/shapes + color, not color alone)
-
-❌ **Don't:**
-- **Overcomplicate** with too many connections (cognitive overload)
-- **Use too many colors** (stick to theme palette: 2 main + 1-2 accents)
-- **Make text too small** (minimum 18pt equivalent in diagrams)
-- **Create bidirectional spaghetti** (unclear flow)
-- **Ignore alignment** (clean grid-based layout)
-- **Rely on color alone** (add labels, patterns, icons for colorblind accessibility)
+- Choose diagram type matching content
+- Apply theme colors consistently via mermaid init directive
+- Keep diagrams simple (max 7-9 nodes)
+- Label clearly, readable font sizes
+- Use directional flow (left-to-right or top-to-bottom)
+- Test colorblind-safe (patterns/shapes + color)
 
 ### Images
-
-✅ **Do:**
-- Use high-resolution (1920x1080+)
-- Match presentation tone
-- Ensure diversity and inclusion
-- Provide attribution
+- High-resolution (1920x1080+), match presentation tone
+- Diverse representation, proper attribution
 - Optimize file size
 
-❌ **Don't:**
-- Use pixelated or blurry images
-- Choose cliché stock photos
-- Ignore licensing
-- Use inconsistent styles
-- Overload with images
-
-### Color (Accessibility Required)
-
-✅ **Do:**
-- **Define palette upfront** (2 main colors + 1-2 accents = 3-4 total)
-- **Ensure contrast ratios** (from research):
-  - Normal text (<24pt): Minimum 4.5:1
-  - Large text (≥24pt): Minimum 3:1
-  - Test with tools: WebAIM Contrast Checker, Colorblind Web Page Filter
-- **Use colorblind-safe palettes**:
-  - Use ColorBrewer (colorbrewer2.org) for verified palettes
-  - Common safe combinations: Blue + Orange, Purple + Green, Blue + Red
-  - AVOID: Red + Green (most common colorblindness)
-- **Don't rely on color alone**:
-  - Add patterns in charts (stripes, dots, hatching)
-  - Use labels and icons alongside colors
-  - Differentiate with size/shape + color
-- **Use consistently throughout** (same meaning = same color)
-- **Test on different displays** (projector, laptop, mobile)
-
-❌ **Don't:**
-- **Use random colors** (establish theme palette first)
-- **Rely on color alone** (excludes 8% of males with colorblindness)
-- **Create low contrast** (<4.5:1 fails accessibility standards)
-- **Mix too many palettes** (max 3-4 colors total)
-- **Ignore accessibility** (legal requirement in many contexts)
-- **Use red+green together** without additional differentiation
-
 ### Theme
-
-✅ **Do:**
-- Establish visual identity
-- Apply consistently
-- Create templates
-- Document color codes
+- Establish visual identity, apply consistently
+- Document color codes, create templates
 - Test in different contexts
-
-❌ **Don't:**
-- Change style mid-presentation
-- Mix incompatible aesthetics
-- Ignore brand guidelines
-- Over-decorate
-- Sacrifice readability for style
 
 ## Quick Reference
 

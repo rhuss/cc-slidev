@@ -1,5 +1,5 @@
 ---
-name: slidev:export
+name: export
 description: Export presentation to PDF, PPTX, or other formats
 argument-hint: "[format]"
 allowed-tools: ["Bash"]

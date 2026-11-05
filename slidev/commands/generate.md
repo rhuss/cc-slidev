@@ -1,5 +1,5 @@
 ---
-name: slidev:generate
+name: generate
 description: Generate Slidev slides from outline
 allowed-tools: ["Read", "Write", "Bash", "Grep", "Skill"]
 skills: ["slidev:presentation-design"]
@@ -9,9 +9,7 @@ skills: ["slidev:presentation-design"]
 
 Generate clean, accessible Slidev slides from validated outline with enforced design limits.
 
-**Research Basis**: These guidelines are based on cognitive load studies (Miller's Law), TED presentation research, and MIT Communication Lab recommendations. See `references/presentation-best-practices.md` for detailed research.
-
-**Default Timing**: 90 seconds (1.5 minutes) per slide (configurable: 60s-180s)
+**Design constraints**: Apply hard limits from `${CLAUDE_PLUGIN_ROOT}/references/design-constraints.md`. Default timing: 90s per slide (configurable 60s-180s).
 
 ## Execution
 
@@ -582,7 +580,7 @@ For project-specific Slidev installation:
     "export": "slidev export"
   },
   "dependencies": {
-    "@slidev/cli": "^0.48.0",
+    "@slidev/cli": "latest",
     "@slidev/theme-default": "latest"
   }
 }
@@ -671,35 +669,19 @@ cd [topic-slug]
 ${CLAUDE_PLUGIN_ROOT}/scripts/preview-slidev.sh slides.md
 ```
 
-## Slide Generation Checklist (Hard Limits)
+## Slide Generation Checklist
 
-**HARD LIMITS (NEVER Violate - Split Slides Instead):**
-- 🔴 **MAX 6 elements** total (bullets + visuals + charts + code blocks combined)
-- 🔴 **MAX 50 words** body text (excluding title)
-- 🔴 **MAX 1-2 code blocks** per slide (8-10 lines each max)
-- 🔴 **ONE idea** per slide (if content has multiple ideas → SPLIT)
+Apply all hard limits and accessibility defaults from `${CLAUDE_PLUGIN_ROOT}/references/design-constraints.md`.
 
-**Critical Requirements (Every Slide):**
-- ✓ **Meaningful title** (assertion: "X demonstrates Y", not label: "Results")
-- ✓ **One idea** per slide (single central finding)
-- ✓ **≤6 elements** total - **SPLIT if exceeded**
-- ✓ **<50 words** body text - **SPLIT if exceeded**
-- ✓ **Visual element** planned or included (except quotes/definitions)
-- ✓ **Phrases not sentences** in bullets
-- ✓ **Detailed text in presenter notes** (not on slide)
-- ✓ **Code examples:** 1 snippet per slide, highlight key lines only
-
-**Accessibility Defaults (Built-in):**
-- ✓ Font sizes: h1=48pt, h2=32pt, h3=24pt, body=20pt (meets ≥18pt requirement)
-- ✓ Sans-serif fonts for body text
-- ✓ Colorblind-safe palette: Blue + Orange (verified contrast ratios)
-- ✓ High contrast: 4.5:1+ for all text
-
-**Structure:**
-- Opening: Hook slide (compelling question/fact, not bio)
-- Main: Content slides (each with meaningful assertion title)
-- Closing: Conclusion with key takeaways (not generic "Thank you")
-- Backup: 3-5 detailed slides for Q&A
+**Per-slide checks:**
+- Meaningful assertion title (not a label)
+- One idea per slide
+- <=6 elements total (split if exceeded)
+- <50 words body text (split if exceeded)
+- Visual element planned or included
+- Phrases not sentences in bullets
+- Detailed text in presenter notes
+- Code: 1 snippet per slide, highlight key lines
 
 **Visual Placeholders:**
 - Mark every slide needing visual with TODO comment

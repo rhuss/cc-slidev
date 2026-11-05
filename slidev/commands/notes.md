@@ -1,5 +1,5 @@
 ---
-name: slidev:notes
+name: notes
 description: Generate or enhance presenter notes for all slides
 allowed-tools: ["Read", "Edit"]
 ---

@@ -1,5 +1,5 @@
 ---
-name: slidev:visuals
+name: visuals
 description: Comprehensive visual enhancement for all slides
 allowed-tools: ["Read", "Edit", "Bash", "WebSearch", "Task", "Skill"]
 skills: ["slidev:presentation-design"]

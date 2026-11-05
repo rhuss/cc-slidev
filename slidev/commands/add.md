@@ -1,5 +1,5 @@
 ---
-name: slidev:add
+name: add
 description: Insert new slide at specified slide number with automatic renumbering
 argument-hint: "<slide-number>"
 allowed-tools: ["Bash", "AskUserQuestion"]

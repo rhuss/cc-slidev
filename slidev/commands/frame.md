@@ -1,5 +1,5 @@
 ---
-name: slidev:frame
+name: frame
 description: Define presentation scope, duration, and slide count targets
 allowed-tools: ["Read", "Write", "AskUserQuestion"]
 ---

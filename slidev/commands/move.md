@@ -1,5 +1,5 @@
 ---
-name: slidev:move
+name: move
 description: Move slide to new position with automatic renumbering
 argument-hint: "<from-slide-number> --after <to-slide-number>"
 allowed-tools: ["Bash", "AskUserQuestion"]

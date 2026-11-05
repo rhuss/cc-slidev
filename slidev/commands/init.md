@@ -1,5 +1,5 @@
 ---
-name: slidev:init
+name: init
 description: Initialize new presentation project with full workflow orchestration
 argument-hint: "[optional-topic]"
 allowed-tools: ["Bash", "AskUserQuestion", "SlashCommand", "TodoWrite", "Skill"]

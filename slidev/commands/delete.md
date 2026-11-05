@@ -1,5 +1,5 @@
 ---
-name: slidev:delete
+name: delete
 description: Delete slide by slide number with automatic renumbering
 argument-hint: "<slide-number>"
 allowed-tools: ["Bash", "AskUserQuestion"]

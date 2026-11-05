@@ -1,5 +1,5 @@
 ---
-name: slidev:diagram
+name: diagram
 description: Create or improve mermaid diagram for specific slide
 argument-hint: "<slide-number>"
 allowed-tools: ["Read", "Edit", "Bash", "Task"]

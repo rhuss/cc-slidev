@@ -12,23 +12,7 @@ Effective presentations combine research-backed design principles, storytelling,
 
 ## HARD LIMITS (Never Violate)
 
-These are research-backed **maximum limits** that should NEVER be exceeded. If content exceeds these limits, you MUST split into multiple slides:
-
-🔴 **MAX 6 elements** per slide (bullets + images + diagrams + code blocks combined)
-🔴 **MAX 50 words** body text per slide (excluding title)
-🔴 **MAX 1-2 code blocks** per slide (8-10 lines each)
-🔴 **ONE idea** per slide (if multiple ideas → split slides)
-
-**Why these are hard limits:**
-- Cognitive load research: >6 elements exponentially increases audience confusion
-- Reading vs listening interference: >50 words means audience stops listening
-- Code complexity: >2 code examples creates comparison overhead
-
-**When content doesn't fit:**
-- ❌ **NEVER** compress or shrink to fit
-- ❌ **NEVER** reduce font size below 18pt
-- ✅ **ALWAYS** split into additional slides
-- ✅ **ALWAYS** move details to presenter notes or backup slides
+Apply all hard limits from `${CLAUDE_PLUGIN_ROOT}/references/design-constraints.md`: max 6 elements, max 50 words, max 1-2 code blocks, one idea per slide. Never compress or shrink to fit; always split into additional slides.
 
 ## Core Principles
 
@@ -73,9 +57,7 @@ These are research-backed **maximum limits** that should NEVER be exceeded. If c
 
 **Critical Rule**: Limit distinct elements to ~6 items per slide maximum.
 
-**Scientific basis:**
-- Working memory: 7±2 items (Miller's Law)
-- David JP Phillips research: >6 objects exponentially increases cognitive load
+**Scientific basis:** See `${CLAUDE_PLUGIN_ROOT}/references/design-constraints.md` for research citations.
 
 **Elements to count:**
 1. Bullet points
@@ -576,46 +558,9 @@ Maintain throughout presentation:
 **Style:** Engaging, storytelling, memorable
 **Duration:** 20-45 minutes typical
 
-## Accessibility Considerations
+## Accessibility
 
-### Visual Accessibility Requirements
-
-**Font requirements** (from research):
-- **Body text minimum**: 18-24pt (never smaller than 18pt)
-- **Headings minimum**: 24pt or larger
-- **Font family**: Sans-serif for body text (Calibri, Arial, Verdana, Helvetica)
-- **Serif usage**: Optional for headings only (for differentiation)
-- **AVOID**: Italics, underlines, ALL CAPS in body text (reduce readability)
-
-**Color requirements:**
-- **Contrast ratios**:
-  - Normal text: Minimum 4.5:1 ratio
-  - Large text (>24pt): Minimum 3:1 ratio
-- **Colorblind-safe palettes**: Use ColorBrewer or similar tools to verify
-- **Don't rely on color alone**: Add patterns, labels, or shapes for differentiation
-- **Core color scheme**: 2 main colors (one light, one dark) for foundation
-- **Accent colors**: 1-2 additional for highlighting
-
-**Layout requirements:**
-- Clear section demarcation
-- Consistent layout across slides
-- Adequate margins and white space
-- Legible over varying backgrounds (add borders/frames if needed)
-
-**Testing accessibility:**
-- Preview slides from back of room distance
-- Use colorblind simulator (online tools available)
-- Verify contrast ratios with accessibility checker
-- Test on different display sizes
-
-### Cognitive Accessibility
-
-- **Simple language:** Avoid jargon, or define technical terms
-- **Clear structure:** Obvious organization with signposting
-- **Predictable pacing:** Consistent timing across slides
-- **Multiple modalities:** Visual + verbal + text reinforcement
-- **One idea per slide:** Prevents information overload
-- **Progressive disclosure:** Don't overwhelm with all info at once
+Apply font, contrast, and colorblind requirements from `${CLAUDE_PLUGIN_ROOT}/references/design-constraints.md`. Key cognitive accessibility rules: simple language, clear structure, predictable pacing, multiple modalities, one idea per slide, progressive disclosure.
 
 ## Presenter Notes
 
@@ -670,41 +615,19 @@ Timing: 90 seconds on this slide
 
 ### Evidence-Based Core Rules
 
+Apply hard limits and accessibility requirements from `${CLAUDE_PLUGIN_ROOT}/references/design-constraints.md`.
+
 **The 10 Essential Principles:**
-1. **One idea per slide** - Each slide = one central finding
-2. **Meaningful titles** - Assertions, not labels ("X demonstrates Y" not "Results")
-3. **Minimal text** - <50 words excluding title, keywords not sentences
-4. **Visual over text** - Almost never text-only slides
-5. **Max 6 elements** - Cognitive load management
-6. **Accessibility** - 18pt+ fonts, 4.5:1 contrast, colorblind-safe
-7. **Design for distracted** - Title + visual convey point without narration
-8. **Progressive disclosure** - Reveal complexity gradually
-9. **Timing** - 90s/slide default (configurable 60-180s)
-10. **Backup slides** - Detailed data separate from main deck
-
-### DO:
-- **Start with compelling hook** (not CV or agenda)
-- **Use rule of three** for main points
-- **Put detailed text in presenter notes**, not on slides
-- **Practice timing** with stopwatch
-- **Leave white space** (minimum 10% margins)
-- **Use progressive disclosure** for complex content
-- **End with clear conclusion statement** (not "Thank you")
-- **Test accessibility** (contrast, colorblind, distance)
-- **Create backup slides** for Q&A
-- **Apply consistent theme** throughout
-
-### DON'T:
-- **Overload slides with text** - Audience can't read and listen
-- **Use tiny fonts** - Minimum 18pt body, 24pt headings
-- **Read slides verbatim** - You lose engagement
-- **Use vague titles** - "Results" → "Experiment X shows 2x gain"
-- **Cram multiple ideas** - One per slide maximum
-- **Exceed 6 elements** - Cognitive overload
-- **Skip accessibility** - Exclude audience members
-- **Use color alone** - Patterns/labels for colorblind
-- **Ignore contrast** - Verify 4.5:1 minimum
-- **Use italics/underlines** in body text - Reduces readability
+1. One idea per slide
+2. Meaningful titles (assertions, not labels)
+3. Minimal text (<50 words, keywords not sentences)
+4. Visual over text
+5. Max 6 elements
+6. Accessibility (see design-constraints.md)
+7. Design for distracted viewer
+8. Progressive disclosure
+9. Timing (90s/slide default, configurable 60-180s)
+10. Backup slides for Q&A
 
 ### Validation Checklist
 
@@ -729,11 +652,3 @@ Presentation-level:
 - [ ] Backup slides separated
 - [ ] Presenter notes for key slides
 
----
-
-**Additional Resources:**
-- See `references/presentation-best-practices.md` for full research-based guidelines
-- Nancy Duarte: *Resonate*, *Slide:ology* (storytelling and visual design)
-- Garr Reynolds: *Presentation Zen* (minimalist design philosophy)
-- PLOS Computational Biology: "Ten Simple Rules for Effective Presentation Slides"
-- MIT Communication Lab: Slide Presentation Guide

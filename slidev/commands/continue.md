@@ -1,5 +1,5 @@
 ---
-name: slidev:continue
+name: continue
 description: Resume work on an existing presentation with context and next steps
 allowed-tools: ["Read", "Grep", "Glob", "Task", "AskUserQuestion", "Skill"]
 skills: ["slidev:presentation-design"]
