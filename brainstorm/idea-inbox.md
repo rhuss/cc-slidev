@@ -46,3 +46,12 @@ Ideas captured from code reviews for future brainstorming.
 - **Summary**: All end-to-end success criteria live behind RUN_RENDER_TESTS=1 with no CI wiring.
 
 > A plain make test says nothing about measurement correctness; add a test-all target or CI job.
+
+### unocss-theme-palette
+
+- **Source**: brainstorm on global-styles-scoped-to-slide-one
+- **Date**: 2026-11-05
+- **Reference**: slidev/commands/generate.md, cc-review/docs/presentation/slides (inline `style="color: var(--primary)"`)
+- **Summary**: Generated slides color accents with inline `style="color: var(--primary)"`, a plugin convention rather than a Slidev one.
+
+> Slidev is UnoCSS-first: defining `primary`/`secondary` as theme colors in `uno.config.ts` would let slides use `text-primary`, `border-primary`, `bg-primary`, and some themes (seriph) also accept `themeConfig.primary`. Changes what generate writes into every slide and how balance box styles relate to the palette, so it needs its own decision.
