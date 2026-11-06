@@ -55,3 +55,12 @@ Ideas captured from code reviews for future brainstorming.
 - **Summary**: Generated slides color accents with inline `style="color: var(--primary)"`, a plugin convention rather than a Slidev one.
 
 > Slidev is UnoCSS-first: defining `primary`/`secondary` as theme colors in `uno.config.ts` would let slides use `text-primary`, `border-primary`, `bg-primary`, and some themes (seriph) also accept `themeConfig.primary`. Changes what generate writes into every slide and how balance box styles relate to the palette, so it needs its own decision.
+
+### balance-vertical-centering
+
+- **Source**: user request during brainstorm #02
+- **Date**: 2026-11-06
+- **Reference**: slidev/commands/balance.md (Step 6 automatic fixes), slidev/references/design-constraints.md (`low-spread`), slidev/scripts/balance/apply-auto-fix.mjs (`class` key)
+- **Summary**: Add a balance fix that vertically centers a slide's main element while the headline stays at the top.
+
+> Targets `low-spread` (content ends in the top half) without zoom or content edits. Could be an automatic `class` fix (e.g. `class: balance-center`) with its CSS in a balance-owned file under `styles/`, like `balance-boxes.css`. Centering spreads content but adds no fill, so for sparse slides it would run before zoom rather than replace it. Open: which layouts it applies to (two-cols, default), and how the reviewer ranks it against zoom.
